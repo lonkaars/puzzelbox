@@ -1,0 +1,5 @@
+[submodule "main/lib/pico-sdk"]
+	path = main/lib/pico-sdk
+	url = https://github.com/raspberrypi/pico-sdk
+	branch = 1.5.1
+	shallow = true
