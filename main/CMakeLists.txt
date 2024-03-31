@@ -6,6 +6,7 @@ project(puzzlebox_main C CXX ASM)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 set(PICO_BOARD pico_w)
 
 pico_sdk_init()
