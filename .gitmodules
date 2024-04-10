@@ -3,3 +3,6 @@
 	url = https://github.com/raspberrypi/pico-sdk
 	branch = 1.5.1
 	shallow = true
+[submodule "test/lib/googletest"]
+	path = test/lib/googletest
+	url = https://github.com/google/googletest
