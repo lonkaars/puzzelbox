@@ -1,0 +1,6 @@
+[glossary]
+== Glossary
+
+[glossary]
+RPI:: Raspberry Pi
+
