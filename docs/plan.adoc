@@ -69,7 +69,7 @@ that are actually in constant motion. The advantage of this is that it is
 actually always clear who is working on which task and which tasks still need
 to be done. This does require each project member to keep track of their tasks
 on the kanban board, to ensure efficiency and discipline while the project is
-ongoing. The tools to enforce this are shown in §7.3.
+ongoing. The tools to enforce this are shown in <<sec:version-management>>.
 
 === Project goal
 
@@ -123,10 +123,12 @@ state.
 
 Multiple tests will be created to safeguard the quality of the project. Code
 and document reviews are also used to safeguard quality. More about this can be
-found in §6.2.
+found in <<sec:control-quality>>.
 
+[[sec:phasing]]
 == Project phases
 
+[[sec:phase-research]]
 === Research phase
 
 This project consists of several research topics which are stated below.
@@ -158,6 +160,7 @@ the conclusion of the research document for the following components:
 - Communiction (with the bomb)
 - Power supply
 
+[[sec:phase-development]]
 === Development phase
 
 The development phase is used to develop a product, or a predetermined part of
@@ -192,6 +195,7 @@ executed parallel to the development of the four sides. The development of the
 sides will also mostly be parallel with just a small delay creating an overlap
 between the sides.
 
+[[sec:phase-qualification]]
 === Qualification
 
 The last phase is the phase where everything needs to be tested and verified to
@@ -236,6 +240,7 @@ below.
 | LxL | Low
 |===
 
+[[sec:control-quality]]
 === Quality control
 
 This project just as any other project need to meet a certain level of quality
@@ -305,9 +310,10 @@ communication with the stakeholders.
 
 === Communication
 
-Table 3 lists the stakeholders which receive regular updates about the project.
-These people are informed about the current progress and are involved in any
-meetings where requirements and/or specifications are discussed.
+<<tab:stakeholders>> lists the stakeholders which receive regular updates
+about the project. These people are informed about the current progress and
+are involved in any meetings where requirements and/or specifications are
+discussed.
 
 [[tab:stakeholders]]
 .Project communication table
@@ -319,6 +325,7 @@ meetings where requirements and/or specifications are discussed.
 |Jonathan Overes|Client|School email; Teams|Weekly
 |===
 
+[[sec:version-management]]
 === Version management
 
 All source code developed during this project is kept under version control
@@ -351,23 +358,28 @@ been reviewed.
 At the request of the stakeholders, time spent working on the project is
 tracked by each team member using Clockify [8].
 
-Figure 1 shows a Gantt-chart including the phases from section 5. The
-milestones are indicated with vertical dashed lines and are marked with week
-numbers.
+[[fig:planning-condensed]]
+.Condensed Gantt planning
+image::img/planning-condensed.svg[]
 
-The research phase (§5.1) includes the planning and writing of the initial
-draft versions of all the project documents. The documentation is also
-continuously updated during the development phase, but this is not shown in
-Figure 1.
+<<fig:planning-condensed>> shows a Gantt-chart including the phases from
+<<sec:phasing>>. The milestones are indicated with vertical dashed lines and
+are marked with week numbers.
 
-The development phase (§5.2) consists of the continuous development of the main
-(central) controller software and various accompanying tests. During this
-phase, the software for each puzzle box side is developed in parallel. Each
-side’s software development is staggered to avoid the accumulation of tasks.
+The research phase (<<sec:phase-research>>) includes the planning and writing
+of the initial draft versions of all the project documents. The documentation
+is also continuously updated during the development phase, but this is not
+shown in <<fig:planning-condensed>>.
 
-The qualification phase (§5.3) consists of validating the results of the
-development phase, fixing issues when they are discovered, and finalizing all
-project documentation.
+The development phase (<<sec:phase-development>>) consists of the continuous
+development of the main (central) controller software and various accompanying
+tests. During this phase, the software for each puzzle box side is developed in
+parallel. Each side’s software development is staggered to avoid the
+accumulation of tasks.
+
+The qualification phase (<<sec:phase-qualification>>) consists of validating
+the results of the development phase, fixing issues when they are discovered,
+and finalizing all project documentation.
 
 include::share/glossary.adoc[]
 

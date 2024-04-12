@@ -60,3 +60,15 @@ heading:
 toc:
   indent: 5mm
   line-height: 1.4
+
+caption:
+  align: center
+  end: bottom
+
+table:
+  caption:
+    end: $caption-end
+
+list:
+  indent: 10mm
+
