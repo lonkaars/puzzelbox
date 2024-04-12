@@ -1,0 +1,62 @@
+# extends: default
+
+page:
+  size: a4
+  margin: [1in, 1in, 1in, 1in]
+  numbering:
+    start-at: toc
+
+base:
+  hyphens: true
+  text-align: justify
+
+prose:
+  margin-bottom: 3mm
+
+# font:
+#   catalog:
+#     serif:
+#       bold: texgyreschola-bold.otf
+#       bold_italic: texgyreschola-bolditalic.otf
+#       italic: texgyreschola-italic.otf
+#       normal: texgyreschola-regular.otf
+#     sans_serif:
+#       bold: Inter-Bold.otf
+#       bold_italic: Inter-BoldItalic.otf
+#       italic: Inter-Italic.otf
+#       normal: Inter-Regular.otf
+#     monospace:
+#       bold: JetBrainsMono-Bold.ttf
+#       bold_italic: JetBrainsMono-BoldItalic.ttf
+#       italic: JetBrainsMono-Italic.ttf
+#       normal: JetBrainsMono-Regular.ttf
+
+base:
+  # font-family: serif
+  font-size: 10.5
+
+title-page:
+  align: center
+  title:
+    margin-top: 1cm
+    font-size: 18
+    font-style: bold
+  subtitle:
+    margin-bottom: 1cm
+    font-size: 16
+  authors:
+    margin-bottom: 1cm
+
+heading:
+  align: left
+  margin-top: 15pt
+  margin-bottom: 5pt
+  font-style: bold
+  h2-font-size: $base-font-size * 1.7
+  h3-font-size: $base-font-size * 1.4
+  h4-font-size: $base-font-size * 1.2
+  h5-font-size: $base-font-size
+
+toc:
+  indent: 5mm
+  line-height: 1.4

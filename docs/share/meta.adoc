@@ -1,9 +1,8 @@
+:sectnums:
+:title-page:
+:toc:
+:toclevels: 4
+:pagenums:
 Thomas in ‘t Anker; Loek Le Blansch; Lars Faase; Elwin Hammer
 0.0, 2024-04-01
-
-:doctype: book
-
-[.metadata]
-{authors} -- version {revnumber}, {revdate}
-
 

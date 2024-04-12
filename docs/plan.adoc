@@ -1,8 +1,5 @@
-= Puzzle Box Project Plan
+= Project Plan: Project Puzzlebox
 include::share/meta.adoc[]
-
-== Table of Contents
-:toc:
 
 == Introduction
 
