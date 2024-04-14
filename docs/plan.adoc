@@ -23,7 +23,7 @@ Monday afternoon. The goal is for teams to perform tasks related to electrical
 engineering and computer science programs. The competitive element and
 interaction with other groups are crucial. For the 19-20 introduction, the bomb
 task was created, inspired by the game "Keep Talking and Nobody Explodes." A
-description of the game can be found on the website [1].
+description of the game can be found on the website cite:[Kee23].
 
 Originally, the plan was to create a bomb that needs to be defused and a puzzle
 box generating codes for defusing the bomb. A previous group successfully
@@ -329,9 +329,9 @@ discussed.
 === Version management
 
 All source code developed during this project is kept under version control
-using the Git [2] version control system and is available online at GitHub [3].
-Each software component has a 3-digit version number following semantic
-versioning [4] conventions (major, minor, patch).
+using the Git cite:[gitscm] version control system and is available online at
+GitHub cite:[gitrepo]. Each software component has a 3-digit version number
+following semantic versioning cite:[semver] conventions (major, minor, patch).
 
 This repository also utilizes Git submodules to track the versions of the
 utilized libraries and SDKs. Submodules refer to commits, and can automatically
@@ -339,24 +339,25 @@ be initialized and managed using Git, so are not further specified in this
 document.
 
 All project documentation is realized using Microsoft Office products and is
-therefore stored in a SharePoint folder [5]. These documents use a simple
-2-digit (major, minor) version number system. The documents are published at
-the discretion of the authors, with each new version incrementing the minor
-version number. Major version number 0 is utilized for the document draft
-versions, while 1 is utilized for documents after the project goal is reached.
-A copy of all the documents is kept for each officially published version.
+therefore stored in a SharePoint folder cite:[sharepoint]. These documents use
+a simple 2-digit (major, minor) version number system. The documents are
+published at the discretion of the authors, with each new version incrementing
+the minor version number. Major version number 0 is utilized for the document
+draft versions, while 1 is utilized for documents after the project goal is
+reached. A copy of all the documents is kept for each officially published
+version.
 
 == Planning
 
-This project utilizes GitHub Projects [6] to manage and allocate tasks to team
-members. GitHub Projects supports multiple workflows, but this project only
-follows the Kanban [7] workflow. Since the Kanban workflow does not require
-sprints, the project is divided into milestones. A milestone is considered
-complete once all tasks assigned to it are both marked as ‘complete’ and have
-been reviewed.
+This project utilizes GitHub Projects cite:[githubprojects] to manage and
+allocate tasks to team members. GitHub Projects supports multiple workflows,
+but this project only follows the Kanban cite:[atlassiankanban] workflow. Since
+the Kanban workflow does not require sprints, the project is divided into
+milestones. A milestone is considered complete once all tasks assigned to it
+are both marked as ‘complete’ and have been reviewed.
 
 At the request of the stakeholders, time spent working on the project is
-tracked by each team member using Clockify [8].
+tracked by each team member using Clockify cite:[clockify].
 
 [[fig:planning-condensed]]
 .Condensed Gantt planning
@@ -381,5 +382,5 @@ The qualification phase (<<sec:phase-qualification>>) consists of validating
 the results of the development phase, fixing issues when they are discovered,
 and finalizing all project documentation.
 
-include::share/glossary.adoc[]
+include::share/footer.adoc[]
 

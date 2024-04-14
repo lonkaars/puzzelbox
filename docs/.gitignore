@@ -1,2 +1,5 @@
 *.pdf
 res
+
+# i know this is bad
+Gemfile.lock
