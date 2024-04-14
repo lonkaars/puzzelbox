@@ -1,4 +1,5 @@
 all: plan.pdf
+all: requirements.pdf
 
 # include font.mk
 
@@ -7,6 +8,7 @@ PDFDEPS += ./theme.yml
 
 ASCIIDOCTOR_ARGS += --require asciidoctor-bibtex
 ASCIIDOCTOR_ARGS += --require asciidoctor-pdf
+# ASCIIDOCTOR_ARGS += --require ./plugin/helloworld
 ASCIIDOCTOR_ARGS += --backend pdf
 ASCIIDOCTOR_ARGS += --attribute pdf-theme=./theme.yml
 # ASCIIDOCTOR_ARGS += --attribute pdf-fontsdir=./res/font

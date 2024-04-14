@@ -1,0 +1,198 @@
+= Project Requirements: Project Puzzlebox
+include::share/meta.adoc[]
+
+== Introduction
+
+In this document, the specifications are described prior to the investigation
+of the Puzzle Box project. These specifications are partly derived from the
+previously established requirements and are further supplemented and modified.
+The priority of specifications is indicated using the MoSCoW method, see
+<<tab:moscow>>.
+
+[[tab:moscow]]
+.MoSCoW Method cite:[Wik22]
+[cols="1,3"]
+|===
+| Priority | Description
+
+| Must have
+| Represents essential system requirements. Without these, the system will not
+function.
+| Should have
+| Denotes desirable system features. The system can work without these, but it
+lacks necessary elements.
+| Could have
+| Refers to additional functionalities that can be implemented if there is
+extra time.
+| Won't have
+| Specifies requirements that will not be implemented in the current version
+but may be considered in a future release.
+|===
+
+This specification document covers hardware, software, and game-specific
+details. The focus in this project year for the Puzzle Box is to thoroughly
+document the system and create a software framework for future groups.
+
+== Context
+
+This chapter describes how the user will interact with the system. This is done
+in the form of a user story. This user story covers hardware, software, and
+game specifications. From this narrative, many specifications can be derived
+for both functional and non-functional requirements
+(<<sec:functional>> and <<sec:technical>>).
+
+The game administrator picks up the puzzle box and places it on a flat surface.
+By using the key switch, the puzzle box is turned on, and the green indicator
+LED lights up. Through the mesh network established by the external puzzle box
+hub, the corresponding web panel can be accessed. The web panel provides
+instructions for configuring the puzzle box, including linking it to any bomb.
+The instructions issue a warning if any of the start conditions are not
+properly set. If a criterion is incorrectly configured, it is highlighted for
+resolution. Additionally, a warning is given if the battery capacity is
+insufficient for one game duration, causing the indicator LED on the puzzle box
+to turn red. In such cases, the battery should be charged using the USB-C
+cable. While the puzzle box is charging, the indicator LED is blue. Once there
+are no warnings and the puzzle box is adequately charged, the game can be
+started in the web panel.
+
+The puzzle box begins with the NeoTrellis game. In this game, players must turn
+off all LEDs on an 8x8 button LED matrix. When any button is pressed, the
+directly adjacent LEDs toggle. If a lit LED is toggled, it turns off; if an
+unlit LED is toggled, it turns on. Once all LEDs are turned off, the game is
+solved, and the software puzzle begins.
+
+On the software puzzle, there are 6 banana plug connectors on both the left and
+right sides. The ones on the left are labeled with various logical gates, while
+the ones on the right are labeled from A to F. Participants in the bomb game
+have 6 pieces of C-code written on paper, corresponding to the logical gates on
+the puzzle box. The bomb participants must provide a description of the C-code
+to the puzzle box participants, allowing them to correctly connect the
+appropriate logical gate to the corresponding letter. Once the correct
+combination of logical gates with the correct letter is made, the game is
+solved. Subsequently, the automation puzzle is initiated.
+
+Since there is no concept available for the automation puzzle yet, the hardware
+puzzle is started directly.
+
+The hardware puzzle is played in two distinct phases. In Phase 1, the objective
+is to solve a combinatorial circuit such that its output becomes '1'. There are
+8 inputs for this circuit, each controlled by an on/off switch. Once the
+combinatorial circuit evaluates to '1', the LED at the output lights up,
+indicating the completion of the first phase. In Phase 2, another LED blinks,
+consistently repeating a pattern. This pattern represents a randomly generated
+Morse code, corresponding to a number from 0 to 9999. Participants use a Morse
+code table to decipher the correct number. Using four potentiometers, the
+participants can set a number on a 7-segment display. When this number matches
+the randomly generated one, the hardware puzzle is solved. Subsequently, the
+vault puzzle is initiated.
+
+In the vault puzzle, a 7-segment display shows a random combination of a letter
+and a digit. Participants have access to a list containing the correct button
+combination for the corresponding letter and digit. The vault puzzle consists
+of 5 levels, each displaying a unique button combination from the list. When
+participants correctly press the button on the keypad, the level advances, and
+a new value is shown. Pressing the wrong button restarts the game at level 1.
+Once all 5 levels are completed, the vault door unlocks, allowing access to the
+inside of the puzzle box. On the mainboard, there is a 7-segment display
+showing a code. This code must be relayed to the participants of the bomb game.
+Once the bomb team receives the code, the puzzle box is considered solved.
+
+[[sec:functional]]
+== Functional Requirements
+
+The functional requirements describe the things which are important to the
+client. This is mainly about the way the product is going to be used, what it
+is going to look like, and how the product reacts to interaction. This chapter
+describes all functional requirements of the puzzle box.
+
+=== The puzzle box
+
+.Puzzle box specifications
+[cols="1,1,10"]
+|===
+| ID | Pri. | Specification
+
+| 1. | M
+| The dimensions of the puzzle box are 30×30×30cm ± 5% (Length × Width × Height).
+
+| 2. | M
+| The puzzle box extends a maximum of 5cm on the sides and the top.
+
+| 3. | M
+| The puzzle box is flat at the bottom.
+
+| 4. | M
+| The puzzle box has a key switch at the bottom of the NeoTrellis puzzle.
+
+| 5. | M
+| The puzzle box has an indicator LED at the bottom of the NeoTrellis puzzle.
+
+| 6. | M
+| The indicator LED turns green when the system is on and not charging.
+
+| 7. | M
+| The indicator LED turns blue when the battery is charging.
+
+| 8. | M
+| The indicator LED turns red when the battery does not have enough capacity for the duration of one game and is not charging.
+
+| 9. | M
+| The puzzle box has a USB-C port at the bottom of the NeoTrellis puzzle for battery charging.
+
+| 10. | M
+| The puzzle box has a distance sensor at the bottom to detect if it is lifted.
+
+| 11. | M
+| The puzzle box main board (PCB on the bottom plate) includes a speaker.
+
+| 12 | W
+| When the puzzle box is lifted, the mainboard speaker emits an alarm sound for at least 10 seconds. It stops only when it has been on a table for another 10 seconds (detected by the distance sensor).
+
+| 13. | W
+| When the game is completed, the puzzle box produces a victory sound.
+
+| 14. | W
+| Pressing the "identify" button on the web panel causes the indicator LED to blink.
+
+| 15. | W
+| Pressing the "identify" button on the web panel triggers a sound from the speaker.
+
+| 16. | W
+| The game starts once the scheduler time is reached (refer to section 3.7 - [2]).
+|===
+
+
+=== The bomb
+=== The game
+==== NeoTrellis puzzle
+==== Software puzzle
+==== Automation puzzle
+==== Hardware puzzle
+==== Vault puzzle
+=== Battery
+=== Network Communication
+=== Framework
+=== Puzzle box hub
+
+[[sec:technical]]
+== Technical Requirements
+
+=== Wireless communication
+=== Framework
+=== Main controller
+=== Puzzle module controller
+=== Vault puzzle
+=== Bomb
+== Preconditions
+== Documentation
+
+[appendix]
+== Explanatory Images
+
+// [#alinea1,reftext='alinea 1']
+// Hoi ik ben een alinea
+//
+// <<alinea1>>
+
+include::share/footer.adoc[]
+
