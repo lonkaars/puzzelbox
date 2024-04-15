@@ -11,8 +11,9 @@ set(PICO_BOARD pico_w)
 
 pico_sdk_init()
 
-add_executable(main
+add_executable(main 
 	main.cpp
+	FSM.cpp
 )
 
 pico_enable_stdio_usb(main 1)
@@ -20,4 +21,3 @@ pico_enable_stdio_usb(main 1)
 pico_add_extra_outputs(main)
 target_include_directories(main PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(main pico_cyw43_arch_lwip_threadsafe_background pico_stdlib)
-
