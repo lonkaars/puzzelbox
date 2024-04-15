@@ -11,7 +11,7 @@
 /// </summary>
 /// <typeparam name="TState">IBehaviouralState is the only accepted
 /// class.</typeparam>
-template <class... TState> class FSM {
+template <class TState> class FSM {
 public:
   template <class... TPState> FSM(TPState &...args) {
     int i = 0;
