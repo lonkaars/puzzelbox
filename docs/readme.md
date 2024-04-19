@@ -8,15 +8,15 @@ makefile is provided for convenience.
 ## TODO
 
 - transfer documents
-    - [ ] project plan
-    - [ ] requirements
+    - [x] project plan
+    - [x] requirements
     - [ ] research
     - [ ] software design
 - xrefs for--
     - [x] tables
     - [x] figures
     - [x] section numbers (headings)
-    - [ ] requirements
+    - [x] requirements
 - [x] figures
 - [x] citations
 - [ ] glossary
