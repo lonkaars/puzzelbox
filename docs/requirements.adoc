@@ -15,16 +15,16 @@ The priority of specifications is indicated using the MoSCoW method, see
 |===
 | Priority | Description
 
-| Must have
+| [[must,M]]<<must,Must have>>
 | Represents essential system requirements. Without these, the system will not
 function.
-| Should have
+| [[should,S]]<<should,Should have>>
 | Denotes desirable system features. The system can work without these, but it
 lacks necessary elements.
-| Could have
+| [[could,C]]<<could,Could have>>
 | Refers to additional functionalities that can be implemented if there is
 extra time.
-| Won't have
+| [[wont,W]]<<wont,Won't have>>
 | Specifies requirements that will not be implemented in the current version
 but may be considered in a future release.
 |===
@@ -112,87 +112,515 @@ describes all functional requirements of the puzzle box.
 |===
 | ID | Pri. | Specification
 
-| 1. | M
-| The dimensions of the puzzle box are 30×30×30cm ± 5% (Length × Width × Height).
+| 001 | <<must>> |
+The dimensions of the puzzle box are 30×30×30cm ± 5% (Length × Width × Height).
 
-| 2. | M
-| The puzzle box extends a maximum of 5cm on the sides and the top.
+| 002 | <<must>> |
+The puzzle box extends a maximum of 5cm on the sides and the top.
 
-| 3. | M
-| The puzzle box is flat at the bottom.
+| 003 | <<must>> |
+The puzzle box is flat at the bottom.
 
-| 4. | M
-| The puzzle box has a key switch at the bottom of the NeoTrellis puzzle.
+| <<req:4>> | <<must>> |
+[[req:4,R-04]] The puzzle box has a key switch at the bottom of the NeoTrellis puzzle.
 
-| 5. | M
-| The puzzle box has an indicator LED at the bottom of the NeoTrellis puzzle.
+| <<req:5>> | <<must>> |
+[[req:5,R-05]] The puzzle box has an indicator LED at the bottom of the NeoTrellis puzzle.
 
-| 6. | M
-| The indicator LED turns green when the system is on and not charging.
+| 006 | <<must>> |
+The indicator LED turns green when the system is on and not charging.
 
-| 7. | M
-| The indicator LED turns blue when the battery is charging.
+| 007 | <<must>> |
+The indicator LED turns blue when the battery is charging.
 
-| 8. | M
-| The indicator LED turns red when the battery does not have enough capacity for the duration of one game and is not charging.
+| 008 | <<must>> |
+The indicator LED turns red when the battery does not have enough capacity for the duration of one game and is not charging.
 
-| 9. | M
-| The puzzle box has a USB-C port at the bottom of the NeoTrellis puzzle for battery charging.
+| 009 | <<must>> |
+The puzzle box has a USB-C port at the bottom of the NeoTrellis puzzle for battery charging.
 
-| 10. | M
-| The puzzle box has a distance sensor at the bottom to detect if it is lifted.
+| 010 | <<must>> |
+The puzzle box has a distance sensor at the bottom to detect if it is lifted.
 
-| 11. | M
-| The puzzle box main board (PCB on the bottom plate) includes a speaker.
+| 011 | <<must>> |
+The puzzle box main board (PCB on the bottom plate) includes a speaker.
 
-| 12 | W
-| When the puzzle box is lifted, the mainboard speaker emits an alarm sound for at least 10 seconds. It stops only when it has been on a table for another 10 seconds (detected by the distance sensor).
+| 012 | <<wont>> |
+When the puzzle box is lifted, the mainboard speaker emits an alarm sound for at least 10 seconds. It stops only when it has been on a table for another 10 seconds (detected by the distance sensor).
 
-| 13. | W
-| When the game is completed, the puzzle box produces a victory sound.
+| 013 | <<wont>> |
+When the game is completed, the puzzle box produces a victory sound.
 
-| 14. | W
-| Pressing the "identify" button on the web panel causes the indicator LED to blink.
+| 014 | <<wont>> |
+Pressing the "identify" button on the web panel causes the indicator LED to blink.
 
-| 15. | W
-| Pressing the "identify" button on the web panel triggers a sound from the speaker.
+| 015 | <<wont>> |
+Pressing the "identify" button on the web panel triggers a sound from the speaker.
 
-| 16. | W
-| The game starts once the scheduler time is reached (refer to section 3.7 - [2]).
+| 016 | <<wont>> |
+The game starts once the scheduler time is reached (refer to section 3.7 - [2]).
 |===
 
-
 === The bomb
+
+.Puzzle box specifications
+[cols="1,1,10"]
+|===
+| ID | Pri. | Specification
+
+| 017 | <<must>> |
+The bomb includes a 6-digit 7-segment display for showing the remaining playtime.
+
+| 018 | <<must>> |
+The bomb contains a keypad for entering the disarm code.
+
+| 019 | <<wont>> |
+The 6-digit 7-segment display turns off when no game is in progress.
+
+| 020 | <<wont>> |
+Once the disarm code is entered on the bomb keypad, the game is complete.
+
+| 021 | <<wont>> |
+When the game is finished, the bomb emits a victory sound.
+
+| 022 | <<wont>> |
+The timer on the bomb counts down from 60:00:00 to 00:00:00.
+
+| 023 | <<wont>> |
+Pressing the "identify" button on the web panel causes the indicator LED to blink.
+
+| 024 | <<wont>> |
+Pressing the "identify" button on the web panel triggers a sound from the speaker.
+
+|===
+
 === The game
+
+[cols="1,1,10"]
+|===
+| 025 | <<wont>> |
+The game lasts for 1 hour.
+
+| 026 | <<wont>> |
+The game should be solvable within the given playtime, without the player having prior knowledge of the game or its mechanics.
+
+| 027 | <<must>> |
+The puzzles should be easy enough to solve without any prior knowledge of the game or its mechanics.
+
+| 167 | <<must>> |
+A puzzle module can manually be reset at the discretion of the game operator
+
+| 168 | <<must>> |
+A puzzle module can manually be set as solved at the discretion of the game operator
+
+| 028 | <<wont>> |
+The disarm code for the bomb consists of 4 digits.
+
+| 029 | <<wont>> |
+Once all games are solved, the mainboard PCB displays the disarm code on a red 7-segment 4-digit screen.
+
+| 030 | <<wont>> |
+The puzzle box records the playtime of each game.
+
+| 031 | <<wont>> |
+The puzzle box features 5 playable puzzles.
+
+| 032 | <<wont>> |
+Only one game is active at a time; the other games do not respond to buttons.
+
+| 033 | <<wont>> |
+The game always starts with the NeoTrellis puzzle.
+|===
+
 ==== NeoTrellis puzzle
+
+[cols="1,1,10"]
+|===
+| 034 | <<must>> |
+There is an 8x8 LED matrix where each LED can display different colors.
+
+| 035 | <<wont>> |
+At the start of the puzzle, a pattern is displayed as shown in Figure 4.
+
+| 036 | <<wont>> |
+When a button is pressed, the adjacent LEDs and the pressed LED toggle (If an LED is off, it turns on. If an LED is on, it turns off).
+
+| 037 | <<wont>> |
+All LEDs in the Neotrellis that are turned on are blue.
+
+| 038 | <<wont>> |
+The puzzle is considered solved when all LEDs are turned off, and then the software puzzle starts.
+|===
+
 ==== Software puzzle
+
+[cols="1,1,10"]
+|===
+| 039 | <<should>> |
+The software puzzle board has 6 banana plug connectors with different logic gates displayed next to them (Refer to Figure 5 for a sketch and Figure 7 for a banana plug example).
+
+| 040 | <<should>> |
+The software puzzle board has 6 banana plug connectors labeled with the letters A through F (Refer to Figure 5 for a sketch).
+
+| 041 | <<should>> |
+At the start of the puzzle box game, the preparer must connect all cables in parallel (horizontally) to the connectors.
+
+| 042 | <<wont>> |
+There are C code blocks visible only to the players on the bomb side, corresponding to the letters A through F (Refer to Figure 6 for the codes).
+
+| 043 | <<should>> |
+The combinations of logic gates to letters are always the same.
+
+| 044 | <<wont>> |
+The puzzle is considered solved when the cables from the logic gates match the code blocks (Refer to Figure 5 and Figure 6 for the combinations).
+
+| 045 | <<wont>> |
+Once the puzzle is solved, the green indicator LED will light up (Refer to Figure 5 and Figure 6).
+
+| 046 | <<wont>> |
+After the puzzle is solved, the automation puzzle begins.
+|===
+
 ==== Automation puzzle
+
+[cols="1,1,10"]
+|===
+| 047 | <<wont>> |
+After the puzzle is solved, the hardware puzzle begins.
+|===
+
 ==== Hardware puzzle
+
+[cols="1,1,10"]
+|===
+| 048 | <<should>> |
+There are eight switches on the hardware puzzle board.
+
+| 049 | <<should>> |
+The hardware puzzle board features a diagram of a combinatorial circuit with 8 inputs (linked to the switches) and 1 output (Refer to Figure 8 for a sketch).
+
+| 050 | <<should>> |
+The hardware puzzle board includes a red 7-segment 4-digit display (Refer to Figure 8 for a sketch).
+
+| 051 | <<should>> |
+There are 4 potentiometers on the hardware puzzle board (Refer to Figure 8 for a sketch).
+
+| 052 | <<should>> |
+A blue LED on the hardware puzzle board displays the morse code.
+
+| 053 | <<should>> |
+A green LED on the hardware puzzle board indicates whether the combinatorial circuit is solved.
+
+| 054 | <<wont>> |
+At the start of the puzzle, the potentiometers are inactive.
+
+| 055 | <<wont>> |
+The 7-segment display is off at the beginning of the puzzle.
+
+| 056 | <<wont>> |
+The LED for the combinatorial puzzle is off initially.
+
+| 057 | <<wont>> |
+The morse code LED is off at the puzzle's outset.
+
+| 058 | <<must>> |
+The preparer must set all switches to the down position at the start of the puzzle box game.
+
+| 059 | <<must>> |
+The preparer must turn all potentiometers to the left (value '0') at the beginning of the puzzle box game.
+
+| 060 | <<wont>> |
+The puzzle consists of two phases.
+
+| 061 | <<wont>> |
+The puzzle begins in phase 1.
+
+| 062 | <<wont>> |
+During the puzzle, the switches must be toggled to obtain a logical '1' at the output of the combinatorial circuit.
+
+| 063 | <<wont>> |
+When the output of the combinatorial circuit equals '1', the green indicator LED turns on (Refer to Figure 8 for a sketch).
+
+| 064 | <<wont>> |
+The puzzle proceeds to phase 2 when the output of the combinatorial circuit is a logical '1'.
+
+| 065 | <<wont>> |
+The switches no longer respond once the puzzle enters phase 2.
+
+| 066 | <<wont>> |
+The indicator LED from phase 1 remains green during phase 2.
+
+| 067 | <<wont>> |
+In phase 2, a morse code is displayed using an LED. This morse code represents 4 numbers from 0 to 9 and repeats every second.
+
+| 068 | <<wont>> |
+The morse code is randomly generated.
+
+| 069 | <<wont>> |
+Each potentiometer can be rotated to display a value from 0 to 9 on the corresponding 4-digit 7-segment display. The order of the potentiometers matches the order of the segments on the display (Refer to Figure 8 for a sketch).
+
+| 070 | <<wont>> |
+The puzzle is considered solved when the code displayed on the 7-segment 4-digit screen matches the 4 numbers from the morse code.
+
+| 071 | <<wont>> |
+Once the puzzle is solved, the value shown on the 7-segment 4-digit display cannot be changed.
+
+| 072 | <<wont>> |
+A 2-second victory sound is produced by the speaker upon solving the puzzle.
+
+| 073 | <<wont>> |
+During the victory sound, the 7-segment display blinks twice per second.
+
+| 074 | <<wont>> |
+After the victory sound, the puzzle has been solved and the vault puzzle begins.
+|===
+
 ==== Vault puzzle
+
+[cols="1,1,10"]
+|===
+| 075 | <<should>> |
+The vault puzzle board features a red 7-segment 4-digit display.
+
+| 076 | <<should>> |
+On the vault puzzle board, there is a 4x4 grid of holes for ventilation and sound.
+
+| 077 | <<should>> |
+The vault puzzle board includes a vault door, and the inside of the vault is transparent, allowing you to see inside the puzzle box.
+
+| 078 | <<should>> |
+A sensor is integrated with the vault to detect when the vault is closed.
+
+| 079 | <<must>> |
+At the beginning of the puzzle box game, the preparer must close the vault.
+
+| 080 | <<wont>> |
+The puzzle starts at level 1.
+
+| 081 | <<wont>> |
+Initially, the 7-segment display shows a code consisting of a letter and a digit. This code represents a valid key combination for level 1 (Refer to Figure 9 for all combinations).
+
+| 082 | <<wont>> |
+There are a total of 5 levels. After each level, a key combination is displayed, starting with a letter followed by a digit, which is valid for that level (Refer to Figure 9).
+
+| 083 | <<wont>> |
+Each level has unique key combinations for the button locations (Refer to Figure 9).
+
+| 084 | <<wont>> |
+Pressing the button corresponding to the letter-digit combinations advances the puzzle to the next level.
+
+| 085 | <<wont>> |
+If an incorrect button is pressed, the game resets to level 1.
+
+| 086 | <<wont>> |
+An error sound is produced by the speaker when an incorrect button is pressed.
+
+| 087 | <<wont>> |
+The 7-segment display blinks when an incorrect button is pressed.
+
+| 088 | <<wont>> |
+After completing 5 levels, the puzzle is solved, and the vault opens.
+|===
+
 === Battery
+
+[cols="1,1,10"]
+|===
+| 089 | <<must>> |
+The puzzle box is powered by a rechargeable battery.
+
+| 090 | <<must>> |
+The battery lasts for a minimum of 4 hours.
+
+| 091 | <<could>> |
+The battery in the puzzle box can be replaced.
+|===
+
 === Network Communication
+
+[cols="1,1,10"]
+|===
+| 092 | <<wont>> |
+The puzzle boxes, bombs, and the puzzle box hub must all be able to communicate with each other.
+
+| 093 | <<must>> |
+Communication between two devices in the network must have a range of at least 20 meters in an open field.
+|===
+
 === Framework
+
+[cols="1,1,10"]
+|===
+| 130 | <<must>> |
+The main controller and its software do not need to be modified to implement a new puzzle module
+
+| 131 | <<could>> |
+Puzzle modules can be added and removed while the main controller is powered on
+
+| 132 | <<must>> |
+Puzzle modules can be added and removed while the main controller is powered off
+
+| 133 | <<must>> |
+The puzzle box provides a single external interface for accessing and controlling game state variables
+|===
+
 === Puzzle box hub
+
+[cols="1,1,10"]
+|===
+| 094 | <<wont>> |
+The puzzle box hub hosts a website that can be accessed by a device connected to the network.
+|===
 
 [[sec:technical]]
 == Technical Requirements
 
+The technical specifications describe the specifications that are important for
+developers. For example, this could include specific requirements related to
+current, voltage, or communication protocols. This chapter outlines all the
+technical specifications of the puzzle box.
+
 === Wireless communication
+
+[cols="1,1,10"]
+|===
+| 127 | <<must>> |
+The wireless communication between the system controller, bomb, and puzzle box operates over a WiFi mesh or WiFi network.
+|===
+
 === Framework
+
+[cols="1,1,10"]
+|===
+| 128 | <<must>> |
+A framework has been created to assist future groups in the development of the puzzle box.
+
+| 129 | <<must>> |
+The framework runs on the main puzzle box controller.
+
+| 134 | <<must>> |
+Puzzle modules are detected by the main controller module.
+
+| 135 | <<must>> |
+Puzzle modules are initialized by the main controller module.
+
+| 165 | <<must>> |
+Puzzle modules repeatedly send 'update' messages to the main controller while their global state is 'uninitialized'
+|===
+
 === Main controller
+
+[cols="1,1,10"]
+|===
+| 136 | <<must>> |
+The main controller has at least 1 I2C peripheral.
+
+| 137 | <<must>> |
+The main controller can connect to a standard 802.11b/g/n access point.
+
+| 138 | <<must>> |
+The main controller can serve TCP socket connection(s).
+
+| 139 | <<must>> |
+The main controller is available as a development kit from Farnell.
+
+| 140 | <<should>> |
+The main controller can communicate over I²C with a speed of 400kb/s
+
+| 166 | <<should>> |
+The main controller is power efficient.
+|===
+
 === Puzzle module controller
+
+[cols="1,1,10"]
+|===
+| 141 | <<must>> |
+The puzzle module controller has at least 1 I2C peripheral.
+
+| 142 | <<should>> |
+The puzzle module controller has enough I/O ports to control a puzzle.
+
+| 143 | <<should>> |
+The puzzle module is power efficient.
+
+| 144 | <<must>> |
+The puzzle module has a configurable clock speed.
+
+| 145 | <<must>> |
+The puzzle module controller is available as a development kit from Farnell.
+
+| 146 | <<should>> |
+The puzzle module can communicate over I²C with a speed of 400kb/s
+|===
+
 === Vault puzzle
+
+[cols="1,1,10"]
+|===
+| 147 | <<must>> |
+The vault puzzle can communicate with the main controller using I²C
+
+| 148 | <<wont>> |
+The vault puzzle can produce a sound signal for the buzzer
+
+| 149 | <<must>> |
+The vault puzzle can lock & unlock a solenoid lock
+
+| 150 | <<must>> |
+The vault puzzle can translate and obtain a button press from the 3x4 keypad using 5 inputs
+
+| 151 | <<must>> |
+The vault puzzle can communicate with a 4x 7 SEG. Display using 2 lines (clock & data)
+
+| 152 | <<should>> |
+The vault puzzle can read a sensor's value to detect if the vault door is open or closed.
+|===
+
 === Bomb
+
+[cols="1,1,10"]
+|===
+| 153 | <<wont>> |
+The bomb can communicate with the hub using a TCP socket connection
+
+| 154 | <<must>> |
+The bomb can sync. time using the WiFi connection
+
+| 155 | <<wont>> |
+The bomb can retrieve, and store a given code in order to verify it later on input
+
+| 156 | <<should>> |
+The bomb can be paired to a puzzlebox using the hub's interface
+|===
+
 == Preconditions
+
+[cols="1,11"]
+|===
+| 160 | The delivery of components cannot take longer than two weeks.
+| 161 | The price of a single puzzle box is not higher than €150.
+| 162 | The existing games are used in the puzzle box.
+| 163 | The puzzle box is not allowed to make a connection with the Avans network (Eduroam).
+| 164 | The bomb hardware cannot be changed.
+|===
+
 == Documentation
+
+[cols="1,1,10"]
+|===
+| 157 | <<should>> |
+All documentation is written according to the style guide [3]
+
+| 158 | <<should>> |
+All documentation is manually checked for spelling and grammar mistakes before being published
+
+| 159 | <<must>> |
+All project documents are examined once by Jonathan Overes from Avans
+|===
 
 [appendix]
 == Explanatory Images
-
-// [#alinea1,reftext='alinea 1']
-// Hoi ik ben een alinea
-//
-// <<alinea1>>
 
 include::share/footer.adoc[]
 
