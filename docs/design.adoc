@@ -1,0 +1,5 @@
+:document: Software Design
+include::share/meta.adoc[]
+
+
+include::share/footer.adoc[]

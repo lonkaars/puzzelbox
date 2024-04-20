@@ -1,4 +1,4 @@
-= Research: {project}
+:document: Research
 include::share/meta.adoc[]
 
 == Microcontrollers used in the current state.
@@ -124,15 +124,14 @@ controller and controller used in puzzle modules.
 The following criteria were used to compare MCUs that are suitable candidates
 as main controller unit:
 
-* Must have at least 1 I^2^C peripheral
-  (<<requirements.adoc#req:main-i2c-ctrl>>).
+* Must have at least 1 I^2^C peripheral (<<reqs.adoc#req:main-i2c-ctrl>>).
 * Must be able to connect to a standard 802.11b/g/n access point
-  (<<requirements.adoc#req:main-802-11-ap>>).
+  (<<reqs.adoc#req:main-802-11-ap>>).
 * Must be able to serve TCP socket connection(s)
-  (<<requirements.adoc#req:main-tcp-socket>>).
-* Should be power efficient (<<requirements.adoc#req:main-pwr-efficient>>).
+  (<<reqs.adoc#req:main-tcp-socket>>).
+* Should be power efficient (<<reqs.adoc#req:main-pwr-efficient>>).
 * Is available as a development kit from Farnell
-  (<<requirements.adoc#req:main-devkit-supplier>>).
+  (<<reqs.adoc#req:main-devkit-supplier>>).
 
 <<tab:1>> lists the considered MCU options matching the above criteria. This
 list is a compilation of microcontroller offerings from the following
@@ -160,14 +159,13 @@ The Raspberry Pi Pico W board is utilized during development.
 The following criteria were used to compare MCUs that are suitable candidates
 for controlling the puzzle modules:
 
-* Must have at least 1 I^2^C peripheral
-  (<<requirements.adoc#req:pm-i2c-ctrl>>).
+* Must have at least 1 I^2^C peripheral (<<reqs.adoc#req:pm-i2c-ctrl>>).
 * Should has enough I/O ports to directly control moderately complex puzzles
-  (<<requirements.adoc#req:pm-gpio>>).
-* Should be power efficient (<<requirements.adoc#req:pm-pwr-efficient>>).
+  (<<reqs.adoc#req:pm-gpio>>).
+* Should be power efficient (<<reqs.adoc#req:pm-pwr-efficient>>).
 * Is available as a development kit from Farnell
-  (<<requirements.adoc#req:pm-devkit-supplier>>).
-* Has a configurable clock speed (<<requirements.adoc#req:pm-clk-ctrl>>).
+  (<<reqs.adoc#req:pm-devkit-supplier>>).
+* Has a configurable clock speed (<<reqs.adoc#req:pm-clk-ctrl>>).
 
 <<tab:2>> lists the considered MCU options matching the above criteria. This
 list is a compilation of microcontroller offerings from the following

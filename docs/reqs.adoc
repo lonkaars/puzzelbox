@@ -1,4 +1,4 @@
-= Project Requirements: {project}
+:document: Project Requirements
 include::share/meta.adoc[]
 
 == Introduction

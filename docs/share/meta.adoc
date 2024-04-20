@@ -1,8 +1,13 @@
-:sectnums:
-:title-page:
-:toc:
-:toclevels: 4
-:pagenums:
+// (these files are included from the parent directory)
+:pdf-theme: ./theme.yml
+// :pdf-fontsdir: ./res/font
+:bibtex-file: ./share/refs.bib
+
+// document / project info
+ifndef::document[]
+:document: DOCUMENT TITLE
+endif::[]
+:project: Project Puzzlebox
 :revnumber: 0.0
 :revdate: 2024-04-01
 :revremark: draft
@@ -10,7 +15,19 @@
 :author_2: Loek Le Blansch
 :author_3: Lars Faase
 :author_4: Elwin Hammer
-:xrefstyle: short
-:project: Project Puzzlebox
 
-// see https://docs.asciidoctor.org/asciidoc/latest/attributes/document-attributes-ref
+// numbering / reference styles
+:sectnums:
+:toclevels: 4
+:pagenums:
+:xrefstyle: short
+
+// (set and display title)
+= {document}: {project}
+// start each document with a title page
+:title-page:
+// followed by a table of contents
+:toc:
+
+// also https://docs.asciidoctor.org/asciidoc/latest/attributes/document-attributes-ref
+

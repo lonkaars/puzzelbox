@@ -1,4 +1,4 @@
-= Project Plan: {project}
+:document: Project Plan
 include::share/meta.adoc[]
 
 == Introduction

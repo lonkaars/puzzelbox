@@ -1,6 +1,7 @@
 all: plan.pdf
-all: requirements.pdf
+all: reqs.pdf
 all: research.pdf
+all: design.pdf
 
 # include font.mk
 
@@ -15,9 +16,6 @@ ASCIIDOCTOR_ARGS += --require asciidoctor-pdf
 # ASCIIDOCTOR_ARGS += --require ./plugin/helloworld
 ASCIIDOCTOR_ARGS += --require asciidoctor-interdoc-reftext
 ASCIIDOCTOR_ARGS += --backend pdf
-ASCIIDOCTOR_ARGS += --attribute pdf-theme=./theme.yml
-# ASCIIDOCTOR_ARGS += --attribute pdf-fontsdir=./res/font
-ASCIIDOCTOR_ARGS += --attribute bibtex-file=./share/refs.bib
 %.pdf: %.adoc $(PDFDEPS)
 	bundle exec asciidoctor $(ASCIIDOCTOR_ARGS) $<
 
