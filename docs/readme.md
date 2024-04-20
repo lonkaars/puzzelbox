@@ -5,12 +5,17 @@ To compile the documents, make sure you have [Ruby][rubydl] and the
 dependencies installed by running the `bundle` command in this folder. A
 makefile is provided for convenience.
 
+## notes for writers
+
+- "I<sup>2</sup>C" is written as `I^2^C`
+- "C++" is written as `{cpp}`
+
 ## TODO
 
 - transfer documents
     - [x] project plan
     - [x] requirements
-    - [ ] research
+    - [x] research
     - [ ] software design
 - xrefs for--
     - [x] tables
@@ -19,7 +24,7 @@ makefile is provided for convenience.
     - [x] requirements
 - [x] figures
 - [x] citations
-- [ ] glossary
+- [ ] glossary (w/ cross-references)
 - [ ] PDF style
 
 [rubydl]: https://www.ruby-lang.org/en/documentation/installation/

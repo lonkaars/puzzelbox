@@ -1,4 +1,4 @@
-[glossary]
+[appendix]
 == Glossary
 
 [glossary]

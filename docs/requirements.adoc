@@ -1,4 +1,4 @@
-= Project Requirements: Project Puzzlebox
+= Project Requirements: {project}
 include::share/meta.adoc[]
 
 == Introduction
@@ -11,7 +11,7 @@ The priority of specifications is indicated using the MoSCoW method, see
 
 [[tab:moscow]]
 .MoSCoW Method cite:[Wik22]
-[cols="1,3"]
+[cols="20h,~"]
 |===
 | Priority | Description
 
@@ -108,7 +108,7 @@ describes all functional requirements of the puzzle box.
 === The puzzle box
 
 .Puzzle box specifications
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -165,7 +165,7 @@ describes all functional requirements of the puzzle box.
 === The bomb
 
 .Bomb specifications
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -198,7 +198,7 @@ describes all functional requirements of the puzzle box.
 === The game
 
 .General game specifications
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -239,7 +239,7 @@ describes all functional requirements of the puzzle box.
 ==== NeoTrellis puzzle
 
 .NeoTrellis puzzle requirements
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -262,30 +262,30 @@ describes all functional requirements of the puzzle box.
 ==== Software puzzle
 
 .Software puzzle requirements
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
 | <<req:039>> | <<should>> |
-[[req:039,R-039]] The software puzzle board has 6 banana plug connectors with different logic gates displayed next to them (Refer to <<fig:software-example>> for a sketch and <<fig:software-cable>> for a banana plug example).
+[[req:039,R-039]] The software puzzle board has 6 banana plug connectors with different logic gates displayed next to them (Refer to <<fig:software-example-sketch>> for a sketch and <<fig:software-cable-sketch>> for a banana plug example).
 
 | <<req:040>> | <<should>> |
-[[req:040,R-040]] The software puzzle board has 6 banana plug connectors labeled with the letters A through F (Refer to <<fig:software-example>> for a sketch).
+[[req:040,R-040]] The software puzzle board has 6 banana plug connectors labeled with the letters A through F (Refer to <<fig:software-example-sketch>> for a sketch).
 
 | <<req:041>> | <<should>> |
 [[req:041,R-041]] At the start of the puzzle box game, the preparer must connect all cables in parallel (horizontally) to the connectors.
 
 | <<req:042>> | <<wont>> |
-[[req:042,R-042]] There are C code blocks visible only to the players on the bomb side, corresponding to the letters A through F (Refer to <<fig:software-codes>> for the codes).
+[[req:042,R-042]] There are C code blocks visible only to the players on the bomb side, corresponding to the letters A through F (Refer to <<fig:software-codes-sketch>> for the codes).
 
 | <<req:043>> | <<should>> |
 [[req:043,R-043]] The combinations of logic gates to letters are always the same.
 
 | <<req:044>> | <<wont>> |
-[[req:044,R-044]] The puzzle is considered solved when the cables from the logic gates match the code blocks (Refer to <<fig:software-example>> and <<fig:software-codes>> for the combinations).
+[[req:044,R-044]] The puzzle is considered solved when the cables from the logic gates match the code blocks (Refer to <<fig:software-example-sketch>> and <<fig:software-codes-sketch>> for the combinations).
 
 | <<req:045>> | <<wont>> |
-[[req:045,R-045]] Once the puzzle is solved, the green indicator LED will light up (Refer to <<fig:software-example>> and <<fig:software-codes>>).
+[[req:045,R-045]] Once the puzzle is solved, the green indicator LED will light up (Refer to <<fig:software-example-sketch>> and <<fig:software-codes-sketch>>).
 
 | <<req:046>> | <<wont>> |
 [[req:046,R-046]] After the puzzle is solved, the automation puzzle begins.
@@ -297,7 +297,7 @@ The specific details for this puzzle are not present in the previous
 documentation. Due to time constraints, the section will be left empty.
 
 .Automation puzzle requirements
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -308,7 +308,7 @@ documentation. Due to time constraints, the section will be left empty.
 ==== Hardware puzzle
 
 .Hardware puzzle requirements
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -316,13 +316,13 @@ documentation. Due to time constraints, the section will be left empty.
 [[req:048,R-048]] There are eight switches on the hardware puzzle board.
 
 | <<req:049>> | <<should>> |
-[[req:049,R-049]] The hardware puzzle board features a diagram of a combinatorial circuit with 8 inputs (linked to the switches) and 1 output (Refer to <<fig:hardware-example>> for a sketch).
+[[req:049,R-049]] The hardware puzzle board features a diagram of a combinatorial circuit with 8 inputs (linked to the switches) and 1 output (Refer to <<fig:hardware-example-sketch>> for a sketch).
 
 | <<req:050>> | <<should>> |
-[[req:050,R-050]] The hardware puzzle board includes a red 7-segment 4-digit display (Refer to <<fig:hardware-example>> for a sketch).
+[[req:050,R-050]] The hardware puzzle board includes a red 7-segment 4-digit display (Refer to <<fig:hardware-example-sketch>> for a sketch).
 
 | <<req:051>> | <<should>> |
-[[req:051,R-051]] There are 4 potentiometers on the hardware puzzle board (Refer to <<fig:hardware-example>> for a sketch).
+[[req:051,R-051]] There are 4 potentiometers on the hardware puzzle board (Refer to <<fig:hardware-example-sketch>> for a sketch).
 
 | <<req:052>> | <<should>> |
 [[req:052,R-052]] A blue LED on the hardware puzzle board displays the morse code.
@@ -358,7 +358,7 @@ documentation. Due to time constraints, the section will be left empty.
 [[req:062,R-062]] During the puzzle, the switches must be toggled to obtain a logical '1' at the output of the combinatorial circuit.
 
 | <<req:063>> | <<wont>> |
-[[req:063,R-063]] When the output of the combinatorial circuit equals '1', the green indicator LED turns on (Refer to <<fig:hardware-example>> for a sketch).
+[[req:063,R-063]] When the output of the combinatorial circuit equals '1', the green indicator LED turns on (Refer to <<fig:hardware-example-sketch>> for a sketch).
 
 | <<req:064>> | <<wont>> |
 [[req:064,R-064]] The puzzle proceeds to phase 2 when the output of the combinatorial circuit is a logical '1'.
@@ -376,7 +376,7 @@ documentation. Due to time constraints, the section will be left empty.
 [[req:068,R-068]] The morse code is randomly generated.
 
 | <<req:069>> | <<wont>> |
-[[req:069,R-069]] Each potentiometer can be rotated to display a value from 0 to 9 on the corresponding 4-digit 7-segment display. The order of the potentiometers matches the order of the segments on the display (Refer to <<fig:hardware-example>> for a sketch).
+[[req:069,R-069]] Each potentiometer can be rotated to display a value from 0 to 9 on the corresponding 4-digit 7-segment display. The order of the potentiometers matches the order of the segments on the display (Refer to <<fig:hardware-example-sketch>> for a sketch).
 
 | <<req:070>> | <<wont>> |
 [[req:070,R-070]] The puzzle is considered solved when the code displayed on the 7-segment 4-digit screen matches the 4 numbers from the morse code.
@@ -397,7 +397,7 @@ documentation. Due to time constraints, the section will be left empty.
 ==== Vault puzzle
 
 .Vault puzzle requirements
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -447,7 +447,7 @@ documentation. Due to time constraints, the section will be left empty.
 === Battery
 
 .Battery requirements
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -464,7 +464,7 @@ documentation. Due to time constraints, the section will be left empty.
 === Network Communication
 
 .Communication requirements
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -477,7 +477,7 @@ documentation. Due to time constraints, the section will be left empty.
 
 === Framework
 
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -497,7 +497,7 @@ documentation. Due to time constraints, the section will be left empty.
 === Puzzle box hub
 
 .Puzzle box hub general requirements
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -516,7 +516,7 @@ technical specifications of the puzzle box.
 === Wireless communication
 
 .Wireless communication requirements
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -527,7 +527,7 @@ technical specifications of the puzzle box.
 === Framework
 
 .Development framework requirements
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -550,7 +550,7 @@ technical specifications of the puzzle box.
 === Main controller
 
 .Main controller requirements
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -575,7 +575,7 @@ technical specifications of the puzzle box.
 
 === Puzzle module controller
 
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -601,7 +601,7 @@ technical specifications of the puzzle box.
 === Vault puzzle
 
 .Vault puzzle requirements
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -627,7 +627,7 @@ technical specifications of the puzzle box.
 === Bomb
 
 .Bomb requirements
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -650,7 +650,7 @@ This section describes the aspects of the project which have been set as
 preconditions and cannot be changed.
 
 .Preconditions
-[cols="1,11"]
+[cols="8h,~"]
 |===
 | ID | Precondition
 
@@ -666,7 +666,7 @@ preconditions and cannot be changed.
 This section lists requirements that apply to documentation produced during
 this project.
 
-[cols="1,1,10"]
+[cols="8h,5h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -681,43 +681,43 @@ this project.
 |===
 
 [appendix]
-== Explanatory Images
+== Attachments
 
-[[fig:vault-disp]]
+[[fig:vault-disp-sketch]]
 .7 Segment 4 digit screen (sketch)
-image::img/requirements/vault-disp.png[]
+image::img/vault-disp-sketch.png[]
 
-[[fig:neotrellis-hardware]]
+[[fig:neotrellis-hardware-sketch]]
 .NeoTrellis example (sketch)
-image::img/requirements/neotrellis-hardware.png[]
+image::img/neotrellis-hardware-sketch.png[]
 
 [[fig:neotrellis-toggle]]
 .Toggling LEDs after the user pressed on the button (purple dot)
-image::img/requirements/neotrellis-toggle.png[width=45%]
+image::img/neotrellis-toggle.png[width=45%]
 
 [[fig:neotrellis-start]]
 .Starting pattern of the NeoTrellis puzzle
-image::img/requirements/neotrellis-start.png[width=45%]
+image::img/neotrellis-start.png[width=45%]
 
-[[fig:software-example]]
+[[fig:software-example-sketch]]
 .Software puzzle example with logical ports (left) and letters A through F (right)
-image::img/requirements/software-example.png[]
+image::img/software-example-sketch.png[]
 
-[[fig:software-codes]]
+[[fig:software-codes-sketch]]
 .The different code fragments corresponding with the letter A through F
-image::img/requirements/software-codes.png[height=35%]
+image::img/software-codes-sketch.png[height=35%]
 
-[[fig:software-cable]]
+[[fig:software-cable-sketch]]
 .Software puzzle cable example
-image::img/requirements/software-cable.png[]
+image::img/software-cable-sketch.png[]
 
-[[fig:hardware-example]]
+[[fig:hardware-example-sketch]]
 .Hardware puzzle on the puzzle box
-image::img/requirements/hardware-example.png[]
+image::img/hardware-example-sketch.png[]
 
 [[fig:vault-keypad]]
 .Buttons combinations with level numbers in the top left
-image::img/requirements/vault-keypad.png[width=45%]
+image::img/vault-keypad.png[width=45%]
 
 include::share/footer.adoc[]
 

@@ -65,6 +65,9 @@ caption:
   align: center
   end: bottom
 
+example:
+  caption:
+    end: $caption-end
 table:
   caption:
     end: $caption-end

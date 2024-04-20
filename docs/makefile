@@ -1,5 +1,6 @@
 all: plan.pdf
 all: requirements.pdf
+all: research.pdf
 
 # include font.mk
 

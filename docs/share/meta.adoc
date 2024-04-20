@@ -11,3 +11,6 @@
 :author_3: Lars Faase
 :author_4: Elwin Hammer
 :xrefstyle: short
+:project: Project Puzzlebox
+
+// see https://docs.asciidoctor.org/asciidoc/latest/attributes/document-attributes-ref

@@ -1,4 +1,4 @@
-= Project Plan: Project Puzzlebox
+= Project Plan: {project}
 include::share/meta.adoc[]
 
 == Introduction
