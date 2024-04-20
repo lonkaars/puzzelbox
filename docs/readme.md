@@ -9,6 +9,8 @@ makefile is provided for convenience.
 
 - "I<sup>2</sup>C" is written as `I^2^C`
 - "C++" is written as `{cpp}`
+- please give cross references, links, image files, figure ids, etc. meaningful
+  names
 
 ## TODO
 

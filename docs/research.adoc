@@ -124,11 +124,15 @@ controller and controller used in puzzle modules.
 The following criteria were used to compare MCUs that are suitable candidates
 as main controller unit:
 
-* Must have at least 1 I^2^C peripheral (R#136).
-* Must be able to connect to a standard 802.11b/g/n access point (R#137).
-* Must be able to serve TCP socket connection(s) (R#138).
-* Should be power efficient (R#166).
-* Is available as a development kit from Farnell (R#139).
+* Must have at least 1 I^2^C peripheral
+  (<<requirements.adoc#req:main-i2c-ctrl>>).
+* Must be able to connect to a standard 802.11b/g/n access point
+  (<<requirements.adoc#req:main-802-11-ap>>).
+* Must be able to serve TCP socket connection(s)
+  (<<requirements.adoc#req:main-tcp-socket>>).
+* Should be power efficient (<<requirements.adoc#req:main-pwr-efficient>>).
+* Is available as a development kit from Farnell
+  (<<requirements.adoc#req:main-devkit-supplier>>).
 
 <<tab:1>> lists the considered MCU options matching the above criteria. This
 list is a compilation of microcontroller offerings from the following
@@ -156,12 +160,14 @@ The Raspberry Pi Pico W board is utilized during development.
 The following criteria were used to compare MCUs that are suitable candidates
 for controlling the puzzle modules:
 
-* Must have at least 1 I^2^C peripheral (R#141).
+* Must have at least 1 I^2^C peripheral
+  (<<requirements.adoc#req:pm-i2c-ctrl>>).
 * Should has enough I/O ports to directly control moderately complex puzzles
-  (R#142).
-* Should be power efficient (R#143).
-* Is available as a development kit from Farnell (R#145).
-* Has a configurable clock speed (R#144).
+  (<<requirements.adoc#req:pm-gpio>>).
+* Should be power efficient (<<requirements.adoc#req:pm-pwr-efficient>>).
+* Is available as a development kit from Farnell
+  (<<requirements.adoc#req:pm-devkit-supplier>>).
+* Has a configurable clock speed (<<requirements.adoc#req:pm-clk-ctrl>>).
 
 <<tab:2>> lists the considered MCU options matching the above criteria. This
 list is a compilation of microcontroller offerings from the following
@@ -607,14 +613,18 @@ students and the choice of microcontrollers also affects the software to be
 written. The other difference is that the 21-22 group only tells how they
 realise the design without indicating which design choices they made for this
 and what other options there were. The 22-23 group did do this and described it
-in the design document. TODO Refer to design document
+in the design document.
+// TODO Refer to design document
 
 === What to consider when developing software
 
 The hardware group (22-23), in addition to the recommendations in the
 requirements package, has provided enough information to work with as a
-software group. TODO: Refereren naar eisenpakket 22/23 It was recommended by
-last year's group that software students pick up the following steps:
+software group.
+// TODO: Refereren naar eisenpakket 22/23
+
+It was recommended by last year's group that software students pick up the
+following steps:
 
 . Choose suitable microcontrollers
 . Understand the operation of wifi mesh + set up the web page

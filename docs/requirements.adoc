@@ -112,54 +112,54 @@ describes all functional requirements of the puzzle box.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:001>> | <<must>> |
-[[req:001,R-001]] The dimensions of the puzzle box are 30×30×30cm ± 5% (Length × Width × Height).
+| <<req:1>> | <<must>> |
+[[req:1,R-001]] The dimensions of the puzzle box are 30×30×30cm ± 5% (Length × Width × Height).
 
-| <<req:002>> | <<must>> |
-[[req:002,R-002]] The puzzle box extends a maximum of 5cm on the sides and the top.
+| <<req:2>> | <<must>> |
+[[req:2,R-002]] The puzzle box extends a maximum of 5cm on the sides and the top.
 
-| <<req:003>> | <<must>> |
-[[req:003,R-003]] The puzzle box is flat at the bottom.
+| <<req:3>> | <<must>> |
+[[req:3,R-003]] The puzzle box is flat at the bottom.
 
-| <<req:004>> | <<must>> |
-[[req:004,R-004]] The puzzle box has a key switch at the bottom of the NeoTrellis puzzle.
+| <<req:4>> | <<must>> |
+[[req:4,R-004]] The puzzle box has a key switch at the bottom of the NeoTrellis puzzle.
 
-| <<req:005>> | <<must>> |
-[[req:005,R-005]] The puzzle box has an indicator LED at the bottom of the NeoTrellis puzzle.
+| <<req:5>> | <<must>> |
+[[req:5,R-005]] The puzzle box has an indicator LED at the bottom of the NeoTrellis puzzle.
 
-| <<req:006>> | <<must>> |
-[[req:006,R-006]] The indicator LED turns green when the system is on and not charging.
+| <<req:6>> | <<must>> |
+[[req:6,R-006]] The indicator LED turns green when the system is on and not charging.
 
-| <<req:007>> | <<must>> |
-[[req:007,R-007]] The indicator LED turns blue when the battery is charging.
+| <<req:7>> | <<must>> |
+[[req:7,R-007]] The indicator LED turns blue when the battery is charging.
 
-| <<req:008>> | <<must>> |
-[[req:008,R-008]] The indicator LED turns red when the battery does not have enough capacity for the duration of one game and is not charging.
+| <<req:8>> | <<must>> |
+[[req:8,R-008]] The indicator LED turns red when the battery does not have enough capacity for the duration of one game and is not charging.
 
-| <<req:009>> | <<must>> |
-[[req:009,R-009]] The puzzle box has a USB-C port at the bottom of the NeoTrellis puzzle for battery charging.
+| <<req:9>> | <<must>> |
+[[req:9,R-009]] The puzzle box has a USB-C port at the bottom of the NeoTrellis puzzle for battery charging.
 
-| <<req:010>> | <<must>> |
-[[req:010,R-010]] The puzzle box has a distance sensor at the bottom to detect if it is lifted.
+| <<req:10>> | <<must>> |
+[[req:10,R-010]] The puzzle box has a distance sensor at the bottom to detect if it is lifted.
 
-| <<req:011>> | <<must>> |
-[[req:011,R-011]] The puzzle box main board (PCB on the bottom plate) includes a speaker.
+| <<req:11>> | <<must>> |
+[[req:11,R-011]] The puzzle box main board (PCB on the bottom plate) includes a speaker.
 
-| <<req:012>> | <<wont>> |
-[[req:012,R-012]] When the puzzle box is lifted, the mainboard speaker emits an alarm sound for at least 10 seconds. It stops only when it has been on a table for another 10 seconds (detected by the distance sensor).
+| <<req:12>> | <<wont>> |
+[[req:12,R-012]] When the puzzle box is lifted, the mainboard speaker emits an alarm sound for at least 10 seconds. It stops only when it has been on a table for another 10 seconds (detected by the distance sensor).
 
-| <<req:013>> | <<wont>> |
-[[req:013,R-013]] When the game is completed, the puzzle box produces a victory sound.
+| <<req:13>> | <<wont>> |
+[[req:13,R-013]] When the game is completed, the puzzle box produces a victory sound.
 
-| <<req:014>> | <<wont>> |
-[[req:014,R-014]] Pressing the "identify" button on the web panel causes the indicator LED to blink.
+| <<req:14>> | <<wont>> |
+[[req:14,R-014]] Pressing the "identify" button on the web panel causes the indicator LED to blink.
 
-| <<req:015>> | <<wont>> |
-[[req:015,R-015]] Pressing the "identify" button on the web panel triggers a sound from the speaker.
+| <<req:15>> | <<wont>> |
+[[req:15,R-015]] Pressing the "identify" button on the web panel triggers a sound from the speaker.
 
-| <<req:016>> | <<wont>> |
+| <<req:16>> | <<wont>> |
 // section 3.7 is inside the citation, and does not refer to section 3.7 in this document
-[[req:016,R-016]] The game starts once the scheduler time is reached (refer to cite:[Bek23] section 3.7).
+[[req:16,R-016]] The game starts once the scheduler time is reached (refer to cite:[Bek23] section 3.7).
 |===
 
 === The bomb
@@ -169,29 +169,29 @@ describes all functional requirements of the puzzle box.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:017>> | <<must>> |
-[[req:017,R-017]] The bomb includes a 6-digit 7-segment display for showing the remaining playtime.
+| <<req:17>> | <<must>> |
+[[req:17,R-017]] The bomb includes a 6-digit 7-segment display for showing the remaining playtime.
 
-| <<req:018>> | <<must>> |
-[[req:018,R-018]] The bomb contains a keypad for entering the disarm code.
+| <<req:18>> | <<must>> |
+[[req:18,R-018]] The bomb contains a keypad for entering the disarm code.
 
-| <<req:019>> | <<wont>> |
-[[req:019,R-019]] The 6-digit 7-segment display turns off when no game is in progress.
+| <<req:19>> | <<wont>> |
+[[req:19,R-019]] The 6-digit 7-segment display turns off when no game is in progress.
 
-| <<req:020>> | <<wont>> |
-[[req:020,R-020]] Once the disarm code is entered on the bomb keypad, the game is complete.
+| <<req:20>> | <<wont>> |
+[[req:20,R-020]] Once the disarm code is entered on the bomb keypad, the game is complete.
 
-| <<req:021>> | <<wont>> |
-[[req:021,R-021]] When the game is finished, the bomb emits a victory sound.
+| <<req:21>> | <<wont>> |
+[[req:21,R-021]] When the game is finished, the bomb emits a victory sound.
 
-| <<req:022>> | <<wont>> |
-[[req:022,R-022]] The timer on the bomb counts down from 60:00:00 to 00:00:00.
+| <<req:22>> | <<wont>> |
+[[req:22,R-022]] The timer on the bomb counts down from 60:00:00 to 00:00:00.
 
-| <<req:023>> | <<wont>> |
-[[req:023,R-023]] Pressing the "identify" button on the web panel causes the indicator LED to blink.
+| <<req:23>> | <<wont>> |
+[[req:23,R-023]] Pressing the "identify" button on the web panel causes the indicator LED to blink.
 
-| <<req:024>> | <<wont>> |
-[[req:024,R-024]] Pressing the "identify" button on the web panel triggers a sound from the speaker.
+| <<req:24>> | <<wont>> |
+[[req:24,R-024]] Pressing the "identify" button on the web panel triggers a sound from the speaker.
 
 |===
 
@@ -202,14 +202,14 @@ describes all functional requirements of the puzzle box.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:025>> | <<wont>> |
-[[req:025,R-025]] The game lasts for 1 hour.
+| <<req:25>> | <<wont>> |
+[[req:25,R-025]] The game lasts for 1 hour.
 
-| <<req:026>> | <<wont>> |
-[[req:026,R-026]] The game should be solvable within the given playtime, without the player having prior knowledge of the game or its mechanics.
+| <<req:26>> | <<wont>> |
+[[req:26,R-026]] The game should be solvable within the given playtime, without the player having prior knowledge of the game or its mechanics.
 
-| <<req:027>> | <<must>> |
-[[req:027,R-027]] The puzzles should be easy enough to solve without any prior knowledge of the game or its mechanics.
+| <<req:27>> | <<must>> |
+[[req:27,R-027]] The puzzles should be easy enough to solve without any prior knowledge of the game or its mechanics.
 
 | <<req:167>> | <<must>> |
 [[req:167,R-167]] A puzzle module can manually be reset at the discretion of the game operator
@@ -217,23 +217,23 @@ describes all functional requirements of the puzzle box.
 | <<req:168>> | <<must>> |
 [[req:168,R-168]] A puzzle module can manually be set as solved at the discretion of the game operator
 
-| <<req:028>> | <<wont>> |
-[[req:028,R-028]] The disarm code for the bomb consists of 4 digits.
+| <<req:28>> | <<wont>> |
+[[req:28,R-028]] The disarm code for the bomb consists of 4 digits.
 
-| <<req:029>> | <<wont>> |
-[[req:029,R-029]] Once all games are solved, the mainboard PCB displays the disarm code on a red 7-segment 4-digit screen.
+| <<req:29>> | <<wont>> |
+[[req:29,R-029]] Once all games are solved, the mainboard PCB displays the disarm code on a red 7-segment 4-digit screen.
 
-| <<req:030>> | <<wont>> |
-[[req:030,R-030]] The puzzle box records the playtime of each game.
+| <<req:30>> | <<wont>> |
+[[req:30,R-030]] The puzzle box records the playtime of each game.
 
-| <<req:031>> | <<wont>> |
-[[req:031,R-031]] The puzzle box features 5 playable puzzles.
+| <<req:31>> | <<wont>> |
+[[req:31,R-031]] The puzzle box features 5 playable puzzles.
 
-| <<req:032>> | <<wont>> |
-[[req:032,R-032]] Only one game is active at a time; the other games do not respond to buttons.
+| <<req:32>> | <<wont>> |
+[[req:32,R-032]] Only one game is active at a time; the other games do not respond to buttons.
 
-| <<req:033>> | <<wont>> |
-[[req:033,R-033]] The game always starts with the NeoTrellis puzzle.
+| <<req:33>> | <<wont>> |
+[[req:33,R-033]] The game always starts with the NeoTrellis puzzle.
 |===
 
 ==== NeoTrellis puzzle
@@ -243,20 +243,20 @@ describes all functional requirements of the puzzle box.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:034>> | <<must>> |
-[[req:034,R-034]] There is an 8x8 LED matrix where each LED can display different colors.
+| <<req:34>> | <<must>> |
+[[req:34,R-034]] There is an 8x8 LED matrix where each LED can display different colors.
 
-| <<req:035>> | <<wont>> |
-[[req:035,R-035]] At the start of the puzzle, a pattern is displayed as shown in <<fig:neotrellis-start>>.
+| <<req:35>> | <<wont>> |
+[[req:35,R-035]] At the start of the puzzle, a pattern is displayed as shown in <<fig:neotrellis-start>>.
 
-| <<req:036>> | <<wont>> |
-[[req:036,R-036]] When a button is pressed, the adjacent LEDs and the pressed LED toggle (If an LED is off, it turns on. If an LED is on, it turns off).
+| <<req:36>> | <<wont>> |
+[[req:36,R-036]] When a button is pressed, the adjacent LEDs and the pressed LED toggle (If an LED is off, it turns on. If an LED is on, it turns off).
 
-| <<req:037>> | <<wont>> |
-[[req:037,R-037]] All LEDs in the Neotrellis that are turned on are blue.
+| <<req:37>> | <<wont>> |
+[[req:37,R-037]] All LEDs in the Neotrellis that are turned on are blue.
 
-| <<req:038>> | <<wont>> |
-[[req:038,R-038]] The puzzle is considered solved when all LEDs are turned off, and then the software puzzle starts.
+| <<req:38>> | <<wont>> |
+[[req:38,R-038]] The puzzle is considered solved when all LEDs are turned off, and then the software puzzle starts.
 |===
 
 ==== Software puzzle
@@ -266,29 +266,29 @@ describes all functional requirements of the puzzle box.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:039>> | <<should>> |
-[[req:039,R-039]] The software puzzle board has 6 banana plug connectors with different logic gates displayed next to them (Refer to <<fig:software-example-sketch>> for a sketch and <<fig:software-cable-sketch>> for a banana plug example).
+| <<req:39>> | <<should>> |
+[[req:39,R-039]] The software puzzle board has 6 banana plug connectors with different logic gates displayed next to them (Refer to <<fig:software-example-sketch>> for a sketch and <<fig:software-cable-sketch>> for a banana plug example).
 
-| <<req:040>> | <<should>> |
-[[req:040,R-040]] The software puzzle board has 6 banana plug connectors labeled with the letters A through F (Refer to <<fig:software-example-sketch>> for a sketch).
+| <<req:40>> | <<should>> |
+[[req:40,R-040]] The software puzzle board has 6 banana plug connectors labeled with the letters A through F (Refer to <<fig:software-example-sketch>> for a sketch).
 
-| <<req:041>> | <<should>> |
-[[req:041,R-041]] At the start of the puzzle box game, the preparer must connect all cables in parallel (horizontally) to the connectors.
+| <<req:41>> | <<should>> |
+[[req:41,R-041]] At the start of the puzzle box game, the preparer must connect all cables in parallel (horizontally) to the connectors.
 
-| <<req:042>> | <<wont>> |
-[[req:042,R-042]] There are C code blocks visible only to the players on the bomb side, corresponding to the letters A through F (Refer to <<fig:software-codes-sketch>> for the codes).
+| <<req:42>> | <<wont>> |
+[[req:42,R-042]] There are C code blocks visible only to the players on the bomb side, corresponding to the letters A through F (Refer to <<fig:software-codes-sketch>> for the codes).
 
-| <<req:043>> | <<should>> |
-[[req:043,R-043]] The combinations of logic gates to letters are always the same.
+| <<req:43>> | <<should>> |
+[[req:43,R-043]] The combinations of logic gates to letters are always the same.
 
-| <<req:044>> | <<wont>> |
-[[req:044,R-044]] The puzzle is considered solved when the cables from the logic gates match the code blocks (Refer to <<fig:software-example-sketch>> and <<fig:software-codes-sketch>> for the combinations).
+| <<req:44>> | <<wont>> |
+[[req:44,R-044]] The puzzle is considered solved when the cables from the logic gates match the code blocks (Refer to <<fig:software-example-sketch>> and <<fig:software-codes-sketch>> for the combinations).
 
-| <<req:045>> | <<wont>> |
-[[req:045,R-045]] Once the puzzle is solved, the green indicator LED will light up (Refer to <<fig:software-example-sketch>> and <<fig:software-codes-sketch>>).
+| <<req:45>> | <<wont>> |
+[[req:45,R-045]] Once the puzzle is solved, the green indicator LED will light up (Refer to <<fig:software-example-sketch>> and <<fig:software-codes-sketch>>).
 
-| <<req:046>> | <<wont>> |
-[[req:046,R-046]] After the puzzle is solved, the automation puzzle begins.
+| <<req:46>> | <<wont>> |
+[[req:46,R-046]] After the puzzle is solved, the automation puzzle begins.
 |===
 
 ==== Automation puzzle
@@ -301,8 +301,8 @@ documentation. Due to time constraints, the section will be left empty.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:047>> | <<wont>> |
-[[req:047,R-047]] After the puzzle is solved, the hardware puzzle begins.
+| <<req:47>> | <<wont>> |
+[[req:47,R-047]] After the puzzle is solved, the hardware puzzle begins.
 |===
 
 ==== Hardware puzzle
@@ -312,86 +312,86 @@ documentation. Due to time constraints, the section will be left empty.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:048>> | <<should>> |
-[[req:048,R-048]] There are eight switches on the hardware puzzle board.
+| <<req:48>> | <<should>> |
+[[req:48,R-048]] There are eight switches on the hardware puzzle board.
 
-| <<req:049>> | <<should>> |
-[[req:049,R-049]] The hardware puzzle board features a diagram of a combinatorial circuit with 8 inputs (linked to the switches) and 1 output (Refer to <<fig:hardware-example-sketch>> for a sketch).
+| <<req:49>> | <<should>> |
+[[req:49,R-049]] The hardware puzzle board features a diagram of a combinatorial circuit with 8 inputs (linked to the switches) and 1 output (Refer to <<fig:hardware-example-sketch>> for a sketch).
 
-| <<req:050>> | <<should>> |
-[[req:050,R-050]] The hardware puzzle board includes a red 7-segment 4-digit display (Refer to <<fig:hardware-example-sketch>> for a sketch).
+| <<req:50>> | <<should>> |
+[[req:50,R-050]] The hardware puzzle board includes a red 7-segment 4-digit display (Refer to <<fig:hardware-example-sketch>> for a sketch).
 
-| <<req:051>> | <<should>> |
-[[req:051,R-051]] There are 4 potentiometers on the hardware puzzle board (Refer to <<fig:hardware-example-sketch>> for a sketch).
+| <<req:51>> | <<should>> |
+[[req:51,R-051]] There are 4 potentiometers on the hardware puzzle board (Refer to <<fig:hardware-example-sketch>> for a sketch).
 
-| <<req:052>> | <<should>> |
-[[req:052,R-052]] A blue LED on the hardware puzzle board displays the morse code.
+| <<req:52>> | <<should>> |
+[[req:52,R-052]] A blue LED on the hardware puzzle board displays the morse code.
 
-| <<req:053>> | <<should>> |
-[[req:053,R-053]] A green LED on the hardware puzzle board indicates whether the combinatorial circuit is solved.
+| <<req:53>> | <<should>> |
+[[req:53,R-053]] A green LED on the hardware puzzle board indicates whether the combinatorial circuit is solved.
 
-| <<req:054>> | <<wont>> |
-[[req:054,R-054]] At the start of the puzzle, the potentiometers are inactive.
+| <<req:54>> | <<wont>> |
+[[req:54,R-054]] At the start of the puzzle, the potentiometers are inactive.
 
-| <<req:055>> | <<wont>> |
-[[req:055,R-055]] The 7-segment display is off at the beginning of the puzzle.
+| <<req:55>> | <<wont>> |
+[[req:55,R-055]] The 7-segment display is off at the beginning of the puzzle.
 
-| <<req:056>> | <<wont>> |
-[[req:056,R-056]] The LED for the combinatorial puzzle is off initially.
+| <<req:56>> | <<wont>> |
+[[req:56,R-056]] The LED for the combinatorial puzzle is off initially.
 
-| <<req:057>> | <<wont>> |
-[[req:057,R-057]] The morse code LED is off at the puzzle's outset.
+| <<req:57>> | <<wont>> |
+[[req:57,R-057]] The morse code LED is off at the puzzle's outset.
 
-| <<req:058>> | <<must>> |
-[[req:058,R-058]] The preparer must set all switches to the down position at the start of the puzzle box game.
+| <<req:58>> | <<must>> |
+[[req:58,R-058]] The preparer must set all switches to the down position at the start of the puzzle box game.
 
-| <<req:059>> | <<must>> |
-[[req:059,R-059]] The preparer must turn all potentiometers to the left (value '0') at the beginning of the puzzle box game.
+| <<req:59>> | <<must>> |
+[[req:59,R-059]] The preparer must turn all potentiometers to the left (value '0') at the beginning of the puzzle box game.
 
-| <<req:060>> | <<wont>> |
-[[req:060,R-060]] The puzzle consists of two phases.
+| <<req:60>> | <<wont>> |
+[[req:60,R-060]] The puzzle consists of two phases.
 
-| <<req:061>> | <<wont>> |
-[[req:061,R-061]] The puzzle begins in phase 1.
+| <<req:61>> | <<wont>> |
+[[req:61,R-061]] The puzzle begins in phase 1.
 
-| <<req:062>> | <<wont>> |
-[[req:062,R-062]] During the puzzle, the switches must be toggled to obtain a logical '1' at the output of the combinatorial circuit.
+| <<req:62>> | <<wont>> |
+[[req:62,R-062]] During the puzzle, the switches must be toggled to obtain a logical '1' at the output of the combinatorial circuit.
 
-| <<req:063>> | <<wont>> |
-[[req:063,R-063]] When the output of the combinatorial circuit equals '1', the green indicator LED turns on (Refer to <<fig:hardware-example-sketch>> for a sketch).
+| <<req:63>> | <<wont>> |
+[[req:63,R-063]] When the output of the combinatorial circuit equals '1', the green indicator LED turns on (Refer to <<fig:hardware-example-sketch>> for a sketch).
 
-| <<req:064>> | <<wont>> |
-[[req:064,R-064]] The puzzle proceeds to phase 2 when the output of the combinatorial circuit is a logical '1'.
+| <<req:64>> | <<wont>> |
+[[req:64,R-064]] The puzzle proceeds to phase 2 when the output of the combinatorial circuit is a logical '1'.
 
-| <<req:065>> | <<wont>> |
-[[req:065,R-065]] The switches no longer respond once the puzzle enters phase 2.
+| <<req:65>> | <<wont>> |
+[[req:65,R-065]] The switches no longer respond once the puzzle enters phase 2.
 
-| <<req:066>> | <<wont>> |
-[[req:066,R-066]] The indicator LED from phase 1 remains green during phase 2.
+| <<req:66>> | <<wont>> |
+[[req:66,R-066]] The indicator LED from phase 1 remains green during phase 2.
 
-| <<req:067>> | <<wont>> |
-[[req:067,R-067]] In phase 2, a morse code is displayed using an LED. This morse code represents 4 numbers from 0 to 9 and repeats every second.
+| <<req:67>> | <<wont>> |
+[[req:67,R-067]] In phase 2, a morse code is displayed using an LED. This morse code represents 4 numbers from 0 to 9 and repeats every second.
 
-| <<req:068>> | <<wont>> |
-[[req:068,R-068]] The morse code is randomly generated.
+| <<req:68>> | <<wont>> |
+[[req:68,R-068]] The morse code is randomly generated.
 
-| <<req:069>> | <<wont>> |
-[[req:069,R-069]] Each potentiometer can be rotated to display a value from 0 to 9 on the corresponding 4-digit 7-segment display. The order of the potentiometers matches the order of the segments on the display (Refer to <<fig:hardware-example-sketch>> for a sketch).
+| <<req:69>> | <<wont>> |
+[[req:69,R-069]] Each potentiometer can be rotated to display a value from 0 to 9 on the corresponding 4-digit 7-segment display. The order of the potentiometers matches the order of the segments on the display (Refer to <<fig:hardware-example-sketch>> for a sketch).
 
-| <<req:070>> | <<wont>> |
-[[req:070,R-070]] The puzzle is considered solved when the code displayed on the 7-segment 4-digit screen matches the 4 numbers from the morse code.
+| <<req:70>> | <<wont>> |
+[[req:70,R-070]] The puzzle is considered solved when the code displayed on the 7-segment 4-digit screen matches the 4 numbers from the morse code.
 
-| <<req:071>> | <<wont>> |
-[[req:071,R-071]] Once the puzzle is solved, the value shown on the 7-segment 4-digit display cannot be changed.
+| <<req:71>> | <<wont>> |
+[[req:71,R-071]] Once the puzzle is solved, the value shown on the 7-segment 4-digit display cannot be changed.
 
-| <<req:072>> | <<wont>> |
-[[req:072,R-072]] A 2-second victory sound is produced by the speaker upon solving the puzzle.
+| <<req:72>> | <<wont>> |
+[[req:72,R-072]] A 2-second victory sound is produced by the speaker upon solving the puzzle.
 
-| <<req:073>> | <<wont>> |
-[[req:073,R-073]] During the victory sound, the 7-segment display blinks twice per second.
+| <<req:73>> | <<wont>> |
+[[req:73,R-073]] During the victory sound, the 7-segment display blinks twice per second.
 
-| <<req:074>> | <<wont>> |
-[[req:074,R-074]] After the victory sound, the puzzle has been solved and the vault puzzle begins.
+| <<req:74>> | <<wont>> |
+[[req:74,R-074]] After the victory sound, the puzzle has been solved and the vault puzzle begins.
 |===
 
 ==== Vault puzzle
@@ -401,47 +401,47 @@ documentation. Due to time constraints, the section will be left empty.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:075>> | <<should>> |
-[[req:075,R-075]] The vault puzzle board features a red 7-segment 4-digit display.
+| <<req:75>> | <<should>> |
+[[req:75,R-075]] The vault puzzle board features a red 7-segment 4-digit display.
 
-| <<req:076>> | <<should>> |
-[[req:076,R-076]] On the vault puzzle board, there is a 4x4 grid of holes for ventilation and sound.
+| <<req:76>> | <<should>> |
+[[req:76,R-076]] On the vault puzzle board, there is a 4x4 grid of holes for ventilation and sound.
 
-| <<req:077>> | <<should>> |
-[[req:077,R-077]] The vault puzzle board includes a vault door, and the inside of the vault is transparent, allowing you to see inside the puzzle box.
+| <<req:77>> | <<should>> |
+[[req:77,R-077]] The vault puzzle board includes a vault door, and the inside of the vault is transparent, allowing you to see inside the puzzle box.
 
-| <<req:078>> | <<should>> |
-[[req:078,R-078]] A sensor is integrated with the vault to detect when the vault is closed.
+| <<req:78>> | <<should>> |
+[[req:78,R-078]] A sensor is integrated with the vault to detect when the vault is closed.
 
-| <<req:079>> | <<must>> |
-[[req:079,R-079]] At the beginning of the puzzle box game, the preparer must close the vault.
+| <<req:79>> | <<must>> |
+[[req:79,R-079]] At the beginning of the puzzle box game, the preparer must close the vault.
 
-| <<req:080>> | <<wont>> |
-[[req:080,R-080]] The puzzle starts at level 1.
+| <<req:80>> | <<wont>> |
+[[req:80,R-080]] The puzzle starts at level 1.
 
-| <<req:081>> | <<wont>> |
-[[req:081,R-081]] Initially, the 7-segment display shows a code consisting of a letter and a digit. This code represents a valid key combination for level 1 (Refer to <<fig:vault-keypad>> for all combinations).
+| <<req:81>> | <<wont>> |
+[[req:81,R-081]] Initially, the 7-segment display shows a code consisting of a letter and a digit. This code represents a valid key combination for level 1 (Refer to <<fig:vault-keypad>> for all combinations).
 
-| <<req:082>> | <<wont>> |
-[[req:082,R-082]] There are a total of 5 levels. After each level, a key combination is displayed, starting with a letter followed by a digit, which is valid for that level (Refer to <<fig:vault-keypad>>).
+| <<req:82>> | <<wont>> |
+[[req:82,R-082]] There are a total of 5 levels. After each level, a key combination is displayed, starting with a letter followed by a digit, which is valid for that level (Refer to <<fig:vault-keypad>>).
 
-| <<req:083>> | <<wont>> |
-[[req:083,R-083]] Each level has unique key combinations for the button locations (Refer to <<fig:vault-keypad>>).
+| <<req:83>> | <<wont>> |
+[[req:83,R-083]] Each level has unique key combinations for the button locations (Refer to <<fig:vault-keypad>>).
 
-| <<req:084>> | <<wont>> |
-[[req:084,R-084]] Pressing the button corresponding to the letter-digit combinations advances the puzzle to the next level.
+| <<req:84>> | <<wont>> |
+[[req:84,R-084]] Pressing the button corresponding to the letter-digit combinations advances the puzzle to the next level.
 
-| <<req:085>> | <<wont>> |
-[[req:085,R-085]] If an incorrect button is pressed, the game resets to level 1.
+| <<req:85>> | <<wont>> |
+[[req:85,R-085]] If an incorrect button is pressed, the game resets to level 1.
 
-| <<req:086>> | <<wont>> |
-[[req:086,R-086]] An error sound is produced by the speaker when an incorrect button is pressed.
+| <<req:86>> | <<wont>> |
+[[req:86,R-086]] An error sound is produced by the speaker when an incorrect button is pressed.
 
-| <<req:087>> | <<wont>> |
-[[req:087,R-087]] The 7-segment display blinks when an incorrect button is pressed.
+| <<req:87>> | <<wont>> |
+[[req:87,R-087]] The 7-segment display blinks when an incorrect button is pressed.
 
-| <<req:088>> | <<wont>> |
-[[req:088,R-088]] After completing 5 levels, the puzzle is solved, and the vault opens.
+| <<req:88>> | <<wont>> |
+[[req:88,R-088]] After completing 5 levels, the puzzle is solved, and the vault opens.
 |===
 
 === Battery
@@ -451,14 +451,14 @@ documentation. Due to time constraints, the section will be left empty.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:089>> | <<must>> |
-[[req:089,R-089]] The puzzle box is powered by a rechargeable battery.
+| <<req:89>> | <<must>> |
+[[req:89,R-089]] The puzzle box is powered by a rechargeable battery.
 
-| <<req:090>> | <<must>> |
-[[req:090,R-090]] The battery lasts for a minimum of 4 hours.
+| <<req:90>> | <<must>> |
+[[req:90,R-090]] The battery lasts for a minimum of 4 hours.
 
-| <<req:091>> | <<could>> |
-[[req:091,R-091]] The battery in the puzzle box can be replaced.
+| <<req:91>> | <<could>> |
+[[req:91,R-091]] The battery in the puzzle box can be replaced.
 |===
 
 === Network Communication
@@ -468,11 +468,11 @@ documentation. Due to time constraints, the section will be left empty.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:092>> | <<wont>> |
-[[req:092,R-092]] The puzzle boxes, bombs, and the puzzle box hub must all be able to communicate with each other.
+| <<req:92>> | <<wont>> |
+[[req:92,R-092]] The puzzle boxes, bombs, and the puzzle box hub must all be able to communicate with each other.
 
-| <<req:093>> | <<must>> |
-[[req:093,R-093]] Communication between two devices in the network must have a range of at least 20 meters in an open field.
+| <<req:93>> | <<must>> |
+[[req:93,R-093]] Communication between two devices in the network must have a range of at least 20 meters in an open field.
 |===
 
 === Framework
@@ -501,8 +501,8 @@ documentation. Due to time constraints, the section will be left empty.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:094>> | <<wont>> |
-[[req:094,R-094]] The puzzle box hub hosts a website that can be accessed by a device connected to the network.
+| <<req:94>> | <<wont>> |
+[[req:94,R-094]] The puzzle box hub hosts a website that can be accessed by a device connected to the network.
 |===
 
 [[sec:technical]]
@@ -554,23 +554,23 @@ technical specifications of the puzzle box.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:136>> | <<must>> |
-[[req:136,R-136]] The main controller has at least 1 I2C peripheral.
+| <<req:main-i2c-ctrl>> | <<must>> |
+[[req:main-i2c-ctrl,R-136]] The main controller has at least 1 I2C peripheral.
 
-| <<req:137>> | <<must>> |
-[[req:137,R-137]] The main controller can connect to a standard 802.11b/g/n access point.
+| <<req:main-802-11-ap>> | <<must>> |
+[[req:main-802-11-ap,R-137]] The main controller can connect to a standard 802.11b/g/n access point.
 
-| <<req:138>> | <<must>> |
-[[req:138,R-138]] The main controller can serve TCP socket connection(s).
+| <<req:main-tcp-socket>> | <<must>> |
+[[req:main-tcp-socket,R-138]] The main controller can serve TCP socket connection(s).
 
-| <<req:139>> | <<must>> |
-[[req:139,R-139]] The main controller is available as a development kit from Farnell.
+| <<req:main-devkit-supplier>> | <<must>> |
+[[req:main-devkit-supplier,R-139]] The main controller is available as a development kit from Farnell.
 
 | <<req:140>> | <<should>> |
 [[req:140,R-140]] The main controller can communicate over I²C with a speed of 400kb/s
 
-| <<req:166>> | <<should>> |
-[[req:166,R-166]] The main controller is power efficient.
+| <<req:main-pwr-efficient>> | <<should>> |
+[[req:main-pwr-efficient,R-166]] The main controller is power efficient.
 |===
 
 === Puzzle module controller
@@ -579,20 +579,20 @@ technical specifications of the puzzle box.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:141>> | <<must>> |
-[[req:141,R-141]] The puzzle module controller has at least 1 I2C peripheral.
+| <<req:pm-i2c-ctrl>> | <<must>> |
+[[req:pm-i2c-ctrl,R-141]] The puzzle module controller has at least 1 I2C peripheral.
 
-| <<req:142>> | <<should>> |
-[[req:142,R-142]] The puzzle module controller has enough I/O ports to control a puzzle.
+| <<req:pm-gpio>> | <<should>> |
+[[req:pm-gpio,R-142]] The puzzle module controller has enough I/O ports to control a puzzle.
 
-| <<req:143>> | <<should>> |
-[[req:143,R-143]] The puzzle module is power efficient.
+| <<req:pm-pwr-efficient>> | <<should>> |
+[[req:pm-pwr-efficient,R-143]] The puzzle module is power efficient.
 
-| <<req:144>> | <<must>> |
-[[req:144,R-144]] The puzzle module has a configurable clock speed.
+| <<req:pm-clk-ctrl>> | <<must>> |
+[[req:pm-clk-ctrl,R-144]] The puzzle module has a configurable clock speed.
 
-| <<req:145>> | <<must>> |
-[[req:145,R-145]] The puzzle module controller is available as a development kit from Farnell.
+| <<req:pm-devkit-supplier>> | <<must>> |
+[[req:pm-devkit-supplier,R-145]] The puzzle module controller is available as a development kit from Farnell.
 
 | <<req:146>> | <<should>> |
 [[req:146,R-146]] The puzzle module can communicate over I²C with a speed of 400kb/s
