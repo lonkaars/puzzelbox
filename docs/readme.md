@@ -18,7 +18,9 @@ makefile is provided for convenience.
     - [x] project plan
     - [x] requirements
     - [x] research
+        - [ ] footnotes
     - [ ] software design
+        - [ ] footnotes
 - xrefs for--
     - [x] tables
     - [x] figures
