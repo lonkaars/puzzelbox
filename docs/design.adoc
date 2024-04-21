@@ -15,14 +15,16 @@ Only design details deemed relevant by the document authors are documented
 here. Low-level implementation details such as API interfaces, code paths and
 workarounds are documented inside the source code repository.
 
+[[sec:lv1]]
 == Top-Level
 
 This section of the design document establishes the development target
-hardware. It also specifies the modules that are elaborated further in §3.
+hardware. It also specifies the modules that are elaborated further in
+<<sec:lv2>>.
 
-Figure 1 shows a block diagram that describes the context in which the puzzle
-box is used. The puzzle box in this diagram internally consists of a main
-controller and multiple puzzle modules. Other notable details include:
+<<fig:system-top>> shows a block diagram that describes the context in which
+the puzzle box is used. The puzzle box in this diagram internally consists of a
+main controller and multiple puzzle modules. Other notable details include:
 
 * The charger is removable, and the puzzle box is intended to be used as a
   battery-powered device (i.e. not while tethered).
@@ -35,7 +37,9 @@ controller and multiple puzzle modules. Other notable details include:
   connection is used to configure the puzzle box before gameplay or modify its
   state during gameplay.
 
+[[fig:system-top]]
 .Context block diagram
+image::img/system-top.svg[]
 
 The rest of this section details the internal hardware modules and the
 separation of functionality of these modules.
@@ -80,24 +84,27 @@ was selected.
 
 The criteria for a puzzle module controller are:
 
-* Must have an I^2^C peripheral (R#141).
+* Must have an I^2^C peripheral (<<reqs.adoc#req:pm-i2c-ctrl>>).
 * Should have enough I/O ports to directly control moderately complex puzzles
-  (R#142).
-* Should be power efficient (R#143).
+  (<<reqs.adoc#req:pm-gpio>>).
+* Should be power efficient (<<reqs.adoc#req:pm-pwr-efficient>>).
 
-The research document [1] compares various microcontrollers matching these
-criteria. As a result of this research, the Microchip PIC16F15276 was selected
-as the recommended microcontroller for future puzzle modules. The current
-development hardware utilizes an ESP32-PICO-D4 module, so the puzzle module
-software is written with portability in mind.
+The research document cite:[research] compares various microcontrollers
+matching these criteria. As a result of this research, the Microchip
+PIC16F15276 was selected as the recommended microcontroller for future puzzle
+modules. The current development hardware utilizes an ESP32-PICO-D4 module, so
+the puzzle module software is written with portability in mind.
 
+[[fig:puzzle-module-top]]
 .Generic puzzle module top-level block diagram
+image::img/puzzle-module-top.svg[]
 
-Figure 2 shows a block diagram of how most puzzle modules are implemented.
-Since the internal components of the puzzle module block from Figure 2 differ
-for each puzzle, they are left out in this section. Section 3 includes the next
-detail level for all of the implemented puzzles this year. The puzzle bus is
-detailed further in §2.3.
+<<fig:puzzle-module-top>> shows a block diagram of how most puzzle modules are
+implemented. Since the internal components of the puzzle module block from
+<<fig:puzzle-module-top>> differ for each puzzle, they are left out in this
+section. <<sec:lv2>> includes the next detail level for all of the implemented
+puzzles this year. The puzzle bus is detailed further in
+<<sec:lv1-communication>>.
 
 === Main Controller
 
@@ -119,70 +126,84 @@ The specific requirement of being able to serve TCP socket connections was
 created so this year's puzzle box could keep compatibility with the software
 produced by the 21-22 group.
 
-As mentioned in the research document [1], the 21-22 group produced the
-hardware that is used as development target for this year's (23-24) run of the
-puzzle box project. The existing hardware utilizes a Raspberry Pi 3B+ as main
-controller, but this controller caused issues with power consumption [2].
-Choosing a different controller during development requires significant
-refactoring, so a different main controller has been selected at the start of
-this year's run of the puzzle box project.
+As mentioned in the research document cite:[research], the 21-22 group produced
+the hardware that is used as development target for this year's (23-24) run of
+the puzzle box project. The existing hardware utilizes a Raspberry Pi 3B+ as
+main controller, but this controller caused issues with power consumption
+cite:[2122_handover]. Choosing a different controller during development
+requires significant refactoring, so a different main controller has been
+selected at the start of this year's run of the puzzle box project.
 
 The criteria for the main controller are:
 
-* Must have an I^2^C peripheral (R#136).
-* Must be able to connect to a standard 802.11b/g/n access point (R#137).
-* Must be able to serve TCP socket connection(s) (R#138).
-* Should be power efficient (R#166).
+* Must have an I^2^C peripheral (<<reqs.adoc#req:main-i2c-ctrl>>).
+* Must be able to connect to a standard 802.11b/g/n access point
+  (<<reqs.adoc#req:main-802-11-ap>>).
+* Must be able to serve TCP socket connection(s)
+  (<<reqs.adoc#req:main-tcp-socket>>).
+* Should be power efficient (<<reqs.adoc#req:main-pwr-efficient>>).
 
 The requirements document compares various microcontrollers that fit these
 criteria. After this comparison, the decision was made to utilize the Raspberry
 Pi Pico W as main controller during development.
 
+[[fig:main-controller-top]]
 .Main controller top-level block diagram
+image::img/main-controller-top.svg[]
 
-Figure 3 shows a block diagram of the main controller and its inputs and
-outputs. The main controller is the only module in the puzzle box that is able
-to communicate over Wi-Fi and is therefore responsible for all communication
-between the puzzle box and game operator. The puzzle bus is detailed further in
-§2.3.
+<<fig:main-controller-top>> shows a block diagram of the main controller and
+its inputs and outputs. The main controller is the only module in the puzzle
+box that is able to communicate over Wi-Fi and is therefore responsible for all
+communication between the puzzle box and game operator. The puzzle bus is
+detailed further in <<sec:lv1-communication>>.
 
+[[sec:lv1-communication]]
 === Communication
 
 Communication between puzzle modules, the main controller and other auxiliary
 peripherals is handled through a central I^2^C bus referred to as the 'puzzle
 bus'. This design was again carried over from the hardware design from the
-21-22 group [3].
+21-22 group cite:[2122_design].
 
 The only notable difference made this year was the removal of the
-"HarwareInterrupt"  line1, which was connected but not utilized [1].
+"HarwareInterrupt" line1{empty}footnote:[This is not a typo], which was
+connected but not utilized cite:[research].
 
-Address definitions and protocol specifications are further detailed in §3.3.
+Address definitions and protocol specifications are further detailed in
+<<sec:lv2-bus>>.
 
 === Power supply
 
 One of the user requirements is that the puzzle box runs on battery power
-(R#89). Due to the team composition of this year's (23-24) run of the puzzle
-box project, a new power supply was not chosen, even though the current power
-supply was determined insufficient by the 21-22 group. This year, additional
-requirements were specified for the power supply, which were used when
-selecting MCUs suitable for battery-powered applications.
+(<<reqs.adoc#req:89>>). Due to the team composition of this year's (23-24) run
+of the puzzle box project, a new power supply was not chosen, even though the
+current power supply was determined insufficient by the 21-22 group. This year,
+additional requirements were specified for the power supply, which were used
+when selecting MCUs suitable for battery-powered applications.
 
+[[fig:power-supply-top]]
 .Power supply module top-level block diagram
+image::img/power-supply-top.svg[]
 
-Figure 2 shows a block diagram of how most puzzle modules are implemented.
-Besides the additional requirements, the power supply remains the same, and
-will not be elaborated further on in this document.
+<<fig:puzzle-module-top>> shows a block diagram of how most puzzle modules are
+implemented. Besides the additional requirements, the power supply remains the
+same, and will not be elaborated further on in this document.
 
 === Overview
 
-Figure 5 is the resulting combination of the modules from Figures 3, 2 and 4.
+<<fig:system-bus>> is the resulting combination of the modules from
+<<fig:puzzle-module-top>>, <<fig:main-controller-top>> and
+<<fig:power-supply-top>>.
 
+[[fig:system-bus]]
 .Hardware component overview
+image::img/system-bus.svg[]
 
+[[sec:lv2]]
 == Modules
 
-This section elaborates on the top-level specifications from §2 with additional
-hardware specifications and software design decisions.
+This section elaborates on the top-level specifications from <<sec:lv1>> with
+additional hardware specifications and software design decisions.
 
 === Puzzle Module Framework
 
@@ -195,33 +216,39 @@ The puzzle framework is the foundation of the puzzle box software, and is
 designed to facilitate the following:
 
 * Allow puzzle modules to be swapped with minimal downtime or maintenance
-  (R#132).
+  (<<reqs.adoc#req:132>>).
 * Simplify the development process and integration of new puzzle modules
-  (R#130).
+  (<<reqs.adoc#req:130>>).
 * Provide abstracted interfaces to allow for easy integration of the puzzle box
-  as part of a larger whole (R#133).
+  as part of a larger whole (<<reqs.adoc#req:133>>).
 
+[[sec:framework-state]]
 ==== State
 
-All puzzle modules implement the same state machine shown in Figure 6. Note
-that the arrows indicate state transitions that a puzzle module may take on its
-own. The main controller also allows the game operator to manually set the
-current state as one of the states on the right half of Figure 6, which can be
-used to skip a puzzle if a player is stuck (R#168) or reset a game if it is
-malfunctioning (R#167).
+All puzzle modules implement the same state machine shown in
+<<fig:puzzle-module-common-state>>. Note that the arrows indicate state
+transitions that a puzzle module may take on its own. The main controller also
+allows the game operator to manually set the current state as one of the states
+on the right half of <<fig:puzzle-module-common-state>>, which can be used to
+skip a puzzle if a player is stuck (<<reqs.adoc#req:168>>) or reset a game if
+it is malfunctioning (<<reqs.adoc#req:167>>).
 
 Puzzle modules start in the 'uninitialized' state, where they repeatedly send
-messages to the main controller (see §3.2.3). The state transition from
-'uninitialized' to 'reset' is forced by the main controller upon
-initialization. States on the right half of Figure 6 are used during gameplay.
+messages to the main controller (see <<sec:main-bridge>>). The state transition
+from 'uninitialized' to 'reset' is forced by the main controller upon
+initialization. States on the right half of <<fig:puzzle-module-common-state>>
+are used during gameplay.
 
+[[fig:puzzle-module-common-state]]
 .Global puzzle module state machine
+image::img/puzzle-module-common-state.svg[]
 
-The state machine described in Figure 6 is referred to as the global state.
-Puzzle modules may also declare and define custom state variables, which is
-referred to as auxiliary state. These auxiliary state variables contain
-game-specific variables; e.g. the binary state of each button on the Neotrellis
-puzzle module, or the last passcode entered on the vault puzzle module.
+The state machine described in <<fig:puzzle-module-common-state>> is referred
+to as the global state. Puzzle modules may also declare and define custom state
+variables, which is referred to as auxiliary state. These auxiliary state
+variables contain game-specific variables; e.g. the binary state of each button
+on the Neotrellis puzzle module, or the last passcode entered on the vault
+puzzle module.
 
 Separating the auxiliary state from the generic state allows the main
 controller to handle the auxiliary state as an arbitrary blob, which allows for
@@ -236,7 +263,7 @@ The puzzle module framework describes the following commands:
 * Update
 
 The 'read' and 'write' commands are used to communicate both types of state
-defined in §3.1.1.
+defined in <<sec:framework-state>>.
 
 To avoid issues caused by state synchronization memory consumption on the main
 controller and puzzle modules, auxiliary state is only stored on each
@@ -257,9 +284,12 @@ This subsection defines the function and state of the main controller.
 ==== State
 
 The global state of the main controller is an aggregated version of all
-installed puzzle modules and is defined by the state machine shown in Figure 7.
+installed puzzle modules and is defined by the state machine shown in
+<<fig:main-controller-state>>.
 
+[[fig:main-controller-state]]
 .Main controller global state machine
+image::img/main-controller-state.svg[]
 
 The following list describes when each state is active:
 
@@ -279,53 +309,58 @@ puzzle modules is stored as an auxiliary state variable of the main controller.
 
 ==== Initializing Puzzle Modules
 
-Puzzle modules start in the 'uninitialized' state (see Figure 6). In this
-state, the puzzle module repeatedly sends an update command to the main
-controller. The main controller responds to this message by sending a 'set
-state' command with the target state as 'reset' as reply. Before this response
-is sent, the main controller internally adds the bus address of the puzzle
-module requesting to be initialized to the list of installed puzzle modules.
-From the main controller's point of view, this reply marks the moment the
-initialization is complete.
+Puzzle modules start in the 'uninitialized' state (see
+<<fig:puzzle-module-common-state>>). In this state, the puzzle module
+repeatedly sends an update command to the main controller. The main controller
+responds to this message by sending a 'set state' command with the target state
+as 'reset' as reply. Before this response is sent, the main controller
+internally adds the bus address of the puzzle module requesting to be
+initialized to the list of installed puzzle modules. From the main controller's
+point of view, this reply marks the moment the initialization is complete.
 
+[[fig:sequence-puzzle-module-init]]
 .Puzzle module initialization sequence diagram
+image::img/sequence-puzzle-module-init.svg[]
 
 (Activated lifeline indicates the module is no longer in 'uninitialized' state)
 
+[[sec:main-bridge]]
 ==== Bridge
 
 The bridge is used to remotely access and control the puzzle box.
 
 The Raspberry Pi 3B+ used as main controller during the 21-22 run of the
-project set up a Wi-Fi Mesh network [3] to communicate with the puzzle box.
-This year's main controller (Raspberry Pi Pico W [1]) uses a standard
-802.11b/g/n access point instead (R#137).
+project set up a Wi-Fi Mesh network cite:[2122_design] to communicate with the
+puzzle box. This year's main controller (Raspberry Pi Pico W cite:[research])
+uses a standard 802.11b/g/n access point instead (<<reqs.adoc#req:137>>).
 
 On this network, the main controller hosts a server that serves TCP socket
 connections. These sockets directly forward all internal messages sent to the
 main controller bidirectionally (i.e. on behalf of the main controller).
-Detailed specifications on the TCP socket server are in §4.1.
+Detailed specifications on the TCP socket server are in
+<<sec:lv3-remote-control>>.
 
 ==== Operating System
 
-The research document [1] contains a detailed comparison of various operating
-systems that are suitable to realize the functionality described in this
-section. After this comparison, the decision was made to utilize FreeRTOS as
-the operating system on the Rasberry Pi Pico W.
+The research document cite:[research] contains a detailed comparison of various
+operating systems that are suitable to realize the functionality described in
+this section. After this comparison, the decision was made to utilize FreeRTOS
+as the operating system on the Rasberry Pi Pico W.
 
+[[sec:lv2-bus]]
 === Puzzle Bus
 
 This section describes the addresses and communication protocol used on the
 puzzle bus. These specifications only apply to messages sent internally in the
-puzzle box, as messages forwarded by the bridge (see §3.2.3) are sent on behalf
-of the main controller.
+puzzle box, as messages forwarded by the bridge (see <<sec:main-bridge>>) are
+sent on behalf of the main controller.
 
 ==== Addresses
 
 The I^2^C addresses remain mostly unchanged from the 20-21 group's
-implementation [4]. Addresses that were modified since the 20-21 implementation
-are marked with an asterisk. Table 1 lists these addresses for reference. These
-addresses are also used to identify specific puzzle modules.
+implementation cite:[2021_design]. Addresses that were modified since the 20-21
+implementation are marked with an asterisk. Table 1 lists these addresses for
+reference. These addresses are also used to identify specific puzzle modules.
 
 .I^2^C address reference
 [%autowidth]
@@ -363,13 +398,13 @@ Property 0x00 stores a module's global state
 
 The messages described in Table 2 are (de)serialized using Google's protocol
 buffer library. This choice was made after considering various alternative
-options for sending structured messages [1].
+options for sending structured messages cite:[research].
 
-Figure 8 shows an example of how messages are exchanged for the initialization
-of a puzzle module.
+<<fig:sequence-puzzle-module-init>> shows an example of how messages are
+exchanged for the initialization of a puzzle module.
 
-Figure 9 shows an example exchange where the last puzzle module (A) is solved
-while (B) is already solved.
+<<fig:sequence-puzzle-finish>> shows an example exchange where the last puzzle
+module (A) is solved while (B) is already solved.
 
 . First, module A sets it's own state to 'solved' and subsequently informs the
   main controller of this change.
@@ -385,7 +420,9 @@ while (B) is already solved.
 In this example, module B could be the vault puzzle module, which displays a
 code when the entire puzzle box is solved.
 
+[[fig:sequence-puzzle-finish]]
 .Puzzle box finish sequence diagram
+image::img/sequence-puzzle-finish.svg[]
 
 === NeoTrellis Puzzle
 
@@ -408,9 +445,11 @@ Appendix B.
 
 The inputs and outputs of this puzzle have been taken from the design document
 of the previous group which worked on this project (??). This input and output
-diagram has been shown in Figure 10.
+diagram has been shown in <<fig:neotrellis-io>>.
 
+[[fig:neotrellis-io]]
 .NeoTrellis puzzle in-out
+image::img/neotrellis-io.png[]
 
 === Software Puzzle
 
@@ -419,6 +458,7 @@ summary of how the puzzle is meant to be solved. This module will be created to
 facilitate the software puzzle game logic and communication with the main
 controller about the software puzzle state.
 
+[[sec:software-gameplay]]
 ==== Software puzzle gameplay
 
 The software puzzle consists of 12 input ports which can be connected using a
@@ -443,11 +483,13 @@ binary code using 16 LEDs above the puzzle, and to continue to the next puzzle.
 
 ==== Puzzle inputs & outputs
 
-As stated in §3.5.1 the puzzle has 12 inputs, as well as an LED which shows
-whether the puzzle has been solved and 16 LEDs showing a binary code. This is
-shown in Figure 11.
+As stated in <<sec:software-gameplay>> the puzzle has 12 inputs, as well as an
+LED which shows whether the puzzle has been solved and 16 LEDs showing a binary
+code. This is shown in <<fig:software-io>>.
 
+[[fig:software-io]]
 .Software puzzle in-out
+image::img/software-io.png[]
 
 === Hardware Puzzle
 
@@ -482,7 +524,9 @@ clicked the vault resets and they need to start over from the beginning.
 
 ==== Puzzle inputs & outputs
 
+[[fig:vault-io]]
 .Vault puzzle in-out
+image::img/vault-io.png[]
 
 === Bomb device
 
@@ -499,9 +543,12 @@ The bomb can also use the WiFi connection to sync. the time.
 
 ==== Device inputs & outputs
 
+[[fig:bomb-io]]
 .Bomb device in-out
+image::img/bomb-io.png[]
 
 == Components
+[[sec:lv3-remote-control]]
 === Remote Control
 ==== Socket Server
 ==== Socket Commands

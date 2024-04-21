@@ -28,8 +28,20 @@ makefile is provided for convenience.
     - [x] requirements
 - [x] figures
 - [x] citations
+- [ ] table of tables
+- [ ] table of figures
 - [ ] glossary (w/ cross-references)
 - [ ] PDF style
+- [ ] give used requirements more meaningful id's
+
+## for later reference
+
+### get citation keys from .docx file
+
+```
+$ unar file.docx
+$ grep -o 'CITATION[^<]\+' file/word/document.xml | awk '!x[$2]++ { i++; print "[" i "] " $2 }'
+```
 
 [rubydl]: https://www.ruby-lang.org/en/documentation/installation/
 [asciidoc]: https://asciidoc.org/
