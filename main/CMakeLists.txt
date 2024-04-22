@@ -11,7 +11,7 @@ set(PICO_BOARD pico_w)
 
 pico_sdk_init()
 
-add_executable(main 
+add_executable(main
 	main.cpp
 )
 
