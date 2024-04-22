@@ -211,11 +211,11 @@ describes all functional requirements of the puzzle box.
 | <<req:27>> | <<must>> |
 [[req:27,R-027]] The puzzles should be easy enough to solve without any prior knowledge of the game or its mechanics.
 
-| <<req:167>> | <<must>> |
-[[req:167,R-167]] A puzzle module can manually be reset at the discretion of the game operator
+| <<req:edge-manual-reset>> | <<must>> |
+[[req:edge-manual-reset,R-167]] A puzzle module can manually be reset at the discretion of the game operator
 
-| <<req:168>> | <<must>> |
-[[req:168,R-168]] A puzzle module can manually be set as solved at the discretion of the game operator
+| <<req:edge-skip-puzzle>> | <<must>> |
+[[req:edge-skip-puzzle,R-168]] A puzzle module can manually be set as solved at the discretion of the game operator
 
 | <<req:28>> | <<wont>> |
 [[req:28,R-028]] The disarm code for the bomb consists of 4 digits.
@@ -451,8 +451,8 @@ documentation. Due to time constraints, the section will be left empty.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:89>> | <<must>> |
-[[req:89,R-089]] The puzzle box is powered by a rechargeable battery.
+| <<req:pwr-battery>> | <<must>> |
+[[req:pwr-battery,R-089]] The puzzle box is powered by a rechargeable battery.
 
 | <<req:90>> | <<must>> |
 [[req:90,R-090]] The battery lasts for a minimum of 4 hours.
@@ -481,17 +481,17 @@ documentation. Due to time constraints, the section will be left empty.
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
-| <<req:130>> | <<must>> |
-[[req:130,R-130]] The main controller and its software do not need to be modified to implement a new puzzle module
+| <<req:main-static>> | <<must>> |
+[[req:main-static,R-130]] The main controller and its software do not need to be modified to implement a new puzzle module
 
 | <<req:131>> | <<could>> |
 [[req:131,R-131]] Puzzle modules can be added and removed while the main controller is powered on
 
-| <<req:132>> | <<must>> |
-[[req:132,R-132]] Puzzle modules can be added and removed while the main controller is powered off
+| <<req:pm-swap>> | <<must>> |
+[[req:pm-swap,R-132]] Puzzle modules can be added and removed while the main controller is powered off
 
-| <<req:133>> | <<must>> |
-[[req:133,R-133]] The puzzle box provides a single external interface for accessing and controlling game state variables
+| <<req:main-interface>> | <<must>> |
+[[req:main-interface,R-133]] The puzzle box provides a single external interface for accessing and controlling game state variables
 |===
 
 === Puzzle box hub

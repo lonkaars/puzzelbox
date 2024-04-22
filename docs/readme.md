@@ -12,27 +12,9 @@ makefile is provided for convenience.
 - please give cross references, links, image files, figure ids, etc. meaningful
   names
 
-## TODO
+## todo (low priority)
 
-- transfer documents
-    - [x] project plan
-    - [x] requirements
-    - [x] research
-        - [ ] footnotes
-    - [ ] software design
-        - [ ] footnotes
-- xrefs for--
-    - [x] tables
-    - [x] figures
-    - [x] section numbers (headings)
-    - [x] requirements
-- [x] figures
-- [x] citations
-- [x] table of tables
-- [x] table of figures
-- [ ] glossary (w/ cross-references)
-- [x] PDF style
-- [ ] give used requirements more meaningful id's
+- cross-references to glossary
 
 ## for later reference
 

@@ -74,7 +74,7 @@ description-list:
 table:
   align: center
   border-color: transparent
-  cell-padding: [0.2pt, 2pt]
+  cell-padding: [0.2pt, 5pt]
   border-color: '#000000'
   border-width: [ 0.5pt, 0pt, 0.5pt, 0pt ]
   head:

@@ -175,11 +175,11 @@ Address definitions and protocol specifications are further detailed in
 === Power supply
 
 One of the user requirements is that the puzzle box runs on battery power
-(<<reqs.adoc#req:89>>). Due to the team composition of this year's (23-24) run
-of the puzzle box project, a new power supply was not chosen, even though the
-current power supply was determined insufficient by the 21-22 group. This year,
-additional requirements were specified for the power supply, which were used
-when selecting MCUs suitable for battery-powered applications.
+(<<reqs.adoc#req:pwr-battery>>). Due to the team composition of this year's
+(23-24) run of the puzzle box project, a new power supply was not chosen, even
+though the current power supply was determined insufficient by the 21-22 group.
+This year, additional requirements were specified for the power supply, which
+were used when selecting MCUs suitable for battery-powered applications.
 
 [[fig:power-supply-top]]
 .Power supply module top-level block diagram
@@ -216,11 +216,11 @@ The puzzle framework is the foundation of the puzzle box software, and is
 designed to facilitate the following:
 
 * Allow puzzle modules to be swapped with minimal downtime or maintenance
-  (<<reqs.adoc#req:132>>).
+  (<<reqs.adoc#req:pm-swap>>).
 * Simplify the development process and integration of new puzzle modules
-  (<<reqs.adoc#req:130>>).
+  (<<reqs.adoc#req:main-static>>).
 * Provide abstracted interfaces to allow for easy integration of the puzzle box
-  as part of a larger whole (<<reqs.adoc#req:133>>).
+  as part of a larger whole (<<reqs.adoc#req:main-interface>>).
 
 [[sec:framework-state]]
 ==== State
@@ -230,8 +230,8 @@ All puzzle modules implement the same state machine shown in
 transitions that a puzzle module may take on its own. The main controller also
 allows the game operator to manually set the current state as one of the states
 on the right half of <<fig:puzzle-module-common-state>>, which can be used to
-skip a puzzle if a player is stuck (<<reqs.adoc#req:168>>) or reset a game if
-it is malfunctioning (<<reqs.adoc#req:167>>).
+skip a puzzle if a player is stuck (<<reqs.adoc#req:edge-skip-puzzle>>) or
+reset a game if it is malfunctioning (<<reqs.adoc#req:edge-manual-reset>>).
 
 Puzzle modules start in the 'uninitialized' state, where they repeatedly send
 messages to the main controller (see <<sec:main-bridge>>). The state transition
@@ -332,7 +332,8 @@ The bridge is used to remotely access and control the puzzle box.
 The Raspberry Pi 3B+ used as main controller during the 21-22 run of the
 project set up a Wi-Fi Mesh network cite:[2122_design] to communicate with the
 puzzle box. This year's main controller (Raspberry Pi Pico W cite:[research])
-uses a standard 802.11b/g/n access point instead (<<reqs.adoc#req:137>>).
+uses a standard 802.11b/g/n access point instead
+(<<reqs.adoc#req:main-802-11-ap>>).
 
 On this network, the main controller hosts a server that serves TCP socket
 connections. These sockets directly forward all internal messages sent to the

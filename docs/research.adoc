@@ -133,8 +133,8 @@ as main controller unit:
 * Is available as a development kit from Farnell
   (<<reqs.adoc#req:main-devkit-supplier>>).
 
-<<tab:1>> lists the considered MCU options matching the above criteria. This
-list is a compilation of microcontroller offerings from the following
+<<tab:main-mcu>> lists the considered MCU options matching the above criteria.
+This list is a compilation of microcontroller offerings from the following
 manufacturers: Atmel, Espressif, Raspberry Pi.
 
 Of these controllers, the Raspberry Pi RP2040 has the lowest clock speed and
@@ -143,7 +143,7 @@ than the other options. It also happens to be less expensive than all other
 options. Due to these reasons, the RP2040 was chosen as main controller MCU.
 The Raspberry Pi Pico W board is utilized during development.
 
-[[tab:1]]
+[[tab:main-mcu]]
 .Main controller MCU candidates
 [%autowidth]
 |===
@@ -151,7 +151,7 @@ The Raspberry Pi Pico W board is utilized during development.
 
 | WFI32E01PC | 1 | 256 KB | 1 MB | 200 MHz
 | ESP8266 | 1 | 50 KB | 16 MB | 160 MHz
-| RP2040 | 2 | 264 KB | 2 MB | 133 MHz
+| RP2040 | 2 | 264 KB | 2 MB | 133 MHz{empty}footnote:[Adjusting the clock speed for the main controller is not necessary, even though the RP2040 supports clock speed configuration (see <<tab:pm-mcu>>)]
 |===
 
 === Puzzle module controller
@@ -167,12 +167,12 @@ for controlling the puzzle modules:
   (<<reqs.adoc#req:pm-devkit-supplier>>).
 * Has a configurable clock speed (<<reqs.adoc#req:pm-clk-ctrl>>).
 
-<<tab:2>> lists the considered MCU options matching the above criteria. This
-list is a compilation of microcontroller offerings from the following
+<<tab:pm-mcu>> lists the considered MCU options matching the above criteria.
+This list is a compilation of microcontroller offerings from the following
 manufacturers: Atmel, STMicroelectronics, Raspberry Pi.
 
-All the MCUs listed in <<tab:2>> support some version of a low-power mode. The
-RP2040 is again included and appears here because it supports clock speed
+All the MCUs listed in <<tab:pm-mcu>> support some version of a low-power mode.
+The RP2040 is again included and appears here because it supports clock speed
 configuration and has a clock gate for each peripheral [2], which may make it a
 feasible option with regards to power consumption. Choosing the RP2040 may also
 simplify the development process as only a single MCU toolchain needs to be
@@ -187,7 +187,7 @@ Because this year's run of this project was carried out by a team consisting
 only of software students, this choice remains as a recommendation. The puzzle
 box hardware may still use the ESP32 development kits from the 21-22 group.
 
-[[tab:2]]
+[[tab:pm-mcu]]
 .Puzzle module controller MCU candidates
 [%autowidth]
 |===
@@ -255,10 +255,10 @@ distributions of Debian are, so this OS is be considered familiar.
 
 === Conclusions
 
-<<tab:3>> summarizes the considered operating systems based on the criteria
-outlined at the start of this section. 
+<<tab:main-os>> summarizes the considered operating systems based on the
+criteria outlined at the start of this section.
 
-[[tab:3]]
+[[tab:main-os]]
 .Main controller OS comparison
 [%autowidth]
 |===
@@ -279,13 +279,13 @@ keeping in mind RTOS-specific frameworks, and what features do they have?
 
 === General framework comparison
 
-In <<tab:4>> is a general comparison shown of multiple different frameworks.
-These are either a header-only testing framework, a testing framework
-specifically designed for embedded systems, a general-purpose {cpp} library, or a
-specialized {cpp} unit testing framework. The following subsections will give
-more information about each framework and their features.
+In <<tab:test-framework>> is a general comparison shown of multiple different
+frameworks. These are either a header-only testing framework, a testing
+framework specifically designed for embedded systems, a general-purpose {cpp}
+library, or a specialized {cpp} unit testing framework. The following
+subsections will give more information about each framework and their features.
 
-[[tab:4]]
+[[tab:test-framework]]
 .General testing framework comparison cite:[Ali24,Joh21]
 [%autowidth]
 |===
