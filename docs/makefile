@@ -15,6 +15,7 @@ ASCIIDOCTOR_ARGS += --require asciidoctor-bibtex
 ASCIIDOCTOR_ARGS += --require asciidoctor-pdf
 # ASCIIDOCTOR_ARGS += --require ./plugin/helloworld
 ASCIIDOCTOR_ARGS += --require asciidoctor-interdoc-reftext
+ASCIIDOCTOR_ARGS += --require asciidoctor-lists
 ASCIIDOCTOR_ARGS += --backend pdf
 %.pdf: %.adoc $(PDFDEPS)
 	bundle exec asciidoctor $(ASCIIDOCTOR_ARGS) $<

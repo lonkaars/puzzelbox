@@ -28,10 +28,10 @@ makefile is provided for convenience.
     - [x] requirements
 - [x] figures
 - [x] citations
-- [ ] table of tables
-- [ ] table of figures
+- [x] table of tables
+- [x] table of figures
 - [ ] glossary (w/ cross-references)
-- [ ] PDF style
+- [x] PDF style
 - [ ] give used requirements more meaningful id's
 
 ## for later reference

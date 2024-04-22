@@ -8,4 +8,6 @@ gem 'asciidoctor-pdf', '~> 2.3'
 gem 'asciidoctor-bibtex', '~> 0.8.0'
 # gem 'asciidoctor-interdoc-reftext', '~> 0.5.2'
 gem 'asciidoctor-interdoc-reftext', git: 'https://github.com/lonkaars/asciidoctor-interdoc-reftext'
+gem 'asciidoctor-lists', '~> 1.0'
+gem 'text-hyphen', '~> 1.5'
 

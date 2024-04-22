@@ -9,6 +9,7 @@ page:
 base:
   hyphens: true
   text-align: justify
+  font-size: 10.5
 
 prose:
   margin-bottom: 3mm
@@ -17,23 +18,19 @@ prose:
 #   catalog:
 #     serif:
 #       bold: texgyreschola-bold.otf
-#       bold_italic: texgyreschola-bolditalic.otf
+#       bold-italic: texgyreschola-bolditalic.otf
 #       italic: texgyreschola-italic.otf
 #       normal: texgyreschola-regular.otf
-#     sans_serif:
+#     sans-serif:
 #       bold: Inter-Bold.otf
-#       bold_italic: Inter-BoldItalic.otf
+#       bold-italic: Inter-BoldItalic.otf
 #       italic: Inter-Italic.otf
 #       normal: Inter-Regular.otf
 #     monospace:
 #       bold: JetBrainsMono-Bold.ttf
-#       bold_italic: JetBrainsMono-BoldItalic.ttf
+#       bold-italic: JetBrainsMono-BoldItalic.ttf
 #       italic: JetBrainsMono-Italic.ttf
 #       normal: JetBrainsMono-Regular.ttf
-
-base:
-  # font-family: serif
-  font-size: 10.5
 
 title-page:
   align: center
@@ -65,13 +62,39 @@ caption:
   align: center
   end: bottom
 
-example:
-  caption:
-    end: $caption-end
-table:
-  caption:
-    end: $caption-end
+image:
+  align: center
 
 list:
   indent: 10mm
+
+description-list:
+  term-font-style: bold
+
+table:
+  align: center
+  border-color: transparent
+  cell-padding: [0.2pt, 2pt]
+  border-color: '#000000'
+  border-width: [ 0.5pt, 0pt, 0.5pt, 0pt ]
+  head:
+    font-style: bold
+    border-bottom-width: 1pt
+  cell:
+    border-width: 0pt
+  caption:
+    end: $caption-end
+
+footnotes:
+  font-size: round($base-font-size * 0.75)
+
+footer:
+  height: 1in
+  vertical-align: middle
+  recto:
+    center:
+      content: '{page-number}'
+  verso:
+    center:
+      content: '{page-number}'
 

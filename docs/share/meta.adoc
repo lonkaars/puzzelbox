@@ -29,5 +29,15 @@ endif::[]
 // followed by a table of contents
 :toc:
 
+[discrete]
+== List of Figures
+list-of::image[]
+
+[discrete]
+== List of Tables
+list-of::table[]
+
+<<<
+
 // also https://docs.asciidoctor.org/asciidoc/latest/attributes/document-attributes-ref
 
