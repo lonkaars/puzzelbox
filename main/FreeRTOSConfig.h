@@ -1,6 +1,10 @@
 #pragma once
 // values from pico-examples/pico_w/wifi/freertos
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define configUSE_PREEMPTION 1
 #define configUSE_TICKLESS_IDLE 0
 #define configUSE_IDLE_HOOK 0
@@ -25,7 +29,7 @@
 #define configSUPPORT_STATIC_ALLOCATION 0
 #define configSUPPORT_DYNAMIC_ALLOCATION 1
 #define configTOTAL_HEAP_SIZE (128 * 1024)
-#define configAPPLICATION_ALLOCATED_HEAP 0
+#define configAPPLICATION_ALLOCATED_HEAP 4
 #define configCHECK_FOR_STACK_OVERFLOW 0
 #define configUSE_MALLOC_FAILED_HOOK 0
 #define configUSE_DAEMON_TASK_STARTUP_HOOK 0
@@ -66,4 +70,8 @@
 #define INCLUDE_xTaskGetHandle 1
 #define INCLUDE_xTaskResumeFromISR 1
 #define INCLUDE_xQueueGetMutexHolder 1
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 

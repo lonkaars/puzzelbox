@@ -12,9 +12,9 @@ const unsigned int LED_PIN = CYW43_WL_GPIO_LED_PIN;
 void blink_task() {
 	while (true) {
 		cyw43_arch_gpio_put(LED_PIN, 0);
-		sleep_ms(250);
+		vTaskDelay(250 / portTICK_PERIOD_MS);
 		cyw43_arch_gpio_put(LED_PIN, 1);
-		sleep_ms(250);
+		vTaskDelay(250 / portTICK_PERIOD_MS);
 	}
 }
 

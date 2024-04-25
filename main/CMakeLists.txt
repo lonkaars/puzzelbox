@@ -25,5 +25,6 @@ target_link_libraries(main
 	pico_cyw43_arch_lwip_threadsafe_background
 	pico_stdlib
 	FreeRTOS-Kernel
+	FreeRTOS-Kernel-Heap4
 	)
 
