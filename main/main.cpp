@@ -1,11 +1,22 @@
-#include <stdio.h>
-
 #include "config.h"
 
-#include "pico/stdlib.h"
-#include "pico/cyw43_arch.h"
+#include <FreeRTOS.h>
+#include <task.h>
+
+#include <pico/stdlib.h>
+#include <pico/stdio.h>
+#include <pico/cyw43_arch.h>
 
 const unsigned int LED_PIN = CYW43_WL_GPIO_LED_PIN;
+
+void blink_task() {
+	while (true) {
+		cyw43_arch_gpio_put(LED_PIN, 0);
+		sleep_ms(250);
+		cyw43_arch_gpio_put(LED_PIN, 1);
+		sleep_ms(250);
+	}
+}
 
 int main() {
 	stdio_init_all();
@@ -16,6 +27,8 @@ int main() {
 		return 1;
 	}
 	cyw43_arch_gpio_put(LED_PIN, 1);
+
+
 	printf("initialised\n");
 
 	cyw43_arch_enable_sta_mode();
@@ -26,11 +39,7 @@ int main() {
 	}
 	printf("connected\n");
 
-	while (true) {
-		cyw43_arch_gpio_put(LED_PIN, 0);
-		sleep_ms(250);
-		cyw43_arch_gpio_put(LED_PIN, 1);
-		sleep_ms(250);
-	}
+	xTaskCreate((TaskFunction_t) blink_task, "blink", 128, NULL, 1, NULL);
+	vTaskStartScheduler();
 }
 

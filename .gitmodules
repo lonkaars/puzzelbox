@@ -8,3 +8,8 @@
 	url = https://github.com/google/googletest
 	branch = v1.14.0
 	shallow = true
+[submodule "main/lib/FreeRTOS-Kernel"]
+	path = main/lib/FreeRTOS-Kernel
+	url = https://github.com/FreeRTOS/FreeRTOS-Kernel
+	branch = V11.1.0
+	shallow = true

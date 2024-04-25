@@ -6,7 +6,7 @@ all: FORCE build/main.uf2
 
 build/build.ninja: CMakeLists.txt
 	mkdir -p build
-	cmake -B build -G Ninja
+	cmake -B build -G Ninja --fresh --log-level WARNING
 
 build/main.uf2: build/build.ninja FORCE
 	ninja -C build
