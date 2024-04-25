@@ -14,6 +14,7 @@ pico_sdk_init()
 
 add_executable(main
 	main.cpp
+	init.cpp
 	)
 
 pico_enable_stdio_usb(main 1)
