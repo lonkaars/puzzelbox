@@ -10,5 +10,7 @@
 #include <cyw43_country.h>
 #define CONF_NET_COUNTRY CYW43_COUNTRY_NETHERLANDS
 
+#define CONF_SRV_PORT 9191
+
 #define LED_PIN CYW43_WL_GPIO_LED_PIN
 
