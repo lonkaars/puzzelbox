@@ -2,6 +2,18 @@
 
 Avans University of Applied Sciences project puzzle box.
 
+## submodules
+
+This repository tracks (most) dependencies via git submodules.
+
+If something is complaining about missing files
+
+```
+git submodule update --init --recursive --depth 1
+```
+
+until your problems go away.
+
 ## Tests
 
 ```
