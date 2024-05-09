@@ -31,7 +31,7 @@ int main() {
 	// this should compile but not work
 	lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-	// xTaskCreate((TaskFunction_t) blink_task, "blink", 128, NULL, 1, NULL);
-	// vTaskStartScheduler();
+	xTaskCreate((TaskFunction_t) blink_task, "blink", 128, NULL, 1, NULL);
+	vTaskStartScheduler();
 }
 
