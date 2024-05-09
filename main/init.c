@@ -26,6 +26,8 @@ static void init_wifi() {
 	if (cyw43_arch_wifi_connect_timeout_ms(CONF_NET_SSID, CONF_NET_PASS, CYW43_AUTH_WPA2_AES_PSK, CONF_NET_CONN_TIMEOUT))
 		panic("cyw43_arch_wifi_connect failed\n");
 
+	printf("connected to Wi-Fi\n");
+
 	// TODO: announce hostname(?)
 }
 
