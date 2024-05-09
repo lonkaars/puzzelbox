@@ -1,8 +1,14 @@
 #include "config.h"
 #include "init.h"
 
+#include <FreeRTOS.h>
+#include <task.h>
+#include <event_groups.h>
+
 #include <pico/stdio.h>
 #include <pico/cyw43_arch.h>
+
+EventGroupHandle_t init_complete;
 
 static void init_stdio() {
 	stdio_init_all();
@@ -20,13 +26,29 @@ static void init_wifi() {
 	if (cyw43_arch_wifi_connect_timeout_ms(CONF_NET_SSID, CONF_NET_PASS, CYW43_AUTH_WPA2_AES_PSK, CONF_NET_CONN_TIMEOUT))
 		panic("cyw43_arch_wifi_connect failed\n");
 
-	// TODO: announce hostname
+	// TODO: announce hostname(?)
 }
 
 void init() {
+	init_complete = xEventGroupCreate();
+
+	// used for debug `printf` and `panic` on errors
 	init_stdio();
-	init_cyw34();
-	init_wifi();
-	// TODO: initialize i2c
+
+	// defer other initialization until the task scheduler is running (important)
+	xTaskCreate((TaskFunction_t) [](void*) {
+		init_cyw34();
+		init_wifi();
+		// TODO: initialize i2c
+
+		xEventGroupSetBits(init_complete, 1);
+
+		// delete self
+		vTaskDelete(NULL);
+	}, "init", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
+}
+
+void await_init() {
+	xEventGroupWaitBits(init_complete, 1, pdFALSE, pdFALSE, portMAX_DELAY);
 }
 
