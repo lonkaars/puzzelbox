@@ -29,6 +29,17 @@ static void init_wifi() {
 	// TODO: announce hostname(?)
 }
 
+static void async_init() {
+	init_cyw34();
+	init_wifi();
+	// TODO: initialize i2c
+
+	xEventGroupSetBits(init_complete, 1);
+
+	// delete self
+	vTaskDelete(NULL);
+}
+
 void init() {
 	init_complete = xEventGroupCreate();
 
@@ -36,16 +47,7 @@ void init() {
 	init_stdio();
 
 	// defer other initialization until the task scheduler is running (important)
-	xTaskCreate((TaskFunction_t) [](void*) {
-		init_cyw34();
-		init_wifi();
-		// TODO: initialize i2c
-
-		xEventGroupSetBits(init_complete, 1);
-
-		// delete self
-		vTaskDelete(NULL);
-	}, "init", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
+	xTaskCreate((TaskFunction_t) async_init, "init", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
 }
 
 void await_init() {

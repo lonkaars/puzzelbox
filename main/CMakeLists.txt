@@ -13,8 +13,8 @@ project(puzzlebox_main C CXX ASM)
 pico_sdk_init()
 
 add_executable(main
-	main.cpp
-	init.cpp
+	main.c
+	init.c
 	)
 
 pico_enable_stdio_usb(main 1)
