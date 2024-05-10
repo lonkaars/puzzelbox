@@ -13,3 +13,8 @@
 	url = https://github.com/FreeRTOS/FreeRTOS-Kernel
 	branch = V11.1.0
 	shallow = true
+[submodule "protobuf"]
+	path = lib/protobuf
+	url = https://github.com/protocolbuffers/protobuf
+	branch = v25.3
+	shallow = true
