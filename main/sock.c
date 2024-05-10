@@ -1,46 +1,52 @@
 #include <pico/stdio.h>
 
-#include <lwip/init.h>
-#include <lwip/tcp.h>
+#include <lwip/opt.h>
+#include <lwip/sys.h>
+#include <lwip/api.h>
 
 #include "init.h"
 
 #include "config.h"
 
-err_t recv_handler(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err) {
-	if (p == NULL) return ERR_VAL;
+void recv_handler(struct netconn* conn, struct netbuf* buf) {
+	void *data;
+	uint16_t len;
 
-	printf("recv: %s\n", (char *) p->payload);
+	do {
+		netbuf_data(buf, &data, &len);
+		printf("got %d bytes!\n", len);
+	} while (netbuf_next(buf) >= 0);
 
-	tcp_recved(pcb, p->len);
-	pbuf_free(p);
-	return ERR_OK;
+	netbuf_delete(buf);
 }
 
-err_t accept_handler(void *arg, struct tcp_pcb *pcb, err_t err) {
-	tcp_recv(pcb, recv_handler);
+void accept_handler(struct netconn* conn) {
+	printf("new connection!\n");
 
-	return ERR_OK;
+	struct netbuf* buf;
+
+	while (netconn_recv(conn, &buf) == ERR_OK)
+		recv_handler(conn, buf);
+
+	netconn_close(conn);
+	netconn_delete(conn);
+
+	printf("connection closed!\n");
 }
 
 void serve_task() {
 	await_init();
 
-	// TODO: why does this hang???
-	// printf("starting lwip...\n");
-	// lwip_init();
-
 	printf("starting server...\n");
-
-	struct tcp_pcb *pcb = tcp_new();
-	tcp_bind(pcb, IP_ADDR_ANY, CONF_SRV_PORT);
-	pcb = tcp_listen(pcb);
+	struct netconn* conn = netconn_new(NETCONN_TCP);
+	netconn_bind(conn, IP_ADDR_ANY, CONF_SRV_PORT);
+	netconn_listen(conn);
 
 	printf("listening on %s:%d\n", ip4addr_ntoa(netif_ip4_addr(netif_list)), CONF_SRV_PORT);
-
-	// connection accept callback
-	tcp_accept(pcb, accept_handler);
-
-	printf("server started!\n");
+	while (1) {
+		struct netconn* incoming;
+		if (netconn_accept(conn, &incoming) == ERR_OK)
+			accept_handler(incoming);
+	}
 }
 

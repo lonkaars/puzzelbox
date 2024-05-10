@@ -23,7 +23,7 @@ static void init_wifi() {
 	// enable 'station' mode (connect to an access point instead of acting like one)
 	cyw43_arch_enable_sta_mode();
 
-	if (cyw43_arch_wifi_connect_timeout_ms(CONF_NET_SSID, CONF_NET_PASS, CYW43_AUTH_WPA2_AES_PSK, CONF_NET_CONN_TIMEOUT))
+	if (cyw43_arch_wifi_connect_timeout_ms(CONF_NET_SSID, CONF_NET_PASS, CONF_NET_AUTH, CONF_NET_CONN_TIMEOUT))
 		panic("cyw43_arch_wifi_connect failed\n");
 
 	printf("connected to Wi-Fi\n");
@@ -33,8 +33,8 @@ static void init_wifi() {
 
 static void async_init() {
 	init_cyw34();
-	init_wifi();
 	// TODO: initialize i2c
+	init_wifi();
 
 	xEventGroupSetBits(init_complete, 1);
 
