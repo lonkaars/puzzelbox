@@ -5,6 +5,10 @@
 
 #define TAG "SoftwarePuzzle"
 #define I2C_MASTER_NUM I2C_NUM_0
+#define I2C_MASTER_SDA_IO GPIO_NUM_21   // update to actual gpio pin
+#define I2C_MASTER_SCL_IO GPIO_NUM_22   // update to actual gpio pin
+#define I2C_MASTER_FREQ_HZ 1000         // check actual value
+// #define I2C_SLAVE_ADDR 0x10
 
 // pins are sorted [up -> down] when looking at the puzzelbox;
 #define TOTAL_VALID 5
@@ -13,7 +17,7 @@
 
 typedef enum {
     UNINITIALIZED = 0U,
-    RESET,
+    IDLE,
     PLAYING,
     SOLVED,
     ERROR
@@ -22,15 +26,16 @@ typedef enum {
 PuzzleState state = UNINITIALIZED;
 const char* validCombinations[TOTAL_VALID] = {"11", "22", "33", "44", "55"};
 
-void I2CMasterInit() {
+// master or slave? (assumed master)
+void I2CInit() {
     i2c_config_t config;
-    config.mode = I2C_MODE_MASTER;
-    config.sda_io_num = I2C_MASTER_SDA_IO;
+    config.mode = I2C_MODE_SLAVE;
+    config.sda_io_num = I2C_SLAVE_SDA_IO;
     config.sda_pullup_en = GPIO_PULLUP_ENABLE;
-    config.scl_io_num = I2C_MASTER_SCL_IO;
+    config.scl_io_num = I2C_SLAVE_SCL_IO;
     config.scl_pullup_en = GPIO_PULLUP_ENABLE;
     config.master.clk_speed = I2C_MASTER_FREQ_HZ;
-    i2c_param_config(I2C_MASTER_NUM, &conf);
+    i2c_param_config(I2C_MASTER_NUM, &config);
     i2c_driver_install(I2C_MASTER_NUM, config.mode, 0, 0, 0);
 }
 
@@ -38,7 +43,7 @@ void SendI2CUpdate(PuzzleState state) {
     uint8_t data;
     switch (state) {
         case UNINITIALIZED: data = 0x00; break;
-        case RESET: data = 0x01; break;
+        case IDLE: data = 0x01; break;
         case PLAYING: data = 0x02; break;
         case SOLVED: data = 0x03; break;
         case ERROR: data = 0x04; break;
@@ -78,6 +83,9 @@ void SystemInit() {
     config.pull_down_en = 0;
     config.pull_up_en = 0;
     gpio_config(&config);
+
+    SendI2CUpdate(IDLE);
+    state = IDLE;
 }
 
 bool ValidateCombination(const int in, const int out) {
@@ -104,40 +112,49 @@ void Update() {
         for ( int inputPin = 0; inputPin < VALID_TOTAL; intputPin++ ){
             // check which input is set to LOW
             if (gpio_get_level(INPUT_PINS[inputPin]) == 0) {
-                // remove message when going into production
+                // remove message when going into production(?)
                 ESP_LOGI(TAG, "Detected connection between output pin: '%s' and input pin: '%s'", outputPin, inputPin);
                 // check if found connection is valid
                 validCombination = ValidateCombination(inputPin, outputPin);
             }
         }
-
         // set output pin back to HIGH
         gpio_set_level(OUTPUT_PINS[outputPin], 1); 
     }
 
     if ( validCombination == true ) {
         ESP_LOGI(TAG, "Solved!");
-        send_i2c_update(SOLVED);
+        SendI2CUpdate(SOLVED);
         state = SOLVED;
     } 
 }
 
 void app_main()
 {
-    I2CMasterInit();
+    I2CInit();
     SystemInit();
     ESP_LOGI("App", "GPIO and I2C initialized.");
     
+    uint8_t data[2];    
     while (state != SOLVED) {
         if( state == ERROR ) {
             ESP_LOGE(TAG, "Error: Entered unknown state!");
             break;
         }
+        
+        if( state != ERROR && state != UNINITIALIZED ) {
+            // get puzzle status from main controller
+            // read 2 bytes from slave address 0x50, register 0x00
+            i2c_master_read(0x50, 0x00, data, 2); 
 
-        // add check if puzzle is active
-        // add request to get puzzle status from main framework
+            // handle data
+        }
 
-        Update();
-        vTaskDelay(pdMS_TO_TICKS(100)); // Delay to make sure it doesn't spam I2C
+        if( state == PLAYING ) {
+            Update();
+        }
+
+        // delay to make sure it doesn't check every few us
+        vTaskDelay(pdMS_TO_TICKS(100)); 
     }
 }
