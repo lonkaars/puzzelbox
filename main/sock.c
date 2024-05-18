@@ -5,8 +5,9 @@
 #include <lwip/api.h>
 
 #include "init.h"
-
 #include "config.h"
+
+struct netconn* current_connection = NULL;
 
 void recv_handler(struct netconn* conn, struct netbuf* buf) {
 	void *data;
@@ -21,17 +22,16 @@ void recv_handler(struct netconn* conn, struct netbuf* buf) {
 }
 
 void accept_handler(struct netconn* conn) {
-	printf("new connection!\n");
+	current_connection = conn;
 
 	struct netbuf* buf;
-
 	while (netconn_recv(conn, &buf) == ERR_OK)
 		recv_handler(conn, buf);
 
 	netconn_close(conn);
 	netconn_delete(conn);
 
-	printf("connection closed!\n");
+	current_connection = NULL;
 }
 
 void serve_task() {

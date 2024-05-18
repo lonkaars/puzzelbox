@@ -1,4 +1,7 @@
 include_directories(${CMAKE_CURRENT_LIST_DIR})
+add_library(puzbus STATIC
+	${CMAKE_CURRENT_LIST_DIR}/puzbusv1.c
+	)
 
 # mpack
 include_directories(${CMAKE_CURRENT_LIST_DIR}/lib/mpack/src/mpack)

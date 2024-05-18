@@ -14,7 +14,7 @@ struct pb_msg {
 };
 
 int pb_read(struct pb_msg* target, char* buf, size_t buf_sz);
-void pb_free(struct pb_msg* msg);
+int pb_write(struct pb_msg* target, char** buf, size_t* buf_sz);
 
 #ifdef __cplusplus
 }

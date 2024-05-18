@@ -4,11 +4,17 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
-include(../proto/include.cmake)
-
 project(puzzlebox_client C CXX)
+
+include(../proto/include.cmake)
 
 add_executable(main
 	main.cpp
 	)
+
+target_link_libraries(main
+	puzbus
+	mpack
+	)
+
 
