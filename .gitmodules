@@ -13,3 +13,8 @@
 	url = https://github.com/FreeRTOS/FreeRTOS-Kernel
 	branch = V11.1.0
 	shallow = true
+[submodule "lib/mpack"]
+	path = lib/mpack
+	url = https://github.com/ludocode/mpack
+	branch = v1.1.1
+	shallow = true

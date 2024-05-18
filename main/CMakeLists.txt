@@ -7,6 +7,7 @@ set(PICO_BOARD pico_w)
 
 include(lib/pico-sdk/pico_sdk_init.cmake)
 include(lib/FreeRTOS-Kernel/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
+include(../proto/include.cmake)
 
 project(puzzlebox_main C CXX ASM)
 
@@ -30,5 +31,6 @@ target_link_libraries(main
 	pico_stdlib
 	FreeRTOS-Kernel
 	FreeRTOS-Kernel-Heap4
+	mpack
 	)
 
