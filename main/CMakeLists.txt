@@ -17,6 +17,7 @@ add_executable(main
 	main.c
 	init.c
 	sock.c
+	i2c.c
 	)
 
 pico_enable_stdio_usb(main 1)
@@ -29,6 +30,7 @@ target_include_directories(main PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(main
 	pico_cyw43_arch_lwip_sys_freertos
 	pico_stdlib
+	hardware_i2c
 	FreeRTOS-Kernel
 	FreeRTOS-Kernel-Heap4
 	mpack

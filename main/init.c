@@ -1,5 +1,6 @@
 #include "config.h"
 #include "init.h"
+#include "i2c.h"
 
 #include <FreeRTOS.h>
 #include <task.h>
@@ -33,7 +34,7 @@ static void init_wifi() {
 
 static void async_init() {
 	init_cyw34();
-	// TODO: initialize i2c
+	init_i2c();
 	init_wifi();
 
 	xEventGroupSetBits(init_complete, 1);
