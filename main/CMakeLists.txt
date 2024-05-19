@@ -31,6 +31,7 @@ target_link_libraries(main
 	pico_stdlib
 	FreeRTOS-Kernel
 	FreeRTOS-Kernel-Heap4
+	puzbus
 	mpack
 	)
 
