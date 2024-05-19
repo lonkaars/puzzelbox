@@ -2,6 +2,32 @@
 
 Avans University of Applied Sciences project puzzle box.
 
+## tidyness
+
+Please keep this repository tidy by being aware of the following conventions!
+
+### folder structure
+
+|folder|contains|
+|-|-|
+|`/client`|Desktop PC application for controlling the puzzle box
+|`/docs`|Project documentation in AsciiDoc(tor) format
+|`/lib`|Libraries (tracked as [submodules](#submodules))
+|`/main`|Main controller (RPi pico) software
+|`/proto`|Puzzle bus TCP protocol functions (used by main and client)
+|`/puzzle/<name>`|Puzzle sources, each puzzle has its own subdirectory
+|`/shared`|Auxiliary shared code
+|`/test`|Unit test framework (currently unutilized)
+
+### code style
+
+An `.editorconfig` file is provided in this repository. Please install the
+[EditorConfig](https://editorconfig.org/) plugin for your text editor of choice
+to automatically use these.
+
+Currently, no linter/formatter is configured for maintaining consistent code
+style.
+
 ## submodules
 
 This repository tracks (most) dependencies via git submodules.
