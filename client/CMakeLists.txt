@@ -11,6 +11,7 @@ include(../proto/include.cmake)
 add_executable(main
 	main.cpp
 	rl.c
+	sock.cpp
 	)
 
 target_link_libraries(main
