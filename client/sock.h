@@ -13,6 +13,8 @@ public:
 
 	void sock_connect();
 
+	void send(char* buf, size_t buf_sz);
+
 private:
 	void sock_task();
 	void sock_close();
@@ -25,4 +27,9 @@ private:
 	int _fd = -1;
 
 };
+
+extern PBSocket* sock;
+
+void i2c_send(uint16_t addr, char* data, size_t data_size);
+void i2c_recv(uint16_t addr, char* data, size_t data_size);
 

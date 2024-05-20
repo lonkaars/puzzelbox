@@ -7,6 +7,7 @@
 #include <readline/history.h>
 
 #include "rl.h"
+#include "sock.h"
 
 void rl_printf(const char *fmt, ...) {
 	// save line
@@ -35,6 +36,11 @@ void rl_printf(const char *fmt, ...) {
 	free(saved_line);
 }
 
+void cmd_test() {
+	const char* data = "Hello world!";
+	i2c_send(0x39, (char*) data, strlen(data));
+}
+
 int cli_main() {
 	char* input = NULL;
 	while (1) {
@@ -48,6 +54,13 @@ int cli_main() {
 		if (*input) add_history(input);
 
 		if (strcmp(input, "exit") == 0) return EXIT_SUCCESS;
+
+		if (strcmp(input, "test") == 0) {
+			cmd_test();
+			continue;
+		}
+
+		printf("unknown command!\n");
 	}	
 
 	return EXIT_SUCCESS;

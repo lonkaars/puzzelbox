@@ -10,7 +10,7 @@ include(../proto/include.cmake)
 
 add_executable(main
 	main.cpp
-	rl.c
+	rl.cpp
 	sock.cpp
 	)
 

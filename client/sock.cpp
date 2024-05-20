@@ -10,6 +10,7 @@
 
 #include <thread>
 
+#include "puzbusv1.h"
 #include "sock.h"
 #include "rl.h"
 
@@ -66,20 +67,59 @@ void PBSocket::sock_close() {
 	_fd = -1;
 }
 
+void PBSocket::send(char* buf, size_t buf_sz) {
+	write(_fd, buf, buf_sz);
+}
+
 void PBSocket::sock_task() {
+	struct pb_msg input;
+
 	while(1) {
 		char buf[80];
 		ssize_t bytes = read(_fd, buf, sizeof(buf));
 
 		if (bytes == -1) {
 			rl_printf("error: %s (%d)\n", strerror(errno), errno);
-			sock_close();
 			break;
 		}
 
-		if (bytes > 0) {
-			rl_printf("received %d bytes\n", bytes);
+		// skip empty frames
+		if (bytes == 0) continue;
+
+		int ret = pb_read(&input, buf, bytes);
+
+		// header read error
+		if (ret < 0) {
+			rl_printf("pb_read error!\n");
+			break;
 		}
+
+		// continue reading if more bytes needed...
+		if (ret > 0) continue;
+
+		// message read completely!
+		i2c_recv(input.addr, input.data, input.length);
+		free(input.data);
 	}
+
+	sock_close();
+}
+
+void i2c_send(uint16_t addr, char* data, size_t data_size) {
+	struct pb_msg msg = {
+		.addr = addr,
+		.data = data,
+		.length = data_size,
+	};
+
+	char* packed;
+	size_t size;
+	if (!pb_write(&msg, &packed, &size)) return;
+
+	sock->send(packed, size);
+}
+
+void i2c_recv(uint16_t addr, char* data, size_t data_size) {
+	rl_printf("[0x%02x]: %.*s\n", addr, data_size, data);
 }
 

@@ -5,14 +5,6 @@
 
 #define CLI_PROMPT "(" COLOR_BOLD "pbc" COLOR_OFF ") "
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 int cli_main();
 void rl_printf(const char *fmt, ...);
-
-#ifdef __cplusplus
-}
-#endif
 
