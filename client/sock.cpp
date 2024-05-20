@@ -19,7 +19,6 @@ using std::thread;
 PBSocket::PBSocket() { }
 PBSocket::PBSocket(char* addr, uint16_t port) : PBSocket() {
 	set_server(addr, port);
-	sock_connect();
 }
 
 PBSocket::~PBSocket() {

@@ -17,9 +17,10 @@ int main(int argc, char** argv) {
 	uint16_t port = 9191;
 	if (argc >= 3) port = atoi(argv[2]);
 
+	PBSocket sock(addr, port);
 	try {
 		// connect to TCP socket (automatically spawns thread)
-		PBSocket sock(addr, port);
+		sock.sock_connect();
 	} catch (const std::exception& e) {
 		printf("error: %s\n", e.what());
 		return EXIT_FAILURE;
