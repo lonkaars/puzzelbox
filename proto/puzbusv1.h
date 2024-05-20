@@ -24,13 +24,26 @@ struct pb_msg {
  * \param buf     pointer to input stream data chunk
  * \param buf_sz  size of \p buf
  *
- * \returns boolean true if a message was completely read, false if more data
- * is required
+ * \returns Integer representing amount of bytes required to finish message, or
+ * -1 if the message header could not be read. If this function returns 0, the
+ *  message in \p target is complete.
  *
- * \note target->data will automatically be allocated by this function, and
- * must be `free()`d by the caller when finished
+ * \note target->data will automatically be allocated by this function, even if
+ * the message is not fully parsed. This variable must be `free()`d by the
+ * caller after each complete message to prevent memory leaks.
  */
-bool pb_read(struct pb_msg* target, char* buf, size_t buf_sz);
+int pb_read(struct pb_msg* target, char* buf, size_t buf_sz);
+
+/**
+ * \brief reset the remaining message data counter
+ *
+ * Calling this function has the effect of forcing \c pb_read() to parse the
+ * next buffer chunk as the start of a new message. This function may be called
+ * before reading a TCP frame's data to mitigate any synchronization issues
+ * arising from earlier corrupt or otherwise malformed messages.
+ */
+void pb_read_reset();
+
 /**
  * \brief Allocate and write a msgpack-formatted message to \p buf
  *

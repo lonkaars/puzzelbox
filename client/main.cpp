@@ -17,31 +17,44 @@ int send_message() {
 	size_t size;
 	if (!pb_write(&output, &packed, &size)) {
 		printf("error writing!\n");
-		return 1;
+		return EXIT_FAILURE;
 	}
 
 	fwrite(packed, sizeof(packed[0]), size, stdout);
 	fflush(stdout);
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 int read_message() {
 	freopen(NULL, "rb", stdin); // allow binary on stdin
 	struct pb_msg input;
 	
-	char buf[8]; // extremely small buffer to test chunked message parsing
+	char buf[4]; // extremely small buffer to test chunked message parsing
 	size_t bytes = 0;
-	while ((bytes = fread(buf, sizeof(buf[0]), sizeof(buf), stdin)) > 0) {
-		if (!pb_read(&input, buf, bytes)) continue;
 
+	while ((bytes = fread(buf, sizeof(buf[0]), sizeof(buf), stdin)) > 0) {
+		int ret = pb_read(&input, buf, bytes);
+
+		// header read error
+		if (ret < 0) {
+			printf("error reading!\n");
+			return EXIT_FAILURE;
+		}
+
+		// continue reading if more bytes needed...
+		if (ret > 0) continue;
+
+		// message read completely!
 		printf("address: 0x%02x\n", input.addr);
 		printf("data:    \"%.*s\"\n", input.length, input.data);
 		free(input.data);
-		return 0;
+		return EXIT_SUCCESS;
 	}
 
-	return 1;
+	// if we reach this point, data was read but it did not contain a complete
+	// message, and is thus considered a failure
+	return EXIT_FAILURE;
 }
 
 int main() {
@@ -49,6 +62,6 @@ int main() {
 	if (!isatty(fileno(stdin))) return read_message();
 	
 	printf("please pipe some data in or out to use this program\n");
-	return 0;
+	return EXIT_SUCCESS;
 }
 
