@@ -10,11 +10,13 @@ include(../proto/include.cmake)
 
 add_executable(main
 	main.cpp
+	rl.c
 	)
 
 target_link_libraries(main
 	puzbus
 	mpack
+	readline # this is such a common library that I did not bother adding it as a submodule
 	)
 
 
