@@ -1,9 +1,9 @@
 #pragma once
 
-#define COLOR_OFF "\x1B[0m"
-#define COLOR_BLUE "\x1B[0;94m"
+#define COLOR_OFF "\x1b[0m"
+#define COLOR_BOLD "\x1b[1m"
 
-#define CLI_PROMPT COLOR_BLUE "pbc" COLOR_OFF "% "
+#define CLI_PROMPT "(" COLOR_BOLD "pbc" COLOR_OFF ") "
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstdint>
+#include <exception>
 
 #include "rl.h"
 #include "sock.h"
@@ -16,8 +17,13 @@ int main(int argc, char** argv) {
 	uint16_t port = 9191;
 	if (argc >= 3) port = atoi(argv[2]);
 
-	// connect to TCP socket (automatically spawns thread)
-	PBSocket sock(addr, port);
+	try {
+		// connect to TCP socket (automatically spawns thread)
+		PBSocket sock(addr, port);
+	} catch (const std::exception& e) {
+		printf("error: %s\n", e.what());
+		return EXIT_FAILURE;
+	}
 
 	// enter main CLI (using GNU readline for comfyness)
 	return cli_main();
