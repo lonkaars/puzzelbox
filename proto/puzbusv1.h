@@ -7,10 +7,12 @@
 extern "C" {
 #endif
 
+/** \brief Puzzle bus message (v1) */
 struct pb_msg {
-	uint16_t addr;
-	char* data;
-	size_t length;
+	uint16_t addr; //!< I^2^C address
+	char * data;   //!< message content
+	size_t length; //!< message size
+	size_t _rdata; //!< \private remaining bytes to read until message is complete
 };
 
 /**
@@ -32,7 +34,7 @@ struct pb_msg {
  * the message is not fully parsed. This variable must be `free()`d by the
  * caller after each complete message to prevent memory leaks.
  */
-int pb_read(struct pb_msg* target, char* buf, size_t buf_sz);
+int pb_read(struct pb_msg * target, const char * buf, size_t buf_sz);
 
 /**
  * \brief reset the remaining message data counter
@@ -42,7 +44,7 @@ int pb_read(struct pb_msg* target, char* buf, size_t buf_sz);
  * before reading a TCP frame's data to mitigate any synchronization issues
  * arising from earlier corrupt or otherwise malformed messages.
  */
-void pb_read_reset();
+void pb_read_reset(struct pb_msg * target);
 
 /**
  * \brief Allocate and write a msgpack-formatted message to \p buf
@@ -60,7 +62,7 @@ void pb_read_reset();
  *
  * \note the pointer stored in \p buf must be `free()`d by the caller afterwards
  */
-bool pb_write(struct pb_msg* target, char** buf, size_t* buf_sz);
+bool pb_write(const struct pb_msg * target, char ** buf, size_t * buf_sz);
 
 #ifdef __cplusplus
 }
