@@ -6,6 +6,7 @@
 
 #define SDA_PIN 16
 #define SCL_PIN 17
+#define MAX_SLAVES 10
 
 /**
  * \brief initialize all required gpio for i2c usage on the pico
@@ -28,9 +29,14 @@ int read_i2c(uint8_t addr, uint8_t *output, size_t len);
 
 /**
  * \brief write data to addr with length len from i2c bus.
- * 
+ * \param addr
+ * \param input
+ * \param len
  * This functions writes data to a specific address on the i2c bus,
  * the input var holds the data which will be written to the given 
  * address with length len.
  */
 int write_i2c(uint8_t addr, uint8_t *input, size_t len);
+
+/** \brief looking for slave addresses and requesting updates */
+void bus_task();
