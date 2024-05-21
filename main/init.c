@@ -24,8 +24,8 @@ static void init_wifi() {
 	// enable 'station' mode (connect to an access point instead of acting like one)
 	cyw43_arch_enable_sta_mode();
 
-	if (cyw43_arch_wifi_connect_timeout_ms(CONF_NET_SSID, CONF_NET_PASS, CONF_NET_AUTH, CONF_NET_CONN_TIMEOUT))
-		panic("cyw43_arch_wifi_connect failed\n");
+	// if (cyw43_arch_wifi_connect_timeout_ms(CONF_NET_SSID, CONF_NET_PASS, CONF_NET_AUTH, CONF_NET_CONN_TIMEOUT))
+	// 	panic("cyw43_arch_wifi_connect failed\n");
 
 	printf("connected to Wi-Fi\n");
 
