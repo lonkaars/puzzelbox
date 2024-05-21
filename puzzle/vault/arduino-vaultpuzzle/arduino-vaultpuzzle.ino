@@ -4,18 +4,22 @@
 #define TOTAL_LEVELS 5
 #define TAG "VaultPuzzle"
 
+// Define the I2C slave address
+#define I2C_SLAVE_ADDR 0x40  // Replace 0x40 with your actual I2C slave device address
+
 // Key Matrix Pin Configuration
 #define ROWS 4
 #define COLS 3
-const int ROW_PINS[ROWS] = {32, 33, 25, 26}; // Update these pin numbers based on your Arduino setup
-const int COL_PINS[COLS] = {27, 14, 12}; // Update these pin numbers based on your Arduino setup
+
+//TODO Update these pin numbers based on your Arduino setup
+const int ROW_PINS[ROWS] = {32, 33, 25, 26}; 
+const int COL_PINS[COLS] = {27, 14, 12}; 
 
 typedef enum {
-    STATE_UNINITIALIZED,
-    STATE_RESET,
-    STATE_PLAYING,
-    STATE_SOLVED,
-    STATE_ERROR
+    STATE_UNINITIALIZED = 0x00,
+    STATE_RESET = 0x01,
+    STATE_PLAYING = 0x02,
+    STATE_SOLVED = 0x03,
 } PuzzleState;
 
 const char* validButtons[TOTAL_LEVELS] = {"A3", "F1", "U4", "C2", "L1"};
@@ -30,10 +34,23 @@ void check_button_press();
 void update_state_after_button_press(bool validPress);
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Wire.begin(); // Initialize I2C as master
   initialize_system();
   Serial.println("GPIO and I2C initialized.");
+}
+
+void initialize_system() {
+    // Configure the rows as input with pull-up
+    for (int i = 0; i < ROWS; i++) {
+      pinMode(ROW_PINS[i], INPUT_PULLUP);
+    }
+    
+    // Configure the columns as output
+    for (int i = 0; i < COLS; i++) {
+      pinMode(COL_PINS[i], OUTPUT);
+      digitalWrite(COL_PINS[i], HIGH);
+    }
 }
 
 void loop() {
@@ -46,11 +63,10 @@ void loop() {
 void send_i2c_update(PuzzleState state) {
     uint8_t data;
     switch (state) {
-        case STATE_UNINITIALIZED: data = 0x00; break;
-        case STATE_RESET: data = 0x01; break;
-        case STATE_PLAYING: data = 0x02; break;
-        case STATE_SOLVED: data = 0x03; break;
-        case STATE_ERROR: data = 0x04; break;
+        case STATE_UNINITIALIZED: data = STATE_UNINITIALIZED; break;
+        case STATE_RESET: data = STATE_RESET; break;
+        case STATE_PLAYING: data = STATE_PLAYING; break;
+        case STATE_SOLVED: data = STATE_SOLVED; break;
         default: data = 0xFF; // Unknown state
     }
     Serial.print("Sending state "); Serial.println(state);
@@ -60,9 +76,9 @@ void send_i2c_update(PuzzleState state) {
     byte error = Wire.endTransmission();
     
     if (error == 0) {
-        Serial.print("State update sent successfully.");
+        Serial.println("State update sent successfully.");
     } else {
-        Serial.print("Failed to send state update via I2C.");
+        Serial.println("Failed to send state update via I2C.");
     }
 }
 
@@ -77,19 +93,6 @@ void display_code(int level) {
         Serial.print("Code for level "); Serial.print(level); Serial.println(" displayed successfully.");
     } else {
         Serial.print("Failed to display code for level "); Serial.print(level); Serial.println(" via I2C.");
-    }
-}
-
-void initialize_system() {
-    // Configure the rows as input with pull-up
-    for (int i = 0; i < ROWS; i++) {
-      pinMode(ROW_PINS[i], INPUT_PULLUP);
-    }
-    
-    // Configure the columns as output
-    for (int i = 0; i < COLS; i++) {
-      pinMode(COL_PINS[i], OUTPUT);
-      digitalWrite(COL_PINS[i], HIGH);
     }
 }
 
@@ -122,9 +125,5 @@ void update_state_after_button_press(bool validPress) {
             currentLevel++;
             display_code(currentLevel);
         }
-    } else {
-        puzzleState = STATE_ERROR;
-        Serial.println("Error in input");
-    }
-    send_i2c_update(puzzleState);
+	}
 }
