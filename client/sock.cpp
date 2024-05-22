@@ -18,7 +18,7 @@ using std::logic_error;
 using std::thread;
 
 PBSocket::PBSocket() { }
-PBSocket::PBSocket(char* addr, uint16_t port) : PBSocket() {
+PBSocket::PBSocket(const char * addr, uint16_t port) : PBSocket() {
 	set_server(addr, port);
 }
 
@@ -32,7 +32,7 @@ PBSocket::~PBSocket() {
 	sock_close();
 }
 
-void PBSocket::set_server(char* addr, uint16_t port) {
+void PBSocket::set_server(const char * addr, uint16_t port) {
 	_addr = addr;
 	_port = port;
 }
@@ -67,7 +67,7 @@ void PBSocket::sock_close() {
 	_fd = -1;
 }
 
-void PBSocket::send(char* buf, size_t buf_sz) {
+void PBSocket::send(const char * buf, size_t buf_sz) {
 	write(_fd, buf, buf_sz);
 }
 
@@ -105,10 +105,10 @@ void PBSocket::sock_task() {
 	sock_close();
 }
 
-void i2c_send(uint16_t addr, char* data, size_t data_size) {
+void i2c_send(uint16_t addr, const char * data, size_t data_size) {
 	struct pb_msg msg = {
 		.addr = addr,
-		.data = data,
+		.data = (char *) data,
 		.length = data_size,
 	};
 
@@ -119,7 +119,7 @@ void i2c_send(uint16_t addr, char* data, size_t data_size) {
 	sock->send(packed, size);
 }
 
-void i2c_recv(uint16_t addr, char* data, size_t data_size) {
+void i2c_recv(uint16_t addr, const char * data, size_t data_size) {
 	rl_printf("[0x%02x]: %.*s\n", addr, data_size, data);
 }
 
