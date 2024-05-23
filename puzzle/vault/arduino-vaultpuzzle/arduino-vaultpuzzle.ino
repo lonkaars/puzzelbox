@@ -12,8 +12,8 @@
 #define COLS 3
 
 //TODO Update these pin numbers based on your Arduino setup
-const int ROW_PINS[ROWS] = {32, 33, 25, 26}; 
-const int COL_PINS[COLS] = {27, 14, 12}; 
+const int ROW_PINS[ROWS] = {7, 6, 5, 4}; 
+const int COL_PINS[COLS] = {10, 9, 8}; 
 
 typedef enum {
     STATE_UNINITIALIZED = 0x00,
@@ -22,7 +22,7 @@ typedef enum {
     STATE_SOLVED = 0x03,
 } PuzzleState;
 
-const char* validButtons[TOTAL_LEVELS] = {"A3", "F1", "U4", "C2", "L1"};
+const char* validButtons[TOTAL_LEVELS] = {"A2", "B1", "D3", "C2", "C1"};
 PuzzleState puzzleState = STATE_UNINITIALIZED;
 int currentLevel = 0;
 
