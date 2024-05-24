@@ -37,16 +37,34 @@ void rl_printf(const char *fmt, ...) {
 }
 
 static bool cli_cmd(char* line) {
+  char* cmd = strtok(line, " \t\n");
 	for (size_t i = 0; i < cmds_length; i++) {
-		if (strcmp(line, cmds[i].name) != 0) continue;
+		if (strncmp(cmds[i].name, cmd, strlen(cmd)) != 0) continue;
 		cmds[i].handle(line);
 		return true;
 	}
 	return false;
 }
 
+static char* rl_completion_entries(const char *text, int state) {
+  static size_t i = 0;
+  if (state == 0) i = 0;
+
+  while (i < cmds_length) {
+    struct cmd cmd = cmds[i];
+    i++;
+    if (strncmp(text, cmd.name, strlen(text)) == 0) {
+      return strdup(cmd.name);
+    }
+  }
+
+  return NULL;
+}
+
 int cli_main() {
 	char* input = NULL;
+  rl_completion_entry_function = rl_completion_entries;
+
 	while (1) {
 		if (input != NULL) free(input);
 		input = readline(CLI_PROMPT);
