@@ -3,9 +3,11 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <hardware/i2c.h>
 
 #define SDA_PIN 16
 #define SCL_PIN 17
+#define I2C_PORT i2c0
 #define MAX_SLAVES 10
 
 /**
