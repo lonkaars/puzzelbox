@@ -8,8 +8,6 @@
 #include <hardware/i2c.h>
 
 void init_i2c() {
-	await_init();
-
 	i2c_init(I2C_PORT, 100 * 1000); // currently at 100kHz
 
 	// Initialize I2C pins - sda(16), scl(17)
@@ -70,8 +68,6 @@ void bus_task() {
 	// send updates at regular intervals
 	await_init();
 	printf("Bus task!");
-
-	return;
 	
 	int i = 0;
 	uint8_t found[MAX_SLAVES];
