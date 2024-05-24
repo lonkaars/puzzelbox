@@ -13,6 +13,7 @@ add_executable(pbc
 	rl.cpp
 	sock.cpp
 	cmd.cpp
+	parse.cpp
 	)
 
 target_link_libraries(pbc

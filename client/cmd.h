@@ -35,11 +35,11 @@ static const struct cmd cmds[] = {
 		.name = "help",
 		.info = "show this help",
 	},
-	// {
-	// 	.handle = cmd_send,
-	// 	.name = "send",
-	// 	.info = "[debug] send raw message",
-	// },
+	{
+		.handle = cmd_send,
+		.name = "send",
+		.info = "[debug] send raw message",
+	},
 	// {
 	// 	.handle = cmd_status,
 	// 	.name = "status",
