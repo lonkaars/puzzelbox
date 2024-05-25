@@ -1,0 +1,100 @@
+# extends: default
+
+page:
+  size: a4
+  margin: [1in, 1in, 1in, 1in]
+  numbering:
+    start-at: toc
+
+base:
+  hyphens: true
+  text-align: justify
+  font-size: 10.5
+
+prose:
+  margin-bottom: 3mm
+
+# font:
+#   catalog:
+#     serif:
+#       bold: texgyreschola-bold.otf
+#       bold-italic: texgyreschola-bolditalic.otf
+#       italic: texgyreschola-italic.otf
+#       normal: texgyreschola-regular.otf
+#     sans-serif:
+#       bold: Inter-Bold.otf
+#       bold-italic: Inter-BoldItalic.otf
+#       italic: Inter-Italic.otf
+#       normal: Inter-Regular.otf
+#     monospace:
+#       bold: JetBrainsMono-Bold.ttf
+#       bold-italic: JetBrainsMono-BoldItalic.ttf
+#       italic: JetBrainsMono-Italic.ttf
+#       normal: JetBrainsMono-Regular.ttf
+
+title-page:
+  align: center
+  title:
+    margin-top: 1cm
+    font-size: 18
+    font-style: bold
+  subtitle:
+    margin-bottom: 1cm
+    font-size: 16
+  authors:
+    margin-bottom: 1cm
+
+heading:
+  align: left
+  margin-top: 15pt
+  margin-bottom: 5pt
+  font-style: bold
+  h2-font-size: $base-font-size * 1.7
+  h3-font-size: $base-font-size * 1.4
+  h4-font-size: $base-font-size * 1.2
+  h5-font-size: $base-font-size
+
+toc:
+  indent: 5mm
+  line-height: 1.4
+
+caption:
+  align: center
+  end: bottom
+
+image:
+  align: center
+
+list:
+  indent: 10mm
+
+description-list:
+  term-font-style: bold
+
+table:
+  align: center
+  border-color: transparent
+  cell-padding: [0.2pt, 5pt]
+  border-color: '#000000'
+  border-width: [ 0.5pt, 0pt, 0.5pt, 0pt ]
+  head:
+    font-style: bold
+    border-bottom-width: 1pt
+  cell:
+    border-width: 0pt
+  caption:
+    end: $caption-end
+
+footnotes:
+  font-size: round($base-font-size * 0.75)
+
+footer:
+  height: 1in
+  vertical-align: middle
+  recto:
+    center:
+      content: '{page-number}'
+  verso:
+    center:
+      content: '{page-number}'
+
