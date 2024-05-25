@@ -8,13 +8,18 @@ project(puzzlebox_client C CXX)
 
 include(../proto/include.cmake)
 
-add_executable(main
+add_executable(pbc
 	main.cpp
+	rl.cpp
+	sock.cpp
+	cmd.cpp
+	parse.cpp
 	)
 
-target_link_libraries(main
+target_link_libraries(pbc
 	puzbus
 	mpack
+	readline # this is such a common library that I did not bother adding it as a submodule
 	)
 
 

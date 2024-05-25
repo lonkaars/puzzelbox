@@ -1,54 +1,38 @@
 #include <cstdio>
 #include <cstdlib>
-#include <cstring>
-#include <unistd.h>
+#include <cstdint>
+#include <exception>
 
-#include "puzbusv1.h"
+#include "rl.h"
+#include "sock.h"
 
-int send_message() {
-	const char* data = "Test message data!";
-	struct pb_msg output = {
-		.addr = 0x39,
-		.data = (char*) data,
-		.length = strlen(data),
-	};
+PBSocket* sock;
 
-	char* packed;
-	size_t size;
-	if (!pb_write(&output, &packed, &size)) {
-		printf("error writing!\n");
-		return 1;
+int main(int argc, char** argv) {
+	if (argc < 2) {
+		printf("usage: %s addr [port]\n", argv[0]);
+		return EXIT_FAILURE;
 	}
 
-	fwrite(packed, sizeof(packed[0]), size, stdout);
-	fflush(stdout);
+	// parse arguments
+	char* addr = argv[1];
+	uint16_t port = 9191;
+	if (argc >= 3) port = atoi(argv[2]);
 
-	return 0;
-}
-
-int read_message() {
-	freopen(NULL, "rb", stdin); // allow binary on stdin
-	struct pb_msg input;
-	
-	char buf[8]; // extremely small buffer to test chunked message parsing
-	size_t bytes = 0;
-	while ((bytes = fread(buf, sizeof(buf[0]), sizeof(buf), stdin)) > 0) {
-		if (!pb_read(&input, buf, bytes)) continue;
-
-		printf("address: 0x%02x\n", input.addr);
-		printf("data:    \"%.*s\"\n", input.length, input.data);
-		free(input.data);
-		return 0;
+	sock = new PBSocket(addr, port);
+	try {
+		// connect to TCP socket (automatically spawns thread)
+		sock->sock_connect();
+	} catch (const std::exception& e) {
+		printf("error: %s\n", e.what());
+		return EXIT_FAILURE;
 	}
 
-	return 1;
-}
+	// enter main CLI (using GNU readline for comfyness)
+	int ret = cli_main();
 
-int main() {
-	if (!isatty(fileno(stdout))) return send_message();
-	if (!isatty(fileno(stdin))) return read_message();
-	
-	printf("please pipe some data in or out to use this program\n");
-	return 0;
+	delete sock;
+
+	return ret;
 }
 

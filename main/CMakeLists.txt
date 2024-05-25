@@ -33,6 +33,7 @@ target_link_libraries(main
 	hardware_i2c
 	FreeRTOS-Kernel
 	FreeRTOS-Kernel-Heap4
+	puzbus
 	mpack
 	)
 
