@@ -54,7 +54,7 @@ uint8_t* scan_bus(uint8_t *array) {
 
 		// if acknowledged -> ret == number of bytes sent
 		if(ret > 0){
-			printf("found i2c slave on addr: %d", addr);
+			printf("found i2c slave on addr: %d\n", addr);
 			array[i] = addr;
 			i++;
 		}
@@ -67,14 +67,13 @@ void bus_task() {
 	// scan bus for slaves
 	// send updates at regular intervals
 	await_init();
-	printf("Bus task!");
 	
 	int i = 0;
 	uint8_t found[MAX_SLAVES];
 	init_addr_array(found, MAX_SLAVES);
 
 	while(1) {
-		printf("Bus scan!");
+		// printf("Bus scan!");
 		scan_bus(found);
 
 		for(int i = 0; i < MAX_SLAVES; i++){
@@ -83,10 +82,8 @@ void bus_task() {
 			
 			uint8_t data = 0x01;
 			// send data to found slave address
-			printf("printing data 1");
 			write_i2c(found[i], &data, 1);
 
-			printf("printing data 0");
 			data = 0x02;
 			write_i2c(found[i], &data, 1);
 			// request update from slave addr at found[i]
