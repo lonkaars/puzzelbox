@@ -26,6 +26,8 @@ static int parse_str(const char* str, char* data, size_t* size) {
 	for (i = 1; i < len && str[i] != '\0'; i++) {
 		char c = str[i];
 
+		// TODO: handle escaped characters
+
 		if (c == closing) {
 			if (scan) printf("string%s of length %d\n", escape ? " (w/ escape)" : "", i - 1);
 			return i + 1; // +1 for closing quote
@@ -72,46 +74,61 @@ static int parse_num(const char* str, char* data, size_t* size) {
 		if (base == 10) *size += 1;
 		else if (base == 16) {
 			if (!bytestring) {
-				*size += (len - i + 1) / 2;
-			} else {
-				for (; colon != NULL && colon < str + len; colon = strchr(str, ':')) {
+				size_t prefixless = len - i;
+				switch (prefixless) {
+					case 2:  //  8-bit (2 hex characters)
+					case 4:  // 16-bit
+					case 8:  // 32-bit
+					case 16: // 64-bit
+						break;
+					default:
+						return -i;
+				}
+				*size += prefixless / 2;
+			} else { // if bytestring
+				size_t c = 0, field = strcspn(str, ifs); // length until end of field
+				while (c < field) { // count bytes in bytestring
+					if (strspn(str + c, SET_HEX) != 2)
+						return -i -c;
+					c += 2;
 					*size += 1;
+
+					if (str[c] == ':') {
+						c += 1;
+						continue;
+					}
+					break;
 				}
 			}
 		}
 	}
 
-	if (scan) printf("number (base %d%s) of length %lu\n", base, bytestring ? " as bytestring" : "", len - i);
-	return len;
+	i += len;
+	return i;
 }
 
 int strtodata(const char* str, char** data, size_t* size) {
 	const char* ifs = IFS;
 	*size = 0;
-	size_t i;
+	size_t i = 0;
 	size_t len = strlen(str);
 
-	for (i = 0; i < len;) {
+	while (i < len) {
 		// skip whitespace
-		int run;
-		run = strspn(&str[i], ifs);
-		if (run > 0) printf("skipping whitespace for %d bytes...\n", run);
-		i += run;
+		i += strspn(&str[i], ifs);
 		// end of string
 		if (str[i] == '\0') break;
 
+		int run;
 		if ((run = parse_str(str + i, NULL, size)) > 0) { i += run; continue; }
 		if ((run = parse_num(str + i, NULL, size)) > 0) { i += run; continue; }
 
 		// no format detected
 		return -i + run;
 	}
-	printf("end of string w/o parse errors\n");
-	printf("buffer size is now %lu\n", *size);
-	exit(0);
 
 	*data = (char*) malloc(*size);
 
-	return 0;
+	return *size;
 }
 
