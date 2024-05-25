@@ -2,9 +2,17 @@
 #include <Adafruit_NeoTrellis.h>
 
 #define MATRIX_SIZE 8
-#define INT_PIN 5 // Interrupt pin for the NeoTrellis
 #define LED_COLOR_ON 0xFFFFFF // Color of the LEDs in ON state
 #define LED_COLOR_OFF 0x000000 // Color of the LEDs in OFF state
+
+Adafruit_NeoTrellis t_array[MATRIX_SIZE / 4][MATRIX_SIZE / 4] = {
+    {Adafruit_NeoTrellis(0x2E), Adafruit_NeoTrellis(0x2F)},
+    {Adafruit_NeoTrellis(0x30), Adafruit_NeoTrellis(0x32)}
+};
+
+Adafruit_MultiTrellis trellis((Adafruit_NeoTrellis *)t_array, MATRIX_SIZE / 4, MATRIX_SIZE / 4);
+
+bool neoMatrix[MATRIX_SIZE][MATRIX_SIZE]; // To track state of each pixel
 
 enum NeoState {
     NEO_UNINITIALIZED,
@@ -12,90 +20,76 @@ enum NeoState {
     NEO_SOLVED
 };
 
-Adafruit_NeoTrellis trellis;
 NeoState neoState = NEO_UNINITIALIZED;
 
-// Initialize the NeoTrellis matrix
-void initializeNeoMatrix() {
+void setup() {
+    Serial.begin(115200);
+    while (!Serial); // Wait for Serial to be ready
+
     if (!trellis.begin()) {
         Serial.println("Failed to initialize NeoTrellis");
-        while (1); // Hold here if initialization fails
+        while (1) delay(1);
     }
 
-    // Set all buttons to listen for presses and releases
+    // Initialize the matrix with a checkerboard pattern
+    bool toggle = false;
     for (int i = 0; i < MATRIX_SIZE; i++) {
         for (int j = 0; j < MATRIX_SIZE; j++) {
-            trellis.activateKey(i * MATRIX_SIZE + j, SEESAW_KEYPAD_EDGE_RISING, true);
-            trellis.activateKey(i * MATRIX_SIZE + j, SEESAW_KEYPAD_EDGE_FALLING, true);
-            trellis.pixels.setPixelColor(i * MATRIX_SIZE + j, LED_COLOR_OFF); // Turn off LED
+            neoMatrix[i][j] = toggle;
+            toggle = !toggle;
+            trellis.setPixelColor(i * MATRIX_SIZE + j, neoMatrix[i][j] ? LED_COLOR_ON : LED_COLOR_OFF);
         }
+        toggle = !toggle;
     }
-    trellis.pixels.show();
+    trellis.show();
     neoState = NEO_PLAYING;
+
+    // Register the callback for each key
+    for (int i = 0; i < MATRIX_SIZE * MATRIX_SIZE; i++) {
+        trellis.activateKey(i, SEESAW_KEYPAD_EDGE_RISING, true);
+        trellis.activateKey(i, SEESAW_KEYPAD_EDGE_FALLING, true);
+        trellis.registerCallback(i, buttonCallback);
+    }
 }
 
-// Callback to handle button presses
-void buttonCallback(keyEvent evt) {
-    uint8_t i = evt.bit.NUM / MATRIX_SIZE;
-    uint8_t j = evt.bit.NUM % MATRIX_SIZE;
+void loop() {
+    trellis.read(); // Process button events
+    delay(20);
+}
 
-    // Toggle the central button and adjacent LEDs
-    toggleAdjacentLEDs(i, j);
-    if (isNeoPuzzleSolved()) {
-        neoState = NEO_SOLVED;
-        Serial.println("The NeoTrellis puzzle is solved!");
-        // Additional actions upon solving the puzzle can go here
+TrellisCallback buttonCallback(keyEvent evt) {
+    int x = evt.bit.NUM / MATRIX_SIZE;
+    int y = evt.bit.NUM % MATRIX_SIZE;
+
+    if (evt.bit.EDGE == SEESAW_KEYPAD_EDGE_RISING) {
+        toggleAdjacentLEDs(x, y);
+        trellis.show();
+        if (isNeoPuzzleSolved()) {
+            neoState = NEO_SOLVED;
+            Serial.println("The NeoTrellis puzzle is solved!");
+        }
     }
-    trellis.pixels.show();
+    return 0;
 }
 
 void toggleAdjacentLEDs(int x, int y) {
-    int idx = x * MATRIX_SIZE + y;
-    trellis.pixels.setPixelColor(idx, trellis.pixels.getPixelColor(idx) ^ LED_COLOR_ON); // Toggle LED color
-
-    // Toggle adjacent LEDs
-    if (x > 0) trellis.pixels.setPixelColor((x-1) * MATRIX_SIZE + y, trellis.pixels.getPixelColor((x-1) * MATRIX_SIZE + y) ^ LED_COLOR_ON);
-    if (x < MATRIX_SIZE - 1) trellis.pixels.setPixelColor((x+1) * MATRIX_SIZE + y, trellis.pixels.getPixelColor((x+1) * MATRIX_SIZE + y) ^ LED_COLOR_ON);
-    if (y > 0) trellis.pixels.setPixelColor(x * MATRIX_SIZE + (y-1), trellis.pixels.getPixelColor(x * MATRIX_SIZE + (y-1)) ^ LED_COLOR_ON);
-    if (y < MATRIX_SIZE - 1) trellis.pixels.setPixelColor(x * MATRIX_SIZE + (y+1), trellis.pixels.getPixelColor(x * MATRIX_SIZE + (y+1)) ^ LED_COLOR_ON);
+    for (int dx = -1; dx <= 1; ++dx) {
+        for (int dy = -1; dy <= 1; ++dy) {
+            if (dx == 0 && dy == 0) continue; // Skip the center button itself
+            int nx = x + dx, ny = y + dy;
+            if (nx >= 0 && nx < MATRIX_SIZE && ny >= 0 && ny < MATRIX_SIZE) {
+                neoMatrix[nx][ny] = !neoMatrix[nx][ny];
+                trellis.setPixelColor(nx * MATRIX_SIZE + ny, neoMatrix[nx][ny] ? LED_COLOR_ON : LED_COLOR_OFF);
+            }
+        }
+    }
 }
 
 bool isNeoPuzzleSolved() {
     for (int i = 0; i < MATRIX_SIZE; i++) {
         for (int j = 0; j < MATRIX_SIZE; j++) {
-            if (trellis.pixels.getPixelColor(i * MATRIX_SIZE + j) != LED_COLOR_OFF) return false; // If any LED is on, puzzle is not solved
+            if (neoMatrix[i][j]) return false; // If any LED is on, puzzle is not solved
         }
     }
     return true;
-}
-
-// Declare a wrapper function that will call your actual callback
-void buttonCallbackWrapper(keyEvent evt) {
-    buttonCallback(evt);
-}
-
-// Adjust the toTrellisCallback function to directly return the wrapper
-TrellisCallback toTrellisCallback(void (*callback)(keyEvent)) {
-    return buttonCallbackWrapper;
-}
-
-void setup() {
-    Serial.begin(115200);
-    trellis.begin(INT_PIN);
-    trellis.pixels.setBrightness(50); // Set brightness of LEDs (0-255)
-    initializeNeoMatrix();
-
-    // Register the callback for each key
-    for (int i = 0; i < MATRIX_SIZE * MATRIX_SIZE; i++) {
-        // Directly use the wrapper function here as the callback is static and does not need conversion
-        trellis.registerCallback(i, buttonCallbackWrapper);
-    }
-}
-
-
-void loop() {
-    if (neoState == NEO_PLAYING) {
-        trellis.read(); // Handle any button events
-        trellis.pixels.show(); // Update the display
-    }
 }
