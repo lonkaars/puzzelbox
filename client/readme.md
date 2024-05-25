@@ -12,3 +12,10 @@ goal (in order of implementation):
     ls                  list connected puzzle modules
 ```
 
+
+```
+send 0x39 "Hello world!" de:ad:be:ef 0xff     5        0a       0750
+          ^~~~~~~~~~~~~~ ^~~~~~~~~~~ ~^~~     ~^       ~^       ~~~~^
+          STR_INTP       BYTE_ARR    UNSIGNED UNSIGNED UNSIGNED UNSIGNED
+                                     (hex+0x) (dec)    (hex)    (oct)
+```

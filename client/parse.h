@@ -4,6 +4,11 @@
 
 #define IFS " \t\n"
 
+#define SET_OCT "01234567"
+#define SET_DEC "0123456789"
+#define SET_HEX SET_DEC"abcdefABCDEF"
+#define SET_HEX_STR SET_HEX":"
+
 /**
  * \brief modify \p token to point to the first token when broken up on \p ifs
  * and return the remaining data
@@ -26,13 +31,12 @@ char* consume_token(char* token, const char* ifs);
  * \param data  pointer to \c char* that will store the resulting data
  * \param size  size of \p data
  *
- * \return 0 if the string was parsed succesfully, or 1 if the string could not
- * be parsed succesfully
+ * \return 0 or a negative integer representing the index where there is a
+ * syntax error if there was an error, or a positive integer representing the
+ * amount of bytes parsed from \p str
  *
  * \note The pointer that \p data refers to will not be initialized by this
  * function if parsing fails
- * \note \p size will contain the index of \p str where the first invalid data
- * was found if parsing fails
  */
 int strtodata(const char* str, char** data, size_t* size);
 

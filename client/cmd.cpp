@@ -48,9 +48,10 @@ void cmd_send(char* addr_str) {
 
 	char* data;
 	size_t data_size;
-	if (strtodata(data_str, &data, &data_size)) {
+	int err = strtodata(data_str, &data, &data_size);
+	if (err <= 0) {
 		printf("data format error at index %d:\n%s\n%*s^\n",
-				(int) data_size, data_str, (int) data_size, "");
+				-err, data_str, -err, "");
 		return;
 	}
 
