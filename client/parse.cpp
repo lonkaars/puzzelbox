@@ -138,8 +138,7 @@ static int parse_number(const char * str, char * data, size_t * offset) {
 	}
 
 	*offset += size;
-	i += len;
-	return i;
+	return len;
 }
 
 static int _strtodata_main(const char * str, char* data, size_t * offset) {
