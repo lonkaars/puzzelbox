@@ -115,12 +115,15 @@ static int parse_number(const char * str, char * data, size_t * offset) {
 		unsigned long number = strtol(str + i, NULL, base);
 		long long mask = (1 << 8 * size) - 1;
 		number &= mask;
+		// NOTE: the hton? functions are used to convert host endianness to network
+		// endianness (big), and are required
 		switch (size) {
 			case 1:
 				data[*offset] = number & 0xff;
 				break;
 			case 2:
 				number = htons(number);
+				// TODO: check if the endianness is OK, or reverse these *offset indices*
 				data[*offset + 1] = (number)       & 0xff;
 				data[*offset + 0] = (number >>= 8) & 0xff;
 				break;

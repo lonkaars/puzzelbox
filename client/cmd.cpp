@@ -5,7 +5,6 @@
 #include "cmd.h"
 #include "sock.h"
 #include "parse.h"
-#include "xxd.h"
 
 char* consume_token(char* input, const char* ifs) {
 	strtok(input, ifs);
@@ -56,11 +55,8 @@ void cmd_send(char* addr_str) {
 		return;
 	}
 
-	printf("char data[%lu = 0x%02lx]:\n", data_size, data_size);
-	xxd(data, data_size);
-
-	// printf("(0x%02x) -> \"%.*s\"\n", addr, data_size, data);
-	// i2c_send(addr, data, data_size);
+	printf("sending char data[%lu = 0x%02lx] to 0x%02x\n", data_size, data_size, addr);
+	i2c_send(addr, data, data_size);
 
 	free(data);
 }

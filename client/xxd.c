@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#include "parse.h"
+#include "xxd.h"
 
 void xxd(const char * data, size_t size) {
 	size_t fake_size = size + (16 - size % 16) % 16;
@@ -20,7 +20,7 @@ void xxd(const char * data, size_t size) {
 				continue;
 			}
 
-			printf("%02x ", data[size]);
+			printf("%02x ", data[i] & 0xff);
 		}
 
 		// print ascii representation
@@ -33,8 +33,8 @@ void xxd(const char * data, size_t size) {
 				continue;
 			}
 
-			if (isprint(data[size]))
-				printf("%c", data[size]);
+			if (isprint(data[i]))
+				printf("%c", data[i]);
 			else
 				printf(".");
 		}
