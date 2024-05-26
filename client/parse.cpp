@@ -1,14 +1,13 @@
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <netinet/in.h>
 
 #include "parse.h"
 
-static int parse_string(const char* str, char* data, size_t* offset) {
+static int parse_string(const char * str, char * data, size_t * offset) {
 	char closing = str[0];
 	char escape = false;
-	bool scan = data == NULL;
 	int i = 0;
 	size_t len = strlen(str);
 
@@ -23,7 +22,7 @@ static int parse_string(const char* str, char* data, size_t* offset) {
 			return -i;
 	}
 
-	for (i = 1; i < len && str[i] != '\0'; i++) {
+	for (i = 1; i < len && str[i] != '\0'; i++, *offset += 1) {
 		char c = str[i];
 
 		// TODO: handle escaped characters
@@ -31,16 +30,16 @@ static int parse_string(const char* str, char* data, size_t* offset) {
 		if (c == closing)
 			return i + 1; // +1 for closing quote
 
-		*offset += 1;
+		if (data != NULL)
+			data[*offset] = c;
 	}
 
 	return -i;
 }
 
-static int parse_hexstr(const char* str, char* data, size_t* offset) {
+static int parse_hexstr(const char * str, char * data, size_t * offset) {
 	const char* ifs = IFS;
 	size_t len = strcspn(str, ifs);
-	bool scan = data == NULL;
 	int i = 0;
 
 	// check if token contains at least one colon
@@ -56,6 +55,10 @@ static int parse_hexstr(const char* str, char* data, size_t* offset) {
 	while (c < len) { // count bytes in bytestring
 		if (strspn(str + c, SET_HEX) != 2)
 			return -i -c;
+
+		if (data != NULL)
+			data[*offset] = strtol(str + c, NULL, 16) & 0xff;
+
 		c += 2;
 		*offset += 1;
 
@@ -70,10 +73,9 @@ static int parse_hexstr(const char* str, char* data, size_t* offset) {
 	return i;
 }
 
-static int parse_number(const char* str, char* data, size_t* offset) {
+static int parse_number(const char * str, char * data, size_t * offset) {
 	const char* ifs = IFS;
 	size_t len = strcspn(str, ifs);
-	bool scan = data == NULL;
 	int i = 0;
 	int base = 10;
 	bool bytestring = false;
@@ -94,8 +96,8 @@ static int parse_number(const char* str, char* data, size_t* offset) {
 	size_t len_ok = strspn(str + i, set) + i;
 	if (len != len_ok) return -len_ok;
 
-	if (base == 10) *offset += 1;
-	else if (base == 16) {
+	size_t size = 1; // default integer size in bytes
+	if (base == 16) {
 		size_t prefixless = len - i;
 		switch (prefixless) {
 			case 2:  //  8-bit (2 hex characters)
@@ -106,40 +108,58 @@ static int parse_number(const char* str, char* data, size_t* offset) {
 			default:
 				return -i;
 		}
-		*offset += prefixless / 2;
+		size = prefixless / 2;
 	}
 
+	if (data != NULL) {
+		unsigned long number = strtol(str + i, NULL, base);
+		long long mask = (1 << 8 * size) - 1;
+		number &= mask;
+		switch (size) {
+			case 1:
+				data[*offset] = number & 0xff;
+				break;
+			case 2:
+				number = htons(number);
+				data[*offset + 1] = (number)       & 0xff;
+				data[*offset + 0] = (number >>= 8) & 0xff;
+				break;
+			case 4:
+				number = htonl(number);
+				data[*offset + 3] = (number)       & 0xff;
+				data[*offset + 2] = (number >>= 8) & 0xff;
+				data[*offset + 1] = (number >>= 8) & 0xff;
+				data[*offset + 0] = (number >>= 8) & 0xff;
+				break;
+		}
+	}
+
+	*offset += size;
 	i += len;
 	return i;
 }
 
-static int _strtodata_main(const char* str, char* _data, size_t* offset) {
+static int _strtodata_main(const char * str, char* data, size_t * offset) {
 	const char* ifs = IFS;
 	size_t len = strlen(str);
 
-	size_t i = 0;
-
-	while (i < len) {
+	int i, run;
+	for (i = 0; i < len; i += run) {
 		i += strspn(&str[i], ifs); // skip whitespace
 		if (str[i] == '\0') break; // end of string
 
-		int run;
-		char* data = _data == NULL ? NULL : _data + *offset;
-		if ((run = parse_string(str + i, data, offset)) > 0) goto format_ok;
-		if ((run = parse_hexstr(str + i, data, offset)) > 0) goto format_ok;
-		if ((run = parse_number(str + i, data, offset)) > 0) goto format_ok;
+		if ((run = parse_string(str + i, data, offset)) > 0) continue;
+		if ((run = parse_hexstr(str + i, data, offset)) > 0) continue;
+		if ((run = parse_number(str + i, data, offset)) > 0) continue;
 
-		return -i + run; // no format detected
-
-format_ok:
-		i += run;
-		continue;
+		// no format detected
+		return -i + run;
 	}
 
 	return i;
 }
 
-int strtodata(const char* str, char** data, size_t* size) {
+int strtodata(const char * str, char ** data, size_t * size) {
 	*size = 0;
 
 	// 1st pass: check data format

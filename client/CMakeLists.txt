@@ -14,6 +14,7 @@ add_executable(pbc
 	sock.cpp
 	cmd.cpp
 	parse.cpp
+	xxd.c
 	)
 
 target_link_libraries(pbc
