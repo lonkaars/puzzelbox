@@ -3,8 +3,11 @@
 #include <string.h>
 
 #include "cmd.h"
+#include "puzbusv1.h"
 #include "sock.h"
 #include "parse.h"
+
+#include "../shared/busaddr.h"
 
 char* consume_token(char* input, const char* ifs) {
 	strtok(input, ifs);
@@ -61,3 +64,30 @@ void cmd_send(char* addr_str) {
 	free(data);
 }
 
+void cmd_status(char*) {
+	const char msg[] = {
+		PB_CMD_READ,
+		0x00, // addr 0 = global state
+	};
+	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
+	// NOTE: the reply handler will automatically print the state once it's
+	// received
+}
+
+void cmd_reset(char*) {
+	const char msg[] = {
+		PB_CMD_WRITE,
+		0x00,
+		PB_GS_IDLE,
+	};
+	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
+}
+
+void cmd_ls(char*) {
+	return;
+	const char msg[] = {
+		PB_CMD_READ,
+		// TODO: which address is this?
+	};
+	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
+}

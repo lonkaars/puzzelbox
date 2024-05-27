@@ -64,6 +64,25 @@ void pb_read_reset(struct pb_msg * target);
  */
 bool pb_write(const struct pb_msg * target, char ** buf, size_t * buf_sz);
 
+/**
+ * \brief I^2^C puzzle bus command types
+ *
+ * The first byte of a puzzle bus message's data indicates the command type.
+ */
+enum pb_cmd {
+	PB_CMD_READ,   //!< read a puzzle module property
+	PB_CMD_WRITE,  //!< write to a puzzle module property
+	// PB_CMD_UPDATE, //!< request an update
+};
+
+/** \brief Puzzle bus global states */
+enum pb_global_state {
+	PB_GS_NOINIT,  //!< uninitialized (only used by puzzle modules)
+	PB_GS_IDLE,    //!< puzzle not started yet
+	PB_GS_PLAYING, //!< puzzle actively being solved
+	PB_GS_SOLVED,  //!< puzzle completed
+};
+
 #ifdef __cplusplus
 }
 #endif

@@ -40,21 +40,21 @@ static const struct cmd cmds[] = {
 		.name = "send",
 		.info = "[debug] send raw message",
 	},
-	// {
-	// 	.handle = cmd_status,
-	// 	.name = "status",
-	// 	.info = "show global puzzle box state (main controller state)",
-	// },
-	// {
-	// 	.handle = cmd_reset,
-	// 	.name = "reset",
-	// 	.info = "reset entire game state",
-	// },
-	// {
-	// 	.handle = cmd_ls,
-	// 	.name = "ls",
-	// 	.info = "list connected puzzle modules",
-	// },
+	{
+		.handle = cmd_status,
+		.name = "status",
+		.info = "show global puzzle box state (main controller state)",
+	},
+	{
+		.handle = cmd_reset,
+		.name = "reset",
+		.info = "reset entire game state",
+	},
+	{
+		.handle = cmd_ls,
+		.name = "ls",
+		.info = "list connected puzzle modules",
+	},
 };
 static const size_t cmds_length = sizeof(cmds) / sizeof(cmds[0]);
 
