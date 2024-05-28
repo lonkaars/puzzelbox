@@ -1,6 +1,6 @@
 include_directories(${CMAKE_CURRENT_LIST_DIR})
-add_library(puzbus STATIC
-	${CMAKE_CURRENT_LIST_DIR}/puzbusv1.c
+add_library(i2ctcp STATIC
+	${CMAKE_CURRENT_LIST_DIR}/i2ctcpv1.c
 	)
 
 # mpack

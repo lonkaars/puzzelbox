@@ -3,11 +3,10 @@
 
 // MIN() macro
 #include <sys/param.h>
-// TODO: check if this works on pico as well
 
-#include "puzbusv1.h"
+#include "i2ctcpv1.h"
 
-int pb_read(struct pb_msg * target, const char * buf, size_t buf_sz) {
+int i2ctcp_read(i2ctcp_msg_t * target, const char * buf, size_t buf_sz) {
 	// a new reader is used per buffer block passed to this function
 	mpack_reader_t reader;
 	mpack_reader_init_data(&reader, buf, buf_sz);
@@ -17,9 +16,9 @@ int pb_read(struct pb_msg * target, const char * buf, size_t buf_sz) {
 		// NOTE: The entire start of a message needs to be readable from the buffer
 		// at this point. When target->addr can be read and target->length is past
 		// the end of the current buffer block, this function will crash and burn.
-		// This is a highly unlikely scenario, as pb_read is called for each chunk
-		// of a TCP frame, and frames (should) include only one puzzle bus message.
-		// The check here is kind of optional.
+		// This is a highly unlikely scenario, as i2ctcp_read is called for each
+		// chunk of a TCP frame, and frames (should) include only one puzzle bus
+		// message. The check here is kind of optional.
 		if (buf_sz < 4) return -1;
 
 		target->addr = mpack_expect_u16(&reader);
@@ -38,11 +37,11 @@ int pb_read(struct pb_msg * target, const char * buf, size_t buf_sz) {
 	return target->_rdata;
 }
 
-void pb_read_reset(struct pb_msg * target) {
+void i2ctcp_read_reset(i2ctcp_msg_t * target) {
 	target->_rdata = 0;
 }
 
-bool pb_write(const struct pb_msg * target, char ** buf, size_t * buf_sz) {
+bool i2ctcp_write(const i2ctcp_msg_t * target, char ** buf, size_t * buf_sz) {
 	mpack_writer_t writer;
 	mpack_writer_init_growable(&writer, buf, buf_sz);
 

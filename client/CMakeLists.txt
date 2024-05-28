@@ -7,7 +7,7 @@ set(CMAKE_BUILD_TYPE Debug)
 
 project(puzzlebox_client C CXX)
 
-include(../proto/include.cmake)
+include(../i2ctcp/include.cmake)
 
 add_executable(pbc
 	main.cpp
@@ -19,7 +19,7 @@ add_executable(pbc
 	)
 
 target_link_libraries(pbc
-	puzbus
+	i2ctcp
 	mpack
 	readline # this is such a common library that I did not bother adding it as a submodule
 	)

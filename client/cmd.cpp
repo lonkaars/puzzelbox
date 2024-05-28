@@ -3,11 +3,11 @@
 #include <string.h>
 
 #include "cmd.h"
-#include "puzbusv1.h"
+#include "i2ctcpv1.h"
 #include "sock.h"
 #include "parse.h"
 
-#include "../shared/busaddr.h"
+#include "../shared/puzbus.h"
 
 char* consume_token(char* input, const char* ifs) {
 	strtok(input, ifs);
