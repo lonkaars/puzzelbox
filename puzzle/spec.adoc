@@ -58,7 +58,7 @@ Example C code:
 #include "puzbus.h"
 
 void pb_cmd_magic_handler(const char * data, size_t sz) {
-	if (sz != siezof(pb_magic_msg)) return;
+	if (sz != sizeof(pb_magic_msg)) return;
 	if (memcmp(buf, pb_magic_msg, sizeof(pb_magic_msg)) != 0) return;
 
 	const char res[] = {
@@ -72,7 +72,9 @@ void pb_cmd_magic_handler(const char * data, size_t sz) {
 void i2c_read_handle(uint16_t addr, const char * buf, size_t sz) {
 	if (sz < 1) return;
 	pb_cmd_t cmd = (pb_cmd_t) buf[0];
-	buf++; sz--; // shift buffer
+
+	// shift buffer pointer to only contain the puzzle bus message data
+	buf++; sz--;
 
 	if (cmd == PB_CMD_MAGIC) pb_cmd_magic_handler(buf, sz);
 }
