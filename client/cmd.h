@@ -17,7 +17,6 @@ cmd_handle_t cmd_exit;
 cmd_handle_t cmd_test;
 cmd_handle_t cmd_help;
 cmd_complete_t cmd_help_complete;
-cmd_handle_t cmd_status;
 cmd_handle_t cmd_reset;
 cmd_handle_t cmd_ls;
 cmd_handle_t cmd_send;
@@ -30,19 +29,9 @@ static const cmd_t cmds[] = {
 		.info = "exit pbc",
 	},
 	{
-		.handle = cmd_test,
-		.name = "test",
-		.info = "send a test puzbus message",
-	},
-	{
 		.handle = cmd_help,
 		.name = "help",
 		.info = "show this help",
-	},
-	{
-		.handle = cmd_status,
-		.name = "status",
-		.info = "show global puzzle box state (main controller state)",
 	},
 	{
 		.handle = cmd_reset,
@@ -57,13 +46,18 @@ static const cmd_t cmds[] = {
 	{
 		.handle = cmd_ls,
 		.name = "ls",
-		.info = "list connected puzzle modules",
+		.info = "list connected puzzle modules and their state",
 	},
 #ifdef DEBUG
 	{
 		.handle = cmd_send,
 		.name = "send",
 		.info = "[debug] send raw message",
+	},
+	{
+		.handle = cmd_test,
+		.name = "test",
+		.info = "[debug] send a test puzbus message",
 	},
 #endif
 };

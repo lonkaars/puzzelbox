@@ -67,15 +67,15 @@ void cmd_send(char* addr_str) {
 	free(data);
 }
 
-void cmd_status(char*) {
-	const char msg[] = {
-		PB_CMD_READ,
-		0x00, // addr 0 = global state
-	};
-	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
-	// NOTE: the reply handler will automatically print the state once it's
-	// received
-}
+// void cmd_status(char*) {
+// 	const char msg[] = {
+// 		PB_CMD_READ,
+// 		0x00, // addr 0 = global state
+// 	};
+// 	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
+// 	// NOTE: the reply handler will automatically print the state once it's
+// 	// received
+// }
 
 void cmd_reset(char*) {
 	const char msg[] = {

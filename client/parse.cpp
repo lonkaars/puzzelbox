@@ -6,7 +6,6 @@
 #include "parse.h"
 
 static int parse_string(const char * str, char * data, size_t * offset) {
-	char closing = str[0];
 	char escape = false;
 	int i = 0;
 	size_t len = strlen(str);
@@ -21,14 +20,26 @@ static int parse_string(const char * str, char * data, size_t * offset) {
 		default:
 			return -i;
 	}
+	char closing = str[i];
 
 	for (i = 1; i < len && str[i] != '\0'; i++, *offset += 1) {
 		char c = str[i];
 
-		// TODO: handle escaped characters
-
 		if (c == closing)
 			return i + 1; // +1 for closing quote
+
+		if (escape && c == '\\') {
+			char x = str[i + 1];
+			if      (x == '0')  c = '\0';
+			else if (x == 't')  c = '\t';
+			else if (x == 'n')  c = '\n';
+			else if (x == 'r')  c = '\r';
+			else if (x == '\\') c = '\\';
+			else if (x == '\"') c = '\"';
+			else if (x == '\'') c = '\'';
+			else break;
+			i++;
+		}
 
 		if (data != NULL)
 			data[*offset] = c;

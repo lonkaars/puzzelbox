@@ -1,0 +1,94 @@
+\# vim: ft=groff
+.de I2C
+I\*{2\*}C
+..
+.TH pbc 1
+.SH NAME
+pbc \- puzzle box client
+.SH SYNPOSIS
+pbc <addr> [port]
+.SH DESCRIPTION
+Connect to a puzzle box at the IPv4 address specified by \fIaddr\fP and
+optionally port specified by \fIport\fP. The default port is 9191. Once
+connected, a
+.MR readline 3 -based
+CLI is started, and commands can be sent.
+.SH COMMANDS
+.TP
+exit
+Disconnect from the puzzle box and exit pbc. This command takes no arguments.
+.TP
+help
+Print a list of available commands with descriptions. This command takes no
+arguments.
+.TP
+ls
+List all puzzle modules, their state, and the combined state of all puzzle
+modules (global state of the main controller).
+.TP
+reset [mod ...]
+Set the main controller or specific puzzle module's global state to \fIidle\fP.
+If no modules are specified, the main controller's state is updated. One or
+more modules can be specified to update them at once.
+.TP
+skip [mod ...]
+Set the main controller or specific puzzle module's global state to
+\fIsolved\fP. If no modules are specified, the main controller's state is
+updated. One or more modules can be specified to update them at once.
+.SH DEBUG COMMANDS
+The commands detailed under this section are only available in version of pbc
+compiled with debug support.
+.TP
+send <addr> <data>
+Send arbitrary data specified by \fIdata\fP to the
+.I2C
+address specified by \fIaddr\fP. \fIdata\fP may consist of multiple arguments
+separated by IFS, in which case the arguments are concatenated.
+.TP
+test
+Send a test command containing the ASCII string "Hello world!" to
+.I2C
+address 0x39. This command takes no arguments.
+.SH DATA FORMATS
+.TP
+number
+Numbers can be specified as decimal or hexadecimal using a "0x" prefix. All
+numbers are unsigned. Decimal literals are always cast to 8-bit integers, while
+hexadecimal literals are cast to the smallest type that will fit the specified
+number. Numbers are always sent as little endian.
+
+Examples: 0 123 255 0x10 0x1245 0xdeadBEEF
+.TP
+hexstr
+Hexadecimal string literals are specified by hexadecimal bytes separated by
+colons. Each byte must be exactly 2 hexadecimal characters long and followed by
+a colon (except for the last byte). The minimum length of a hexstr is 2 bytes,
+as it must include at least a single colon.
+
+Examples: de:ad:be:ef 00:00
+.TP
+string
+A string literal starts and ends with a single quote. All characters within
+this literal are sent as-is, and no escaping is possible.
+
+Examples: 'Hello world!' 'string' '  hello '
+
+When double quotes are used instead of single quotes, the following escape
+sequences are recognised and replaced with special characters:
+
+\\0 -> 0x00 (null)
+.br
+\\t -> 0x09 (tab)
+.br
+\\n -> 0x0a (newline)
+.br
+\\r -> 0x0d (carriage return)
+.br
+\\\\ -> 0x5c (backslash)
+.br
+\\" -> 0x22 (double quote)
+.br
+\\' -> 0x27 (single quote)
+
+Examples: "Hello world!\\0" "foo\\nbar"
+
