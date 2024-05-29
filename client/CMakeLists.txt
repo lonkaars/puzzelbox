@@ -11,6 +11,7 @@ add_compile_definitions(DEBUG)
 project(puzzlebox_client C CXX)
 
 include(../i2ctcp/include.cmake)
+include(../shared/include.cmake)
 
 add_executable(pbc
 	main.cpp
@@ -23,6 +24,7 @@ add_executable(pbc
 
 target_link_libraries(pbc
 	i2ctcp
+	puzbus
 	mpack
 	readline # this is such a common library that I did not bother adding it as a submodule
 	)

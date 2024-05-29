@@ -5,11 +5,12 @@
 
 #include "cmd.h"
 #include "i2ctcpv1.h"
+#include "pb/types.h"
 #include "rl.h"
 #include "sock.h"
 #include "parse.h"
 
-#include "../shared/puzbus.h"
+#include "pb/bus.h"
 
 char* consume_token(char* input, const char* ifs) {
 	strtok(input, ifs);
