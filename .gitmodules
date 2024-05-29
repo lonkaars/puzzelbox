@@ -1,8 +1,20 @@
-[submodule "main/lib/pico-sdk"]
-	path = main/lib/pico-sdk
+[submodule "pico-sdk"]
+	path = lib/pico-sdk
 	url = https://github.com/raspberrypi/pico-sdk
 	branch = 1.5.1
 	shallow = true
-[submodule "test/lib/googletest"]
-	path = test/lib/googletest
+[submodule "googletest"]
+	path = lib/googletest
 	url = https://github.com/google/googletest
+	branch = v1.14.0
+	shallow = true
+[submodule "FreeRTOS-Kernel"]
+	path = lib/FreeRTOS-Kernel
+	url = https://github.com/FreeRTOS/FreeRTOS-Kernel
+	branch = V11.1.0
+	shallow = true
+[submodule "lib/mpack"]
+	path = lib/mpack
+	url = https://github.com/ludocode/mpack
+	branch = v1.1.1
+	shallow = true
