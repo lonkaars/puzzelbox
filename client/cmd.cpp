@@ -1,9 +1,11 @@
 #include <cstdio>
 #include <cstdlib>
+#include <readline/readline.h>
 #include <string.h>
 
 #include "cmd.h"
 #include "i2ctcpv1.h"
+#include "rl.h"
 #include "sock.h"
 #include "parse.h"
 
@@ -35,7 +37,8 @@ void cmd_help(char*) {
 
 	printf(
 		"\n"
-		"You can also use the TAB key to autocomplete commands\n"
+		"See man pbc(1) for more info about specific commands\n"
+		"Hint: you can use the TAB key to autocomplete commands\n"
 	);
 }
 
@@ -79,6 +82,15 @@ void cmd_reset(char*) {
 		PB_CMD_WRITE,
 		0x00,
 		PB_GS_IDLE,
+	};
+	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
+}
+
+void cmd_skip(char*) {
+	const char msg[] = {
+		PB_CMD_WRITE,
+		0x00,
+		PB_GS_SOLVED,
 	};
 	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
 }

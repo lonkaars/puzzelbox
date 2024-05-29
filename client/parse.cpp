@@ -38,8 +38,7 @@ static int parse_string(const char * str, char * data, size_t * offset) {
 }
 
 static int parse_hexstr(const char * str, char * data, size_t * offset) {
-	const char* ifs = IFS;
-	size_t len = strcspn(str, ifs);
+	size_t len = strcspn(str, IFS);
 	int i = 0;
 
 	// check if token contains at least one colon
@@ -74,8 +73,7 @@ static int parse_hexstr(const char * str, char * data, size_t * offset) {
 }
 
 static int parse_number(const char * str, char * data, size_t * offset) {
-	const char* ifs = IFS;
-	size_t len = strcspn(str, ifs);
+	size_t len = strcspn(str, IFS);
 	int i = 0;
 	int base = 10;
 	bool bytestring = false;
@@ -142,12 +140,11 @@ static int parse_number(const char * str, char * data, size_t * offset) {
 }
 
 static int _strtodata_main(const char * str, char* data, size_t * offset) {
-	const char* ifs = IFS;
 	size_t len = strlen(str);
 
 	int i, run;
 	for (i = 0; i < len; i += run) {
-		i += strspn(&str[i], ifs); // skip whitespace
+		i += strspn(&str[i], IFS); // skip whitespace
 		if (str[i] == '\0') break; // end of string
 
 		if ((run = parse_string(str + i, data, offset)) > 0) continue;

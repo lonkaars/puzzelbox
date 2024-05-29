@@ -38,6 +38,7 @@ void rl_printf(const char *fmt, ...) {
 }
 
 static void cli_cmd(char* cmd) {
+	cmd += strspn(cmd, IFS); // skip leading whitespace
 	char* line = consume_token(cmd, IFS);
 
 	for (size_t i = 0; i < cmds_length; i++) {
@@ -66,9 +67,31 @@ static char* rl_completion_entries(const char *text, int state) {
 	return NULL;
 }
 
+static char** rl_attempted_completion(const char * text, int start, int end) {
+	// do not suggest filenames
+	rl_attempted_completion_over = 1;
+
+	// if first word in line buffer -> complete commands from cmds[]
+	size_t cmd_start = strspn(rl_line_buffer, IFS);
+	if (start == cmd_start)
+		return rl_completion_matches(text, rl_completion_entries);
+
+	// else, check specialized completion functions
+	size_t cmd_len = strcspn(rl_line_buffer + cmd_start, IFS);
+	for (size_t i = 0; i < cmds_length; i++) {
+		cmd_t cmd = cmds[i];
+		if (cmd.complete == NULL) continue;
+		if (strncmp(cmd.name, rl_line_buffer + cmd_start, cmd_len) != 0) continue;
+		return cmd.complete(rl_line_buffer, start, end);
+	}
+
+	// else, no completion available
+	return NULL;
+}
+
 int cli_main() {
 	char* input = NULL;
-	rl_completion_entry_function = rl_completion_entries;
+	rl_attempted_completion_function = rl_attempted_completion;
 
 	while (1) {
 		if (input != NULL) free(input);

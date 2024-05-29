@@ -2,24 +2,28 @@
 
 #include <stddef.h>
 
-typedef void cmd_fn_t(char *);
+typedef void cmd_handle_t(char *);
+typedef char** cmd_complete_t(const char*, int, int);
 
 struct cmd {
-	void (* handle)(char *);
+	cmd_handle_t * handle;
 	const char* name;
 	const char* info;
-	// TODO: tab completion function?
+	cmd_complete_t * complete;
 };
+typedef struct cmd cmd_t;
 
-cmd_fn_t cmd_exit;
-cmd_fn_t cmd_test;
-cmd_fn_t cmd_help;
-cmd_fn_t cmd_status;
-cmd_fn_t cmd_reset;
-cmd_fn_t cmd_ls;
-cmd_fn_t cmd_send;
+cmd_handle_t cmd_exit;
+cmd_handle_t cmd_test;
+cmd_handle_t cmd_help;
+cmd_complete_t cmd_help_complete;
+cmd_handle_t cmd_status;
+cmd_handle_t cmd_reset;
+cmd_handle_t cmd_ls;
+cmd_handle_t cmd_send;
+cmd_handle_t cmd_skip;
 
-static const struct cmd cmds[] = {
+static const cmd_t cmds[] = {
 	{
 		.handle = cmd_exit,
 		.name = "exit",
@@ -43,7 +47,12 @@ static const struct cmd cmds[] = {
 	{
 		.handle = cmd_reset,
 		.name = "reset",
-		.info = "reset entire game state",
+		.info = "set game state to 'idle' for one or more puzzle modules",
+	},
+	{
+		.handle = cmd_skip,
+		.name = "skip",
+		.info = "set game state to 'solved' for one or more puzzle modules",
 	},
 	{
 		.handle = cmd_ls,
