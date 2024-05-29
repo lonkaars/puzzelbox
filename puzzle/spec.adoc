@@ -58,8 +58,7 @@ Example C code:
 #include "puzbus.h"
 
 void pb_cmd_magic_handler(const char * data, size_t sz) {
-	if (sz != sizeof(pb_magic_msg)) return;
-	if (memcmp(buf, pb_magic_msg, sizeof(pb_magic_msg)) != 0) return;
+	if (strncmp(buf, pb_magic_msg, sizeof(pb_magic_msg)) != 0) return;
 
 	const char res[] = {
 		PB_CMD_MAGIC,
