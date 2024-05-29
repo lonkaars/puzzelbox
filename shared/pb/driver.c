@@ -7,7 +7,7 @@ __weak bool pbdrv_hook_cmd() {
 
 __weak void pbdrv_i2c_recv(uint16_t addr, const char * buf, size_t sz) {
 	if (sz == 0) return;
-	enum pb_cmd cmd = (enum pb_cmd) buf[0];
+	pb_cmd_t cmd = (enum pb_cmd) buf[0];
 
 	// shift buffer pointer to only contain the puzzle bus message buf
 	buf++;
