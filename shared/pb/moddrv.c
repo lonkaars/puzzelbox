@@ -4,22 +4,22 @@
 #include "moddrv.h"
 
 /** \brief [private] placeholder global state variable */
-static pb_state_t _global_state = PB_GS_NOINIT;
+static enum pb_state _global_state = PB_GS_NOINIT;
 
 /** \brief [private] main controller global state */
-static pb_state_t _main_state = PB_GS_NOINIT;
+static enum pb_state _main_state = PB_GS_NOINIT;
 
-__weak pb_state_t pbdrv_hook_mod_state_read() {
+__weak enum pb_state pbdrv_hook_mod_state_read() {
 	return _global_state;
 }
 
-__weak void pbdrv_hook_mod_state_write(pb_state_t state) {
+__weak void pbdrv_hook_mod_state_write(enum pb_state state) {
 	_global_state = state;
 }
 
 __weak void pbdrv_i2c_recv(uint16_t i2c_addr, const char * buf, size_t sz) {
 	if (sz == 0) return;
-	pb_cmd_t cmd = (enum pb_cmd) buf[0];
+	enum pb_cmd cmd = (enum pb_cmd) buf[0];
 
 	// shift buffer pointer to only contain the puzzle bus message buf
 	buf++;
@@ -105,8 +105,8 @@ __weak void pbdrv_handle_sex(uint16_t i2c_addr, const char * buf, size_t sz) {
 	pbdrv_hook_main_state_update(_main_state);
 }
 
-__weak void pbdrv_hook_main_state_update(pb_state_t state) { }
-__weak bool pbdrv_hook_cmd(uint16_t i2c_addr, pb_cmd_t cmd, const char * buf, size_t sz) {
+__weak void pbdrv_hook_main_state_update(enum pb_state state) { }
+__weak bool pbdrv_hook_cmd(uint16_t i2c_addr, enum pb_state cmd, const char * buf, size_t sz) {
 	return false;
 }
 __weak bool pbdrv_hook_read(uint16_t i2c_addr, uint8_t addr) {

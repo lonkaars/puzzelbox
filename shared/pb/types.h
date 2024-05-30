@@ -29,7 +29,7 @@ enum __packed pb_cmd {
 	PB_CMD_SEX, //!< state exchange
 	PB_CMD_MAGIC, //!< magic message
 };
-typedef enum pb_cmd pb_cmd_t;
+// typedef enum pb_cmd pb_cmd_t;
 
 /** \brief magic sent from main controller to puzzle module */
 static const char pb_magic_msg[] = { 0x70, 0x75, 0x7a, 0x62, 0x75, 0x73 };
@@ -43,10 +43,16 @@ enum __packed pb_state {
 	PB_GS_PLAYING, //!< puzzle actively being solved
 	PB_GS_SOLVED,  //!< puzzle completed
 };
-typedef enum pb_state pb_state_t;
+// typedef enum pb_state pb_state_t;
+
+typedef struct __packed {
+	const enum pb_cmd cmd;
+	const uint8_t data[];
+} pb_cmd_t;
 
 typedef struct __packed {
 	const uint8_t address;
+	const uint8_t data[];
 } pb_cmd_read_t;
 
 typedef struct __packed {
@@ -55,7 +61,7 @@ typedef struct __packed {
 } pb_cmd_write_t;
 
 typedef struct __packed {
-	const pb_state_t main_state;
+	const enum pb_state main_state;
 } pb_cmd_sex_t;
 
 enum __packed {

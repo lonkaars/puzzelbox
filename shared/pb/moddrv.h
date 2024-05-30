@@ -27,9 +27,9 @@ extern "C" {
 void pbdrv_i2c_recv(uint16_t i2c_addr, const char * buf, size_t sz);
 void pbdrv_i2c_send(uint16_t i2c_addr, const char * buf, size_t sz);
 
-pb_state_t pbdrv_hook_mod_state_read();
-void pbdrv_hook_mod_state_write(pb_state_t state);
-void pbdrv_hook_main_state_update(pb_state_t state);
+enum pb_state pbdrv_hook_mod_state_read();
+void pbdrv_hook_mod_state_write(enum pb_state state);
+void pbdrv_hook_main_state_update(enum pb_state state);
 
 /**
  * \name hooks
@@ -44,7 +44,7 @@ void pbdrv_hook_main_state_update(pb_state_t state);
  */
 
 /** \brief cmd receive hook */
-bool pbdrv_hook_cmd(uint16_t i2c_addr, pb_cmd_t cmd, const char * buf, size_t sz);
+bool pbdrv_hook_cmd(uint16_t i2c_addr, enum pb_state cmd, const char * buf, size_t sz);
 /** \brief read cmd hook */
 bool pbdrv_hook_read(uint16_t i2c_addr, uint8_t addr);
 /** \brief write cmd hook */

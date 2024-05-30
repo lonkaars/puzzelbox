@@ -7,6 +7,16 @@ game operator to control and monitor the state of a puzzle box, but is also a
 useful debugging tool when developing puzzle modules, as it allows you to send
 arbitrary data over the puzzle bus.
 
+## WIP TODO
+
+- cleanup
+  - separate ../shared/pb/moddrv.c into a puzzle module specific and 'common' bit
+  - use the common bit in i2c.cpp instead
+  - cast to structs in ../shared/pb/moddrv.c
+- functionality
+  - print pretty tree of connected puzzle modules
+  - add enum to string functions in CLIENT ONLY
+
 ## Features
 
 - List detected puzzle modules

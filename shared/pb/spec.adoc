@@ -10,10 +10,16 @@ puzzle module framework.
 The puzzle bus carries data over a standard I^2^C bus. Additional details about
 this bus can be found in the link:../../docs/design.adoc[Design document].
 
-NOTE: Addresses influence the puzzle box's behavior, as the order of puzzles is
-determined by the puzzle module address. Two puzzle modules may use the same
-address, but this will mean that they cannot be used simultaniously in the same
-puzzle box. Known addresses are documented in link:bus.h[].
+The following details are important to puzzle module developers, as they may
+cause unexpected behavior:
+
+- *Addresses influence the puzzle box's behavior*. The order of puzzles is
+	determined by the puzzle module address. Two puzzle modules may use the same
+	address, but this will mean that they cannot be used simultaniously in the
+	same puzzle box. Known addresses are documented in link:bus.h[].
+- *The read/write bit of an I^2^C frame determines how it's handled*. I^2^C
+	*read* frames are treated as requests, while *write* frames are treated as
+	responses.
 
 == Puzzle bus driver (pbdrv)
 
@@ -46,8 +52,8 @@ default implementations, but this is discouraged.
 [[sec:state-global]]
 == Global state
 
-If your puzzle module defines its own ``pb_state_t``, you can tell the driver
-to use it by implementing the ``pbdrv_hook_state_read`` and
+If your puzzle module defines its own global ``enum pb_state``, you can tell
+the driver to use it by implementing the ``pbdrv_hook_state_read`` and
 ``pbdrv_hook_state_write`` functions. These functions are also used by the
 default implementation of the read/write commands to address 0 (global state).
 
@@ -115,7 +121,7 @@ command(s) that you want to overwrite.
 Example:
 
 ```c
-bool pbdrv_hook_cmd(uint16_t i2c_addr, pb_cmd_t cmd, const char * buf, size_t sz) {
+bool pbdrv_hook_cmd(uint16_t i2c_addr, enum pb_cmd cmd, const char * buf, size_t sz) {
 	if (cmd == 0x54) {
 		printf("custom command received!\n");
 		return true;
