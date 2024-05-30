@@ -26,12 +26,14 @@ extern "C" {
 enum __packed pb_cmd {
 	PB_CMD_READ, //!< read a puzzle module property
 	PB_CMD_WRITE, //!< write to a puzzle module property
-	// PB_CMD_UPDATE, //!< request an update
-	PB_CMD_MAGIC = 0x69, //!< magic message
+	PB_CMD_SEX, //!< state exchange
+	PB_CMD_MAGIC, //!< magic message
 };
 typedef enum pb_cmd pb_cmd_t;
 
+/** \brief magic sent from main controller to puzzle module */
 static const char pb_magic_msg[] = { 0x70, 0x75, 0x7a, 0x62, 0x75, 0x73 };
+/** \brief magic reply from puzzle module back to main controller */
 static const char pb_magic_res[] = { 0x67, 0x61, 0x6d, 0x69, 0x6e, 0x67 };
 
 /** \brief Puzzle bus global states */
@@ -44,13 +46,21 @@ enum __packed pb_state {
 typedef enum pb_state pb_state_t;
 
 typedef struct __packed {
-	uint8_t address;
+	const uint8_t address;
 } pb_cmd_read_t;
 
 typedef struct __packed {
-	uint8_t address;
-	uint8_t data[];
+	const uint8_t address;
+	const uint8_t data[];
 } pb_cmd_write_t;
+
+typedef struct __packed {
+	const pb_state_t main_state;
+} pb_cmd_sex_t;
+
+enum __packed {
+	PB_ADDR_GS = 0x00, //!< global state address
+};
 
 #ifdef __cplusplus
 }
