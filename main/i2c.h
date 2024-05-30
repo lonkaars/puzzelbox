@@ -1,5 +1,6 @@
 #pragma once
 // https://github.com/raspberrypi/pico-examples/tree/master/i2c
+// https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html
 
 #include <stddef.h>
 #include <stdint.h>

@@ -38,6 +38,7 @@ void init_addr_array(uint8_t array[], int size) {
 	}
 }
 
+// Make sure that current addresses are checked (modules), and invalid addresses are ignore (neotrellis slave)
 uint8_t* scan_bus(uint8_t *array) {
 	int ret;
 	int i = 0;
