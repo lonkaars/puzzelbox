@@ -1,7 +1,7 @@
 #include <memory.h>
 
 #include "types.h"
-#include "driver.h"
+#include "moddrv.h"
 
 /** \brief [private] placeholder global state variable */
 static pb_state_t _global_state = PB_GS_NOINIT;
@@ -15,12 +15,6 @@ __weak pb_state_t pbdrv_hook_mod_state_read() {
 
 __weak void pbdrv_hook_mod_state_write(pb_state_t state) {
 	_global_state = state;
-}
-
-__weak void pbdrv_hook_main_state_update(pb_state_t state) { }
-
-__weak bool pbdrv_hook_cmd(uint16_t i2c_addr, pb_cmd_t cmd, const char * buf, size_t sz) {
-	return false;
 }
 
 __weak void pbdrv_i2c_recv(uint16_t i2c_addr, const char * buf, size_t sz) {
@@ -109,5 +103,16 @@ __weak void pbdrv_handle_sex(uint16_t i2c_addr, const char * buf, size_t sz) {
 	_main_state = cmd->main_state;
 	// call update if main state changed
 	pbdrv_hook_main_state_update(_main_state);
+}
+
+__weak void pbdrv_hook_main_state_update(pb_state_t state) { }
+__weak bool pbdrv_hook_cmd(uint16_t i2c_addr, pb_cmd_t cmd, const char * buf, size_t sz) {
+	return false;
+}
+__weak bool pbdrv_hook_read(uint16_t i2c_addr, uint8_t addr) {
+	return false;
+}
+__weak bool pbdrv_hook_write(uint16_t i2c_addr, uint8_t addr, const char * buf, size_t sz) {
+	return false;
 }
 

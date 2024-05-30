@@ -20,11 +20,11 @@ add_executable(pbc
 	cmd.cpp
 	parse.cpp
 	xxd.c
+	i2c.cpp
 	)
 
 target_link_libraries(pbc
 	i2ctcp
-	puzbus
 	mpack
 	readline # this is such a common library that I did not bother adding it as a submodule
 	)
