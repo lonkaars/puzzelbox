@@ -16,11 +16,12 @@ typedef struct cmd cmd_t;
 cmd_handle_t cmd_exit;
 cmd_handle_t cmd_test;
 cmd_handle_t cmd_help;
-cmd_complete_t cmd_help_complete;
 cmd_handle_t cmd_reset;
 cmd_handle_t cmd_ls;
 cmd_handle_t cmd_send;
 cmd_handle_t cmd_skip;
+cmd_handle_t cmd_dump;
+cmd_complete_t cmd_dump_complete;
 
 static const cmd_t cmds[] = {
 	{
@@ -58,6 +59,12 @@ static const cmd_t cmds[] = {
 		.handle = cmd_test,
 		.name = "test",
 		.info = "[debug] send a test puzbus message",
+	},
+	{
+		.handle = cmd_dump,
+		.name = "dump",
+		.info = "[debug] dump sent or received messages",
+		.complete = cmd_dump_complete,
 	},
 #endif
 };

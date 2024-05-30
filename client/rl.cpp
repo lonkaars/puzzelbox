@@ -82,7 +82,7 @@ static char** rl_attempted_completion(const char * text, int start, int end) {
 		cmd_t cmd = cmds[i];
 		if (cmd.complete == NULL) continue;
 		if (strncmp(cmd.name, rl_line_buffer + cmd_start, cmd_len) != 0) continue;
-		return cmd.complete(rl_line_buffer, start, end);
+		return cmd.complete(text, start, end);
 	}
 
 	// else, no completion available
@@ -105,5 +105,17 @@ int cli_main() {
 	}	
 
 	return EXIT_SUCCESS;
+}
+
+int rl_word(const char * line, int cursor) {
+	int word = -1;
+	for (int i = 0; line[i] != '\0';) {
+		i += strspn(line + i, IFS);
+		int len = strcspn(line + i, IFS);
+		word++;
+		i += len;
+		if (i > cursor) break;
+	}
+	return word;
 }
 

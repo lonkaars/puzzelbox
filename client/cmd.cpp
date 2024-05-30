@@ -43,7 +43,7 @@ void cmd_help(char*) {
 	);
 }
 
-void cmd_send(char* addr_str) {
+void cmd_send(char * addr_str) {
 	char* data_str = consume_token(addr_str, IFS);
 
 	char* end;
@@ -67,16 +67,6 @@ void cmd_send(char* addr_str) {
 
 	free(data);
 }
-
-// void cmd_status(char*) {
-// 	const char msg[] = {
-// 		PB_CMD_READ,
-// 		0x00, // addr 0 = global state
-// 	};
-// 	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
-// 	// NOTE: the reply handler will automatically print the state once it's
-// 	// received
-// }
 
 void cmd_reset(char*) {
 	const char msg[] = {
@@ -105,3 +95,44 @@ void cmd_ls(char*) {
 	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
 }
 
+extern bool i2c_dump_send;
+extern bool i2c_dump_recv;
+const char * dump_modes[] = {
+	"none",
+	"send",
+	"recv",
+	"both",
+	NULL,
+};
+void cmd_dump(char * mode) {
+	consume_token(mode, IFS);
+	mode += strspn(mode, IFS);
+
+	for (int i = 0; dump_modes[i] != NULL; i++) {
+		if (strcmp(mode, dump_modes[i]) == 0) {
+			i2c_dump_send = (i >> 0) & 1;
+			i2c_dump_recv = (i >> 1) & 1;
+			return;
+		}
+	}
+
+	printf("mode \"%s\" unknown\n", mode);
+}
+char** cmd_dump_complete(const char * text, int begin, int end) {
+	int word = rl_word(rl_line_buffer, begin);
+	if (word != 1) return NULL;
+
+	return rl_completion_matches(text, [](const char * text, int state) -> char * {
+		static size_t i = 0;
+		if (state == 0) i = 0;
+
+		while (dump_modes[i] != NULL) {
+			const char * mode = dump_modes[i++];
+			if (strncmp(text, mode, strlen(text)) == 0)
+				return strdup(mode);
+		}
+		return NULL;
+	});
+
+	return NULL;
+}

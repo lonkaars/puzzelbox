@@ -7,4 +7,5 @@
 
 int cli_main();
 void rl_printf(const char * fmt, ...);
+int rl_word(const char * line, int cursor);
 
