@@ -14,3 +14,6 @@ add_library(mpack STATIC
 	${CMAKE_CURRENT_LIST_DIR}/lib/mpack/src/mpack/mpack-writer.c
 	)
 
+# causes some wild crashes, please leave off
+add_compile_definitions(MPACK_READ_TRACKING=0)
+

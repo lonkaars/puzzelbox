@@ -73,6 +73,7 @@ void PBSocket::send(const char * buf, size_t buf_sz) {
 
 void PBSocket::sock_task() {
 	i2ctcp_msg_t input;
+	i2ctcp_read_reset(&input);
 
 	while(1) {
 		char buf[80];
