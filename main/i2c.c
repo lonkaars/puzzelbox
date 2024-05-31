@@ -49,14 +49,16 @@ uint8_t* scan_bus(uint8_t *array) {
 	int i = 0;
 	uint8_t rxdata;
 
-	for(int addr = 0; addr < (1<<7); addr++) {
+	for(int addr = 1; addr < (1<<7); addr++) {
 		// ignore reserved addresses
 		// These are any addresses of the form 000 0xxx or 111 1xxx
-		if( reserved_addr(addr) ){
-			ret = PICO_ERROR_GENERIC;
-		}else{
-			ret = i2c_read_blocking(I2C_PORT, addr, &rxdata, 1, false);
-		}
+		
+		// if( reserved_addr(addr) ){
+		// 	ret = PICO_ERROR_GENERIC;
+		// }else{
+		// 	
+		ret = i2c_read_blocking(I2C_PORT, addr, &rxdata, 1, false);
+		//}
 
 		// if acknowledged -> ret == number of bytes sent
 		if(ret > 0){
@@ -77,31 +79,36 @@ void bus_task() {
 	int i = 0;
 	uint8_t found[MAX_SLAVES];
 	init_addr_array(found, MAX_SLAVES);
+	scan_bus(found);
 
 	while(1) {
 		// printf("Bus scan!");
-		scan_bus(found);
 
 		uint8_t data;
 		for(int i = 0; i < MAX_SLAVES; i++){
 			if( found[i] == 0x00 )
-				break;
+				continue;
 			
-			data = 0x01;
-			// send data to found slave address
-			write_i2c(found[i], &data, 1);
+			read_i2c(found[i], &data, 2);
+			if(data > 0) {
+				printf("Data: %d", data);
+			}
 
-			data = 0x02;
-			write_i2c(found[i], &data, 1);
+			// data = 0x01;
+			// // send data to found slave address
+			// write_i2c(found[i], &data, 1);
+
+			// data = 0x02;
+			// write_i2c(found[i], &data, 1);
+
 			// request update from slave addr at found[i]
 			//write_i2c();
 		}
 
 		uint8_t rcvData[2];
-		if(xQueueReceive(queue, &rcvData, portMAX_DELAY) == pdPASS){
+		if(xQueueReceive(queue, &rcvData, 5) == pdPASS){
+			printf("Send to address: %d, datat: %d\n", rcvData[0], rcvData[1]);
 			write_i2c(rcvData[0], &rcvData[1], sizeof(rcvData[1]));
-		} else {
-			printf("Something went wrong at queue receive!\n");
 		}
 	}
 }

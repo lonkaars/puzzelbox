@@ -55,8 +55,8 @@ void i2c_recv(uint16_t addr, const char * data, size_t data_size) {
 
 	printf("Sending data over i2c");
 	uint8_t i2cData[2] = {addr, 0x00};
-	if(xQueueSend(queue, &i2cData, portMAX_DELAY) != pdPASS) {
-		printf("Something went wrong!");
+	if(xQueueSend(queue, &i2cData, portMAX_DELAY) == pdPASS) {
+		printf("Socket send data to address: %d, data: %d", i2cData[0], i2cData[1]);
 	}
 
 }
@@ -70,8 +70,10 @@ void recv_handler(struct netconn* conn, struct netbuf* buf) {
 		netbuf_data(buf, (void**)&data, &len);
 
 		// continue early if more data is needed to complete message
+		printf("yeetus deletus defeatus");
 		if (!pb_read(&recv_msg, data, len)) continue;
 
+		printf("yeetus deletus defeatus v2!");
 		// forward received message to puzzle bus
 		i2c_recv(recv_msg.addr, recv_msg.data, recv_msg.length);
 		free(recv_msg.data);
