@@ -36,13 +36,15 @@ typedef enum {
     STATE_ERROR = 0x04
 } PuzzleState;
 
-//! TODO: The code needs to be genereted using some sort of logic that also match the game manual
 const char* validButtons[TOTAL_LEVELS] = {"A2", "B1", "D3", "C2", "C1"};
+const char bombCode[] = "1234";  // Display this code at the end
+
 PuzzleState puzzleState = STATE_UNINITIALIZED;
 int currentLevel = 0;
 
 // Function prototypes
 void display_code(int level);
+void display_final_code(const char* code);
 void initialize_system();
 void check_button_press();
 void play_error_sound();
@@ -64,6 +66,17 @@ void setup() {
   blink_display('0'); // Blink '0's when uninitialized
 }
 
+void initialize_system() {
+    for (int i = 0; i < ROWS; i++) {
+      pinMode(ROW_PINS[i], INPUT_PULLUP);
+    }
+    for (int i = 0; i < COLS; i++) {
+      pinMode(COL_PINS[i], OUTPUT);
+      digitalWrite(COL_PINS[i], HIGH);
+    }
+    Serial.println("GPIO and display initialized.");
+}
+
 void loop() {
   if (puzzleState != STATE_UNINITIALIZED && puzzleState != STATE_ERROR) {
     while (puzzleState != STATE_SOLVED) {
@@ -71,14 +84,21 @@ void loop() {
       delay(100);
     }
     if (puzzleState == STATE_SOLVED) {
+      display_final_code(bombCode);
       digitalWrite(SOLVED_PIN, HIGH);
-      display.showNumberDec(currentLevel, true);
       Serial.println("Final display shown. Puzzle complete.");
-      while (1) { delay(1000); }
+      while (1) { delay(1000); } // Keep displaying final code
     }
   } else if (puzzleState == STATE_ERROR) {
     blink_display('1'); // Blink '1's when in error state
   }
+}
+
+void display_final_code(const char* code) {
+    for (int i = 0; code[i] != '\0'; i++) {
+        display.showNumberDec(code[i] - '0', false); // Display each digit
+        delay(1000); // Display each digit for 1 second
+    }
 }
 
 void display_code(int level) {
@@ -158,13 +178,3 @@ void receiveEvent(int howMany) {
   }
 }
 
-void initialize_system() {
-    for (int i = 0; i < ROWS; i++) {
-      pinMode(ROW_PINS[i], INPUT_PULLUP);
-    }
-    for (int i = 0; i < COLS; i++) {
-      pinMode(COL_PINS[i], OUTPUT);
-      digitalWrite(COL_PINS[i], HIGH);
-    }
-    Serial.println("GPIO and display initialized.");
-}
