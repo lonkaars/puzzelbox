@@ -1,5 +1,4 @@
 #include <FreeRTOS.h>
-#include <queue.h>
 #include <task.h>
 
 #include <pico/stdlib.h>
@@ -9,8 +8,6 @@
 #include "init.h"
 #include "sock.h"
 #include "i2c.h"
-
-QueueHandle_t queue;
 
 void blink_task() {
 	await_init(); // `blink_task` uses GPIO

@@ -7,11 +7,6 @@
 #include <pico/stdlib.h>
 #include <hardware/i2c.h>
 
-#include <FreeRTOS.h>
-#include <queue.h>
-
-extern QueueHandle_t queue;
-
 void init_i2c() {
 	i2c_init(I2C_PORT, 100 * 1000); // currently at 100kHz
 
@@ -94,21 +89,6 @@ void bus_task() {
 				printf("Data: %d", data);
 			}
 
-			// data = 0x01;
-			// // send data to found slave address
-			// write_i2c(found[i], &data, 1);
-
-			// data = 0x02;
-			// write_i2c(found[i], &data, 1);
-
-			// request update from slave addr at found[i]
-			//write_i2c();
-		}
-
-		uint8_t rcvData[2];
-		if(xQueueReceive(queue, &rcvData, 5) == pdPASS){
-			printf("Send to address: %d, datat: %d\n", rcvData[0], rcvData[1]);
-			write_i2c(rcvData[0], &rcvData[1], sizeof(rcvData[1]));
 		}
 	}
 }

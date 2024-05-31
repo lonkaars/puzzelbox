@@ -5,13 +5,11 @@
 #include <lwip/api.h>
 #include <string.h>
 
-#include <FreeRTOS.h>
-#include <queue.h>
-
 #include "init.h"
 #include "config.h"
 #include "i2ctcpv1.h"
 #include "sock.h"
+#include <hardware/i2c.h>
 
 extern QueueHandle_t queue;
 
@@ -40,25 +38,12 @@ void i2c_send(uint16_t addr, const char * data, size_t data_size) {
 }
 
 void i2c_recv(uint16_t addr, const char * data, size_t data_size) {
-	/*
-	printf("address: 0x%02x\n", addr);
-	printf("data:    \"%.*s\"\n", data_size, data);
-
-	// send message back
-	char reply[] = "Test message back!";
-	i2c_send(0x69, reply, strlen(reply));
-	*/
-
 	// TODO: this function should forward the recieved message onto the puzzle
 	// bus instead of printing/replying
 	// using queueu -> i2c_write only accepts uint8_t addr, and uint8_t data ._.
 
-	printf("Sending data over i2c");
-	uint8_t i2cData[2] = {addr, 0x00};
-	if(xQueueSend(queue, &i2cData, portMAX_DELAY) == pdPASS) {
-		printf("Socket send data to address: %d, data: %d", i2cData[0], i2cData[1]);
-	}
-
+	printf("Addr: %lu, Data: %c, Data_size: %lu\n", addr, data[0], data_size);
+	i2c_write_blocking(i2c0, addr, data, data_size, false);
 }
 
 void recv_handler(struct netconn* conn, struct netbuf* buf) {
@@ -70,10 +55,8 @@ void recv_handler(struct netconn* conn, struct netbuf* buf) {
 		netbuf_data(buf, (void**)&data, &len);
 
 		// continue early if more data is needed to complete message
-		printf("yeetus deletus defeatus");
-		if (!i2ctcp_read(&recv_msg, data, len)) continue;
+		if (i2ctcp_read(&recv_msg, data, len) > 0) continue;
 
-		printf("yeetus deletus defeatus v2!");
 		// forward received message to puzzle bus
 		i2c_recv(recv_msg.addr, recv_msg.data, recv_msg.length);
 		free(recv_msg.data);
