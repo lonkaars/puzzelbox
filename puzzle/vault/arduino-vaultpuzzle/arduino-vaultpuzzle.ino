@@ -36,6 +36,7 @@ typedef enum {
     STATE_ERROR = 0x04
 } PuzzleState;
 
+//! TODO: Both codes needs to be genereted using some sort of logic that also match the game manual
 const char* validButtons[TOTAL_LEVELS] = {"A2", "B1", "D3", "C2", "C1"};
 const char bombCode[] = "1234";  // Display this code at the end
 
