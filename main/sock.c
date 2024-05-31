@@ -5,10 +5,15 @@
 #include <lwip/api.h>
 #include <string.h>
 
+#include <FreeRTOS.h>
+#include <queue.h>
+
 #include "init.h"
 #include "config.h"
 #include "puzbusv1.h"
 #include "sock.h"
+
+extern QueueHandle_t queue;
 
 struct netconn* current_connection = NULL;
 struct pb_msg recv_msg;
@@ -35,15 +40,25 @@ void i2c_send(uint16_t addr, const char * data, size_t data_size) {
 }
 
 void i2c_recv(uint16_t addr, const char * data, size_t data_size) {
+	/*
 	printf("address: 0x%02x\n", addr);
 	printf("data:    \"%.*s\"\n", data_size, data);
 
 	// send message back
 	char reply[] = "Test message back!";
 	i2c_send(0x69, reply, strlen(reply));
+	*/
 
 	// TODO: this function should forward the recieved message onto the puzzle
 	// bus instead of printing/replying
+	// using queueu -> i2c_write only accepts uint8_t addr, and uint8_t data ._.
+
+	printf("Sending data over i2c");
+	uint8_t i2cData[2] = {addr, 0x00};
+	if(xQueueSend(queue, &i2cData, portMAX_DELAY) != pdPASS) {
+		printf("Something went wrong!");
+	}
+
 }
 
 void recv_handler(struct netconn* conn, struct netbuf* buf) {
