@@ -19,9 +19,14 @@
 // Initialize the TM1637 display
 TM1637Display display(CLK, DIO);
 
-//TODO Update these pin numbers based on your Arduino setup
-const int ROW_PINS[ROWS] = {7, 6, 5, 4}; 
-const int COL_PINS[COLS] = {10, 9, 8}; 
+// I2C slave address
+#define I2C_SLAVE_ADDRESS 0x08
+
+// LED on pin 13 to indicate I2C communication
+const int ledPin = 13;
+
+const int ROW_PINS[ROWS] = {7, 6, 5, 4};
+const int COL_PINS[COLS] = {10, 9, 8};
 
 typedef enum {
     STATE_UNINITIALIZED = 0x00,
@@ -42,63 +47,50 @@ void check_button_press();
 void update_state_after_button_press(bool validPress);
 void play_error_sound();
 void blink_display();
+void receiveEvent(int howMany);
 
 void setup() {
   Serial.begin(115200); // Initialize default Serial for debug messages
-  pinMode(SOLVED_PIN, OUTPUT); // Initialize the solved indicator pin
-  digitalWrite(SOLVED_PIN, LOW); // Start with the solved pin LOW
+  pinMode(SOLVED_PIN, OUTPUT);
+  digitalWrite(SOLVED_PIN, LOW);
 
-  display.setBrightness(0x0f); // Set the brightness of the TM1637 display
-  initialize_system();
-  Serial.println("GPIO and display initialized.");
+  display.setBrightness(0x0f);
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, LOW);
 
-  // Test to light up all segments
-  uint8_t allOn[] = {0xFF, 0xFF, 0xFF, 0xFF}; // All segments on
+  // Initialize I2C as a slave
+  Wire.begin(I2C_SLAVE_ADDRESS);
+  Wire.onReceive(receiveEvent); // Attach receive event handler
+
+  uint8_t allOn[] = {0xFF, 0xFF, 0xFF, 0xFF};
   display.setSegments(allOn);
-  delay(2000); // Keep it on for 2 seconds before proceeding
-
-  // Initialize the game
-  if (true) { // Simulating isVaultClosed
-      puzzleState = STATE_RESET;
-      currentLevel = 0;
-      display_code(currentLevel);
-  } else {
-      Serial.println("Vault door is open. Please close the door to start the puzzle.");
-  }
-}
-
-void initialize_system() {
-    // Configure the rows as input with pull-up
-    for (int i = 0; i < ROWS; i++) {
-      pinMode(ROW_PINS[i], INPUT_PULLUP);
-    }
-    
-    // Configure the columns as output
-    for (int i = 0; i < COLS; i++) {
-      pinMode(COL_PINS[i], OUTPUT);
-      digitalWrite(COL_PINS[i], HIGH);
-    }
+  delay(2000);
 }
 
 void loop() {
-  while (puzzleState != STATE_SOLVED) {
+  if (puzzleState != STATE_UNINITIALIZED) {
+    while (puzzleState != STATE_SOLVED) {
       check_button_press();
-      delay(100); // Non-blocking delay
-  }
-  // When puzzle is solved, you might want to display a final message and set the solved pin high
-  if (puzzleState == STATE_SOLVED) {
-      digitalWrite(SOLVED_PIN, HIGH); // Set the solved pin high
-      display.showNumberDec(currentLevel, true); // Show final level or a special message
+      delay(100);
+    }
+    if (puzzleState == STATE_SOLVED) {
+      digitalWrite(SOLVED_PIN, HIGH);
+      display.showNumberDec(currentLevel, true);
       Serial.println("Final display shown. Puzzle complete.");
-      while (1) { delay(1000); } // Hold on the final display
+      while (1) { delay(1000); }
+    }
+  } else {
+    delay(100); // Wait until initialized
   }
 }
 
 void display_code(int level) {
-    Serial.print("Displaying code for level "); Serial.println(level);
-    // Display the level on the TM1637 4-digit 7-segment display
+    Serial.print("Displaying code for level ");
+    Serial.println(level);
     display.showNumberDec(level, true); // True to show leading zeros
-    Serial.print("Code for level "); Serial.print(level); Serial.println(" displayed successfully.");
+    Serial.print("Code for level ");
+    Serial.print(level);
+    Serial.println(" displayed successfully.");
 }
 
 void check_button_press() {
@@ -112,13 +104,14 @@ void check_button_press() {
                     keyPress[0] = 'A' + row;
                     keyPress[1] = '1' + col;
                     keyPress[2] = '\0';
-                    Serial.print("Keypress detected: "); Serial.println(keyPress);
+                    Serial.print("Keypress detected: ");
+                    Serial.println(keyPress);
                     if (strcmp(keyPress, validButtons[currentLevel]) == 0) {
                         currentLevel++;
                         if (currentLevel >= TOTAL_LEVELS) {
                             puzzleState = STATE_SOLVED;
                             Serial.println("Puzzle solved!");
-                            display.showNumberDec(currentLevel + 1, true);  // Display the final level
+                            display.showNumberDec(currentLevel + 1, true); // Display the final level
                             digitalWrite(SOLVED_PIN, HIGH); // Set the solved pin high
                         } else {
                             puzzleState = STATE_PLAYING;
@@ -147,4 +140,29 @@ void play_error_sound() {
 void blink_display() {
     // Simulate blinking the display - use LEDs or other methods to show visual feedback
     Serial.println("7-segment display is blinking to indicate an error.");
+}
+
+void receiveEvent(int howMany) {
+  while (Wire.available()) {
+    char c = Wire.read();
+    if (c == 'S') { // Start signal received
+      digitalWrite(ledPin, HIGH); // Turn on LED to indicate signal received
+      initialize_system();
+      puzzleState = STATE_RESET;
+      currentLevel = 0;
+      display_code(currentLevel);
+      digitalWrite(ledPin, LOW); // Turn off LED after initialization
+    }
+  }
+}
+
+void initialize_system() {
+    for (int i = 0; i < ROWS; i++) {
+      pinMode(ROW_PINS[i], INPUT_PULLUP);
+    }
+    for (int i = 0; i < COLS; i++) {
+      pinMode(COL_PINS[i], OUTPUT);
+      digitalWrite(COL_PINS[i], HIGH);
+    }
+    Serial.println("GPIO and display initialized.");
 }
