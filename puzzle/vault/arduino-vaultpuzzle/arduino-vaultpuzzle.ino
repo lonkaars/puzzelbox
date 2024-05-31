@@ -63,8 +63,6 @@ void setup() {
 
   Wire.begin(I2C_SLAVE_ADDRESS);
   Wire.onReceive(receiveEvent);
-
-  blink_display('0'); // Blink '0's when uninitialized
 }
 
 void initialize_system() {
@@ -92,6 +90,9 @@ void loop() {
     }
   } else if (puzzleState == STATE_ERROR) {
     blink_display('1'); // Blink '1's when in error state
+  } else if (puzzleState == STATE_UNINITIALIZED){
+    Serial.println("Puzzle module unitialized.");
+    blink_display('0'); // Blink '0's when uninitialized
   }
 }
 
