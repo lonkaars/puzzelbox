@@ -1,10 +1,15 @@
 #include <cstdio>
 #include <cstdlib>
+#include <readline/readline.h>
 #include <string.h>
 
 #include "cmd.h"
-#include "sock.h"
+#include "pb/types.h"
+#include "rl.h"
+#include "i2c.h"
 #include "parse.h"
+
+#include "pb/bus.h"
 
 char* consume_token(char* input, const char* ifs) {
 	strtok(input, ifs);
@@ -32,11 +37,12 @@ void cmd_help(char*) {
 
 	printf(
 		"\n"
-		"You can also use the TAB key to autocomplete commands\n"
+		"See man pbc(1) for more info about specific commands\n"
+		"Hint: you can use the TAB key to autocomplete commands\n"
 	);
 }
 
-void cmd_send(char* addr_str) {
+void cmd_send(char * addr_str) {
 	char* data_str = consume_token(addr_str, IFS);
 
 	char* end;
@@ -55,9 +61,77 @@ void cmd_send(char* addr_str) {
 		return;
 	}
 
-	// printf("(0x%02x) -> \"%.*s\"\n", addr, data_size, data);
+	printf("sending char data[%lu = 0x%02lx] to 0x%02x\n", data_size, data_size, addr);
 	i2c_send(addr, data, data_size);
 
 	free(data);
 }
 
+void cmd_reset(char*) {
+	const char msg[] = {
+		PB_CMD_WRITE,
+		0x00,
+		PB_GS_IDLE,
+	};
+	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
+}
+
+void cmd_skip(char*) {
+	const char msg[] = {
+		PB_CMD_WRITE,
+		0x00,
+		PB_GS_SOLVED,
+	};
+	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
+}
+
+void cmd_ls(char*) {
+	return;
+	const char msg[] = {
+		PB_CMD_READ,
+		// TODO: which address is this?
+	};
+	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
+}
+
+extern bool i2c_dump_send;
+extern bool i2c_dump_recv;
+const char * dump_modes[] = {
+	"none",
+	"send",
+	"recv",
+	"both",
+	NULL,
+};
+void cmd_dump(char * mode) {
+	consume_token(mode, IFS);
+	mode += strspn(mode, IFS);
+
+	for (int i = 0; dump_modes[i] != NULL; i++) {
+		if (strcmp(mode, dump_modes[i]) == 0) {
+			i2c_dump_send = (i >> 0) & 1;
+			i2c_dump_recv = (i >> 1) & 1;
+			return;
+		}
+	}
+
+	printf("mode \"%s\" unknown\n", mode);
+}
+char** cmd_dump_complete(const char * text, int begin, int end) {
+	int word = rl_word(rl_line_buffer, begin);
+	if (word != 1) return NULL;
+
+	return rl_completion_matches(text, [](const char * text, int state) -> char * {
+		static size_t i = 0;
+		if (state == 0) i = 0;
+
+		while (dump_modes[i] != NULL) {
+			const char * mode = dump_modes[i++];
+			if (strncmp(text, mode, strlen(text)) == 0)
+				return strdup(mode);
+		}
+		return NULL;
+	});
+
+	return NULL;
+}

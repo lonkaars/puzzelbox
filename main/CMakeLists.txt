@@ -7,7 +7,7 @@ set(PICO_BOARD pico_w)
 
 include(lib/pico-sdk/pico_sdk_init.cmake)
 include(lib/FreeRTOS-Kernel/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
-include(../proto/include.cmake)
+include(../i2ctcp/include.cmake)
 
 project(puzzlebox_main C CXX ASM)
 
@@ -33,7 +33,7 @@ target_link_libraries(main
 	hardware_i2c
 	FreeRTOS-Kernel
 	FreeRTOS-Kernel-Heap4
-	puzbus
+	i2ctcp
 	mpack
 	)
 

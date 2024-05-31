@@ -10,18 +10,18 @@
 
 #include "init.h"
 #include "config.h"
-#include "puzbusv1.h"
+#include "i2ctcpv1.h"
 #include "sock.h"
 
 extern QueueHandle_t queue;
 
 struct netconn* current_connection = NULL;
-struct pb_msg recv_msg;
+i2ctcp_msg_t recv_msg;
 
 void i2c_send(uint16_t addr, const char * data, size_t data_size) {
 	if (current_connection == NULL) return;
 
-	struct pb_msg send_msg = {
+	i2ctcp_msg_t send_msg = {
 		.addr = addr,
 		.data = (char *) data,
 		.length = data_size,
@@ -30,7 +30,7 @@ void i2c_send(uint16_t addr, const char * data, size_t data_size) {
 	char * buf;
 	size_t buf_sz;
 
-	if (!pb_write(&send_msg, &buf, &buf_sz)) return;
+	if (!i2ctcp_write(&send_msg, &buf, &buf_sz)) return;
 
 	// NOTE: netconn does return an error code, but the data needs to be freed
 	// whether netconn throws an error or not, so it remains unused
@@ -62,7 +62,7 @@ void i2c_recv(uint16_t addr, const char * data, size_t data_size) {
 }
 
 void recv_handler(struct netconn* conn, struct netbuf* buf) {
-	pb_read_reset(&recv_msg);
+	i2ctcp_read_reset(&recv_msg);
 
 	do {
 		char* data;
@@ -71,7 +71,7 @@ void recv_handler(struct netconn* conn, struct netbuf* buf) {
 
 		// continue early if more data is needed to complete message
 		printf("yeetus deletus defeatus");
-		if (!pb_read(&recv_msg, data, len)) continue;
+		if (!i2ctcp_read(&recv_msg, data, len)) continue;
 
 		printf("yeetus deletus defeatus v2!");
 		// forward received message to puzzle bus

@@ -1,6 +1,6 @@
 include_directories(${CMAKE_CURRENT_LIST_DIR})
-add_library(puzbus STATIC
-	${CMAKE_CURRENT_LIST_DIR}/puzbusv1.c
+add_library(i2ctcp STATIC
+	${CMAKE_CURRENT_LIST_DIR}/i2ctcpv1.c
 	)
 
 # mpack
@@ -13,4 +13,7 @@ add_library(mpack STATIC
 	${CMAKE_CURRENT_LIST_DIR}/lib/mpack/src/mpack/mpack-reader.c
 	${CMAKE_CURRENT_LIST_DIR}/lib/mpack/src/mpack/mpack-writer.c
 	)
+
+# causes some wild crashes, please leave off
+add_compile_definitions(MPACK_READ_TRACKING=0)
 

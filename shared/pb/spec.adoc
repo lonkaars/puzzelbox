@@ -1,0 +1,133 @@
+= Puzzle module specification
+
+This folder contains an implementation of the puzzle bus protocol
+specification, and is targeted at puzzle module developers. This document
+describes the required implementation steps for integrating a new game into the
+puzzle module framework.
+
+== The bus
+
+The puzzle bus carries data over a standard I^2^C bus. Additional details about
+this bus can be found in the link:../../docs/design.adoc[Design document].
+
+The following details are important to puzzle module developers, as they may
+cause unexpected behavior:
+
+- *Addresses influence the puzzle box's behavior*. The order of puzzles is
+	determined by the puzzle module address. Two puzzle modules may use the same
+	address, but this will mean that they cannot be used simultaniously in the
+	same puzzle box. Known addresses are documented in link:bus.h[].
+- *The read/write bit of an I^2^C frame determines how it's handled*. I^2^C
+	*read* frames are treated as requests, while *write* frames are treated as
+	responses.
+
+== Puzzle bus driver (pbdrv)
+
+The library in this folder is a partial implementation of the puzzle bus
+specification *for puzzle modules*. Most functions in the driver are marked
+with the 'weak' attribute, which allows you to override them by providing an
+implementation.
+
+In order to utilize this driver, the following must be done:
+
+- The ``pbdrv_i2c_recv`` function must be *called* for every received *I^2^C
+	read* frame
+- The ``pbdrv_i2c_send`` function must be *implemented* with the
+	platform-specific *I^2^C write* function
+
+This is enough to get the puzzle module registered. You may also want to
+implement some of the following integrations:
+
+- If your game uses the global state variable, you should implement the
+	<<sec:state-global,global state hooks>> to point the driver to your own
+	global state variable, and be notified of reads/writes to it.
+- If you want to expose additional game state variables over the puzzle bus,
+	you should implement the <<sec:state-aux,auxiliary state hooks>>.
+- If you want to implement custom puzzle bus commands, you can implement the
+	<<sec:cmd,command hook>>.
+
+All other kinds of integrations/hooks can likely be realized by overriding the
+default implementations, but this is discouraged.
+
+[[sec:state-global]]
+== Global state
+
+If your puzzle module defines its own global ``enum pb_state``, you can tell
+the driver to use it by implementing the ``pbdrv_hook_state_read`` and
+``pbdrv_hook_state_write`` functions. These functions are also used by the
+default implementation of the read/write commands to address 0 (global state).
+
+Example:
+
+```c
+pb_state_t global_state = PB_GS_NOINIT;
+
+pb_state_t pbdrv_hook_mod_state_read() {
+	return global_state;
+}
+
+void pbdrv_hook_mod_state_write(pb_state_t state) {
+	global_state = state;
+}
+```
+
+[[sec:state-aux]]
+== Auxiliary state
+
+You can expose additional state variables by implementing the
+``pbdrv_hook_read`` and ``pbdrv_hook_write`` functions. These functions should
+return ``true`` for state addresses you want to override.
+
+Example:
+
+```c
+#define CUSTOM_VAR_ADDR 0x01
+uint8_t my_custom_variable = 10;
+
+bool pbdrv_hook_read(uint16_t i2c_addr, uint8_t addr) {
+	switch (addr) {
+		case CUSTOM_VAR_ADDR: {
+			char res[] = { PB_CMD_READ, addr, my_custom_variable };
+			pbdrv_i2c_send(i2c_addr, res, sizeof(res));
+			break;
+		}
+		default: return false;
+	}
+
+	return true;
+}
+
+bool pbdrv_hook_write(uint16_t i2c_addr, uint8_t addr, const char * buf, size_t sz) {
+	switch (addr) {
+		case CUSTOM_VAR_ADDR: {
+			if (sz != 1) return false;
+			my_custom_variable = buf[0];
+			break;
+		}
+		default: return false;
+	}
+
+	return true;
+}
+```
+
+[[sec:cmd]]
+== Custom commands
+
+Similar to the auxiliary state, custom commands can be added by implementing
+the ``pbdrv_hook_cmd`` function, which should return ``true`` for the
+command(s) that you want to overwrite.
+
+Example:
+
+```c
+bool pbdrv_hook_cmd(uint16_t i2c_addr, enum pb_cmd cmd, const char * buf, size_t sz) {
+	if (cmd == 0x54) {
+		printf("custom command received!\n");
+		return true;
+	}
+
+	return false;
+}
+```
+

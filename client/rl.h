@@ -6,5 +6,6 @@
 #define CLI_PROMPT "(" COLOR_BOLD "pbc" COLOR_OFF ") "
 
 int cli_main();
-void rl_printf(const char *fmt, ...);
+void rl_printf(const char * fmt, ...);
+int rl_word(const char * line, int cursor);
 

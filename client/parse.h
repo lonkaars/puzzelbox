@@ -22,7 +22,7 @@
  *
  * \return the remaining data after \p token and the first \p ifs
  */
-char* consume_token(char* token, const char* ifs);
+char* consume_token(char * token, const char * ifs);
 
 /**
  * \brief convert string with literals into raw data
@@ -38,5 +38,5 @@ char* consume_token(char* token, const char* ifs);
  * \note The pointer that \p data refers to will not be initialized by this
  * function if parsing fails
  */
-int strtodata(const char* str, char** data, size_t* size);
+int strtodata(const char * str, char ** data, size_t * size);
 

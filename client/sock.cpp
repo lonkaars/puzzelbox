@@ -7,12 +7,12 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <errno.h>
-
 #include <thread>
 
-#include "puzbusv1.h"
+#include "i2ctcpv1.h"
 #include "sock.h"
 #include "rl.h"
+#include "i2c.h"
 
 using std::logic_error;
 using std::thread;
@@ -72,7 +72,8 @@ void PBSocket::send(const char * buf, size_t buf_sz) {
 }
 
 void PBSocket::sock_task() {
-	struct pb_msg input;
+	i2ctcp_msg_t input;
+	i2ctcp_read_reset(&input);
 
 	while(1) {
 		char buf[80];
@@ -86,11 +87,11 @@ void PBSocket::sock_task() {
 		// skip empty frames
 		if (bytes == 0) continue;
 
-		int ret = pb_read(&input, buf, bytes);
+		int ret = i2ctcp_read(&input, buf, bytes);
 
 		// header read error
 		if (ret < 0) {
-			rl_printf("pb_read error!\n");
+			rl_printf("i2ctcp_read error!\n");
 			break;
 		}
 
@@ -103,23 +104,5 @@ void PBSocket::sock_task() {
 	}
 
 	sock_close();
-}
-
-void i2c_send(uint16_t addr, const char * data, size_t data_size) {
-	struct pb_msg msg = {
-		.addr = addr,
-		.data = (char *) data,
-		.length = data_size,
-	};
-
-	char* packed;
-	size_t size;
-	if (!pb_write(&msg, &packed, &size)) return;
-
-	sock->send(packed, size);
-}
-
-void i2c_recv(uint16_t addr, const char * data, size_t data_size) {
-	rl_printf("[0x%02x]: %.*s\n", addr, data_size, data);
 }
 

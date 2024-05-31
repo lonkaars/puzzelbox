@@ -2,33 +2,32 @@
 
 #include <stddef.h>
 
-typedef void cmd_fn_t(char *);
+typedef void cmd_handle_t(char *);
+typedef char** cmd_complete_t(const char*, int, int);
 
 struct cmd {
-	void (* handle)(char *);
+	cmd_handle_t * handle;
 	const char* name;
 	const char* info;
-	// TODO: tab completion function?
+	cmd_complete_t * complete;
 };
+typedef struct cmd cmd_t;
 
-cmd_fn_t cmd_exit;
-cmd_fn_t cmd_test;
-cmd_fn_t cmd_help;
-cmd_fn_t cmd_send;
-cmd_fn_t cmd_status;
-cmd_fn_t cmd_reset;
-cmd_fn_t cmd_ls;
+cmd_handle_t cmd_exit;
+cmd_handle_t cmd_test;
+cmd_handle_t cmd_help;
+cmd_handle_t cmd_reset;
+cmd_handle_t cmd_ls;
+cmd_handle_t cmd_send;
+cmd_handle_t cmd_skip;
+cmd_handle_t cmd_dump;
+cmd_complete_t cmd_dump_complete;
 
-static const struct cmd cmds[] = {
+static const cmd_t cmds[] = {
 	{
 		.handle = cmd_exit,
 		.name = "exit",
 		.info = "exit pbc",
-	},
-	{
-		.handle = cmd_test,
-		.name = "test",
-		.info = "send a test puzbus message",
 	},
 	{
 		.handle = cmd_help,
@@ -36,25 +35,38 @@ static const struct cmd cmds[] = {
 		.info = "show this help",
 	},
 	{
+		.handle = cmd_reset,
+		.name = "reset",
+		.info = "set game state to 'idle' for one or more puzzle modules",
+	},
+	{
+		.handle = cmd_skip,
+		.name = "skip",
+		.info = "set game state to 'solved' for one or more puzzle modules",
+	},
+	{
+		.handle = cmd_ls,
+		.name = "ls",
+		.info = "list connected puzzle modules and their state",
+	},
+#ifdef DEBUG
+	{
 		.handle = cmd_send,
 		.name = "send",
 		.info = "[debug] send raw message",
 	},
-	// {
-	// 	.handle = cmd_status,
-	// 	.name = "status",
-	// 	.info = "show global puzzle box state (main controller state)",
-	// },
-	// {
-	// 	.handle = cmd_reset,
-	// 	.name = "reset",
-	// 	.info = "reset entire game state",
-	// },
-	// {
-	// 	.handle = cmd_ls,
-	// 	.name = "ls",
-	// 	.info = "list connected puzzle modules",
-	// },
+	{
+		.handle = cmd_test,
+		.name = "test",
+		.info = "[debug] send a test puzbus message",
+	},
+	{
+		.handle = cmd_dump,
+		.name = "dump",
+		.info = "[debug] dump sent or received messages",
+		.complete = cmd_dump_complete,
+	},
+#endif
 };
 static const size_t cmds_length = sizeof(cmds) / sizeof(cmds[0]);
 
