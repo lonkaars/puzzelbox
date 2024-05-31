@@ -36,6 +36,7 @@ typedef enum {
     STATE_ERROR = 0x04
 } PuzzleState;
 
+//! TODO: The code needs to be genereted using some sort of logic that also match the game manual
 const char* validButtons[TOTAL_LEVELS] = {"A2", "B1", "D3", "C2", "C1"};
 PuzzleState puzzleState = STATE_UNINITIALIZED;
 int currentLevel = 0;
@@ -44,13 +45,12 @@ int currentLevel = 0;
 void display_code(int level);
 void initialize_system();
 void check_button_press();
-void update_state_after_button_press(bool validPress);
 void play_error_sound();
-void blink_display();
+void blink_display(char num);
 void receiveEvent(int howMany);
 
 void setup() {
-  Serial.begin(115200); // Initialize default Serial for debug messages
+  Serial.begin(115200);
   pinMode(SOLVED_PIN, OUTPUT);
   digitalWrite(SOLVED_PIN, LOW);
 
@@ -58,17 +58,14 @@ void setup() {
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, LOW);
 
-  // Initialize I2C as a slave
   Wire.begin(I2C_SLAVE_ADDRESS);
-  Wire.onReceive(receiveEvent); // Attach receive event handler
+  Wire.onReceive(receiveEvent);
 
-  uint8_t allOn[] = {0xFF, 0xFF, 0xFF, 0xFF};
-  display.setSegments(allOn);
-  delay(2000);
+  blink_display('0'); // Blink '0's when uninitialized
 }
 
 void loop() {
-  if (puzzleState != STATE_UNINITIALIZED) {
+  if (puzzleState != STATE_UNINITIALIZED && puzzleState != STATE_ERROR) {
     while (puzzleState != STATE_SOLVED) {
       check_button_press();
       delay(100);
@@ -79,15 +76,15 @@ void loop() {
       Serial.println("Final display shown. Puzzle complete.");
       while (1) { delay(1000); }
     }
-  } else {
-    delay(100); // Wait until initialized
+  } else if (puzzleState == STATE_ERROR) {
+    blink_display('1'); // Blink '1's when in error state
   }
 }
 
 void display_code(int level) {
     Serial.print("Displaying code for level ");
     Serial.println(level);
-    display.showNumberDec(level, true); // True to show leading zeros
+    display.showNumberDec(level, true);
     Serial.print("Code for level ");
     Serial.print(level);
     Serial.println(" displayed successfully.");
@@ -96,11 +93,11 @@ void display_code(int level) {
 void check_button_press() {
     char keyPress[3] = {0};
     for (int col = 0; col < COLS; col++) {
-        digitalWrite(COL_PINS[col], LOW); // Activate column
+        digitalWrite(COL_PINS[col], LOW);
         for (int row = 0; row < ROWS; row++) {
-            if (digitalRead(ROW_PINS[row]) == LOW) { // Detect if any row is activated
-                delay(50); // Debounce delay
-                if (digitalRead(ROW_PINS[row]) == LOW) { // Confirm the button is still pressed
+            if (digitalRead(ROW_PINS[row]) == LOW) {
+                delay(50);
+                if (digitalRead(ROW_PINS[row]) == LOW) {
                     keyPress[0] = 'A' + row;
                     keyPress[1] = '1' + col;
                     keyPress[2] = '\0';
@@ -111,47 +108,52 @@ void check_button_press() {
                         if (currentLevel >= TOTAL_LEVELS) {
                             puzzleState = STATE_SOLVED;
                             Serial.println("Puzzle solved!");
-                            display.showNumberDec(currentLevel + 1, true); // Display the final level
-                            digitalWrite(SOLVED_PIN, HIGH); // Set the solved pin high
+                            display.showNumberDec(currentLevel + 1, true);
+                            digitalWrite(SOLVED_PIN, HIGH);
                         } else {
                             puzzleState = STATE_PLAYING;
                             display_code(currentLevel);
                         }
                     } else {
-                        play_error_sound();
-                        blink_display();
                         puzzleState = STATE_ERROR;
                         currentLevel = 0;
-                        display_code(currentLevel);
                     }
-                    while (digitalRead(ROW_PINS[row]) == LOW) {} // Wait for release
+                    while (digitalRead(ROW_PINS[row]) == LOW) {}
                 }
             }
         }
-        digitalWrite(COL_PINS[col], HIGH); // Deactivate column
+        digitalWrite(COL_PINS[col], HIGH);
     }
 }
 
 void play_error_sound() {
-    // Simulate error sound - connect a buzzer to play actual sound
     Serial.println("Playing error sound.");
 }
 
-void blink_display() {
-    // Simulate blinking the display - use LEDs or other methods to show visual feedback
-    Serial.println("7-segment display is blinking to indicate an error.");
+void blink_display(char num) {
+    if (num == '0') {
+        display.showNumberDec(0, true); // Display '0' continuously
+        delay(500);
+        display.clear(); // Clear display
+        delay(500);
+    } else if (num == '1') {
+        display.showNumberDec(1, true); // Display '1' continuously
+        delay(500);
+        display.clear(); // Clear display
+        delay(500);
+    }
 }
 
 void receiveEvent(int howMany) {
-  while (Wire.available()) {
+  if (Wire.available() > 0) {
     char c = Wire.read();
-    if (c == 'S') { // Start signal received
-      digitalWrite(ledPin, HIGH); // Turn on LED to indicate signal received
+    if (c == 'S' && puzzleState == STATE_UNINITIALIZED) {
+      digitalWrite(ledPin, HIGH);
       initialize_system();
       puzzleState = STATE_RESET;
       currentLevel = 0;
       display_code(currentLevel);
-      digitalWrite(ledPin, LOW); // Turn off LED after initialization
+      digitalWrite(ledPin, LOW);
     }
   }
 }
