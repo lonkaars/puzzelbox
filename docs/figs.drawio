@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2024-03-17T13:05:37.082Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/23.1.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="7STPuaY27yiGeP_RMlUo" version="23.1.5" type="device" pages="12">
+<mxfile host="Electron" modified="2024-06-01T11:52:27.222Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.4.8 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="qt8lwteWkdC3DiowClIP" version="24.4.8" type="device" pages="12">
   <diagram name="planning-condensed" id="ntlEKQOA_ElMvQzKZB-_">
     <mxGraphModel dx="1646" dy="488" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -437,27 +437,27 @@
     </mxGraphModel>
   </diagram>
   <diagram id="tQJt-i1klPodeKevl6yF" name="puzzle-module-common-state">
-    <mxGraphModel dx="1422" dy="822" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="673" dy="1582" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="5xofdATqJuVrBNkdsEzn-2" value="Uninitialized" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
-          <mxGeometry width="80" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="5xofdATqJuVrBNkdsEzn-6" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Arial;" parent="1" source="5xofdATqJuVrBNkdsEzn-3" target="5xofdATqJuVrBNkdsEzn-4" edge="1">
+        <mxCell id="TXo2J6VZZM4ndMLuZKAH-1" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="5xofdATqJuVrBNkdsEzn-2" target="5xofdATqJuVrBNkdsEzn-3">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5xofdATqJuVrBNkdsEzn-3" value="Reset" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
-          <mxGeometry x="100" width="60" height="60" as="geometry" />
+        <mxCell id="5xofdATqJuVrBNkdsEzn-2" value="uninitialized" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
+          <mxGeometry y="-10" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="5xofdATqJuVrBNkdsEzn-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Arial;" parent="1" source="5xofdATqJuVrBNkdsEzn-4" target="5xofdATqJuVrBNkdsEzn-5" edge="1">
+        <mxCell id="5xofdATqJuVrBNkdsEzn-3" value="idle" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
+          <mxGeometry x="100" y="-10" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="5xofdATqJuVrBNkdsEzn-7" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Arial;" parent="1" source="5xofdATqJuVrBNkdsEzn-4" target="5xofdATqJuVrBNkdsEzn-5" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5xofdATqJuVrBNkdsEzn-4" value="Playing" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
-          <mxGeometry x="100" y="80" width="60" height="60" as="geometry" />
+        <mxCell id="5xofdATqJuVrBNkdsEzn-4" value="playing" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
+          <mxGeometry x="200" y="-10" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="5xofdATqJuVrBNkdsEzn-5" value="Solved" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
-          <mxGeometry x="100" y="160" width="60" height="60" as="geometry" />
+        <mxCell id="5xofdATqJuVrBNkdsEzn-5" value="solved" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
+          <mxGeometry x="300" y="-10" width="80" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

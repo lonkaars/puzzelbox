@@ -203,7 +203,7 @@ image::img/system-bus.svg[]
 == Modules
 
 This section elaborates on the top-level specifications from <<sec:lv1>> with
-additional hardware specifications and software design decisions.
+software design decisions and protocol specifications.
 
 === Puzzle Module Framework
 
@@ -221,38 +221,6 @@ designed to facilitate the following:
   (<<reqs.adoc#req:main-static>>).
 * Provide abstracted interfaces to allow for easy integration of the puzzle box
   as part of a larger whole (<<reqs.adoc#req:main-interface>>).
-
-[[sec:framework-state]]
-==== State
-
-All puzzle modules implement the same state machine shown in
-<<fig:puzzle-module-common-state>>. Note that the arrows indicate state
-transitions that a puzzle module may take on its own. The main controller also
-allows the game operator to manually set the current state as one of the states
-on the right half of <<fig:puzzle-module-common-state>>, which can be used to
-skip a puzzle if a player is stuck (<<reqs.adoc#req:edge-skip-puzzle>>) or
-reset a game if it is malfunctioning (<<reqs.adoc#req:edge-manual-reset>>).
-
-Puzzle modules start in the 'uninitialized' state, where they repeatedly send
-messages to the main controller (see <<sec:main-bridge>>). The state transition
-from 'uninitialized' to 'reset' is forced by the main controller upon
-initialization. States on the right half of <<fig:puzzle-module-common-state>>
-are used during gameplay.
-
-[[fig:puzzle-module-common-state]]
-.Global puzzle module state machine
-image::img/puzzle-module-common-state.svg[]
-
-The state machine described in <<fig:puzzle-module-common-state>> is referred
-to as the global state. Puzzle modules may also declare and define custom state
-variables, which is referred to as auxiliary state. These auxiliary state
-variables contain game-specific variables; e.g. the binary state of each button
-on the Neotrellis puzzle module, or the last passcode entered on the vault
-puzzle module.
-
-Separating the auxiliary state from the generic state allows the main
-controller to handle the auxiliary state as an arbitrary blob, which allows for
-future expansion without modification of the main controller software.
 
 ==== Commands
 
@@ -276,6 +244,45 @@ the puzzle box would rely heavily on polling-based updates internally. To solve
 this, the 'update' command was created. This command is utilized for various
 kinds of updates, including registering new puzzle modules and updating global
 state.
+
+
+[[sec:framework-state]]
+==== State
+
+All puzzle modules implement the same state machine shown in
+<<fig:puzzle-module-common-state>>. Note that the arrows indicate state
+transitions that a puzzle module may take on its own. The main controller also
+allows the game operator to manually set the current state as one of the states
+on the right half of <<fig:puzzle-module-common-state>>, which can be used to
+skip a puzzle if a player is stuck (<<reqs.adoc#req:edge-skip-puzzle>>) or
+reset a game if it is malfunctioning (<<reqs.adoc#req:edge-manual-reset>>).
+
+- Puzzle modules start in the 'uninitialized' state, during which they wait for
+  a handshake command (magic) from the main controller. Once the magic reply is
+  sent, the puzzle module transitions to the _idle_ state.
+- During the 'idle' state, the puzzle module  waits until the main controller
+  forces it into the _playing_ state.
+- While in the 'playing' state, the puzzle module is active, and may be solved
+  by the player(s). The puzzle module's game logic is responsible for checking
+  if the game is finished, upon which it will transition to the _solved_ state.
+- The 'solved' state is similar to the 'idle' state, with the exception that
+  the main controller will not re-start this puzzle module. Unless a module is
+  manually reset by the game operator, it does not return from this state.
+
+[[fig:puzzle-module-common-state]]
+.Global puzzle module state machine
+image::img/puzzle-module-common-state.svg[]
+
+The state machine described in <<fig:puzzle-module-common-state>> is referred
+to as the _global state_ of a puzzle module. Puzzle modules may also declare
+and define custom state variables, which is referred to as _auxiliary state_.
+These auxiliary state variables contain game-specific variables (e.g. the
+binary state of each button on the Neotrellis puzzle module, or the last
+passcode entered on the vault puzzle module).
+
+Separating the auxiliary state from the generic state allows the main
+controller to handle the auxiliary state as an arbitrary blob, which allows for
+future expansion without modification of the main controller software.
 
 === Main Controller
 

@@ -1,0 +1,6 @@
+!theme plain
+skinparam DefaultFontSize 14
+skinparam DefaultFontName Inter
+skinparam RoundCorner 0
+skinparam maxMessageSize 200
+hide footbox

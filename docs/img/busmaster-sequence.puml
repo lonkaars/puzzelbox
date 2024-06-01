@@ -1,0 +1,22 @@
+@startuml
+!include theme.ipuml
+
+participant "Main controller\n(0x00)" as main
+participant "Vault PM\n(0x08)" as a
+participant "NeoTrellis PM\n(0x09)" as b
+participant "NeoTrellis unit 1\n(0x2e)" as neo1
+participant "NeoTrellis unit 2\n(0x2f)" as neo2
+
+activate main
+main -> a --++: SEX?
+a -> main --++: SEX
+|||
+main -> b --++: SEX?
+b -> neo1: I<sup>2</sup>C write
+neo1 -> b: I<sup>2</sup>C read
+b -> neo2: I<sup>2</sup>C write
+neo2 -> b: I<sup>2</sup>C read
+b -> main --++: SEX
+|||
+
+@enduml
