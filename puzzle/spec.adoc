@@ -20,62 +20,62 @@ All puzzle bus messages follow the following format:
 
 [%autowidth]
 |===
-| ``pb_cmd_t command`` | ``uint8_t data[]``
+| ``pb_cmd_t command`` | ``uint8_t sender`` | ``uint8_t data[]``
 |===
 
 The format of ``data[]`` is determined by the message type. These messages are
 the core of the puzzle bus framework, and follow these rules:
 
-- Only the main controller takes initiative to send messages (i.e. puzzle
-	modules wait until they are asked to give information, and do not immediately
-	send new information when internal updates occur, etc.)
-- Puzzle modules can only reply to messages sent from the main controller
-- Messages from the main controller to puzzle modules are sent as *I^2^C read*
-	commands (even ``PB_CMD_WRITE`` commands)
-- Reponses from the puzzle modules back to the main contorller are sent as
-	*I^2^C write* commands
+- Only the main controller takes initiative to send requests (i.e. puzzle
+	modules only respond to requests)
+- All messages are sent as *I^2^C writes*
+- All puzzle modules and the main controller act as I^2^C masters
 
 In order to properly integrate with the puzzle module framework, a puzzle
 module must do the following:
 
 - <<sec:cmd-magic,Respond to the 'magic message'>>
++++<s>+++
 - Keep a global state variable of type ``pb_state_t``
 - <<sec:state-global,Implement the exchange command>>
 - <<sec:state-aux,Implement address 0 for the read and write commands>>
++++</s>+++
 
 [[sec:cmd-magic]]
 === Magic
 
-The puzzle module will receive a message of type ``PB_CMD_MAGIC`` with data
-being equal to ``pb_magic_msg``. Upon verifying that the message data indeed
-matches ``pb_magic_msg``, the puzzle module sends back a message of type
-``PB_CMD_MAGIC`` with data ``pb_magic_res``. This concludes the puzzle module
-registration process.
+The puzzle module will receive a message of type ``PB_CMD_MAGIC`` with
+``data[]`` being equal to ``pb_magic_msg``. Upon verifying that the message
+data indeed matches ``pb_magic_msg``, the puzzle module sends back a message of
+type ``PB_CMD_MAGIC`` with data ``pb_magic_res``. This concludes the puzzle
+module registration process.
 
 Example C code:
 
 ```c
 #include "puzbus.h"
 
-void pb_cmd_magic_handler(const char * data, size_t sz) {
+void pb_cmd_magic_handler(uint8_t sender, const char * data, size_t sz) {
 	if (strncmp(buf, pb_magic_msg, sizeof(pb_magic_msg)) != 0) return;
 
 	const char res[] = {
 		PB_CMD_MAGIC,
+		BUSADDR_SELF,
 		pb_magic_res,
 	};
 
-	i2c_write(BUSADDR_MAIN, res, sizeof(res));
+	i2c_write(sender, res, sizeof(res));
 }
 
-void i2c_read_handle(uint16_t addr, const char * buf, size_t sz) {
-	if (sz < 1) return;
+void i2c_recv_handle(const char * buf, size_t sz) {
+	if (sz < 2) return;
 	pb_cmd_t cmd = (pb_cmd_t) buf[0];
+	uint8_t sender = (uint8_t) buf[1];
 
 	// shift buffer pointer to only contain the puzzle bus message data
-	buf++; sz--;
+	buf += 2; sz -= 2;
 
-	if (cmd == PB_CMD_MAGIC) pb_cmd_magic_handler(buf, sz);
+	if (cmd == PB_CMD_MAGIC) pb_cmd_magic_handler(sender, buf, sz);
 }
 ```
 
