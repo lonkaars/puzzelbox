@@ -7,10 +7,11 @@
 #define CLK 2
 #define DIO 3
 #define SOLVED_PIN 53
-#define I2C_SLAVE_ADDRESS 0x08
-#define HANDSHAKE_CMD 0x47
-#define REQUEST_STATE_CMD 0x53
+#define I2C_MODULE_ADDRESS 0x08  // Address of the puzzle module
+#define HANDSHAKE_CMD 0x47      // 'G' as the magic command for the handshake
+#define REQUEST_STATE_CMD 0x53  // 'S' to request the game state
 
+//! TODO: Both codes below need to be generated using some sort of logic so that it matches the outcome of the game manual
 const int ROW_PINS[ROWS] = {7, 6, 5, 4};
 const int COL_PINS[COLS] = {10, 9, 8};
 const char* validButtons[TOTAL_LEVELS] = {"A2", "B1", "D3", "C2", "C3"};
@@ -35,7 +36,7 @@ void setup() {
     digitalWrite(SOLVED_PIN, LOW);
     display.setBrightness(0x0f);
 
-    Wire.begin(I2C_SLAVE_ADDRESS);
+    Wire.begin(I2C_MODEL_ADDRESS);
     Wire.onRequest(requestEvent);
     Wire.onReceive(receiveEvent);
 }
@@ -85,6 +86,7 @@ void receiveEvent(int howMany) {
         // Implement other command receptions here if necessary
     }
 }
+
 
 void display_final_code(const char* code) {
     uint8_t segs[4] = {0, 0, 0, 0}; // Array to hold the segment data for each digit
