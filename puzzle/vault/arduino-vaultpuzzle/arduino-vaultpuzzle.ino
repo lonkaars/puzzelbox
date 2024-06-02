@@ -169,13 +169,11 @@ void blink_display(char num) {
 void receiveEvent(int howMany) {
   if (Wire.available() > 0) {
     char c = Wire.read();
-    if (c == 'S' && puzzleState == STATE_UNINITIALIZED) {
-      digitalWrite(ledPin, HIGH);
+    if (c == 'M' && puzzleState == STATE_UNINITIALIZED) {
       initialize_system();
       puzzleState = STATE_RESET;
       currentLevel = 0;
       display_code(currentLevel);
-      digitalWrite(ledPin, LOW);
     }
   }
 }
