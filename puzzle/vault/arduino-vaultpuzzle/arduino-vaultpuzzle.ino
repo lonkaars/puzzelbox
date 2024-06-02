@@ -36,7 +36,7 @@ void setup() {
     digitalWrite(SOLVED_PIN, LOW);
     display.setBrightness(0x0f);
 
-    Wire.begin(I2C_MODEL_ADDRESS);
+    Wire.begin(I2C_MODULE_ADDRESS);
     Wire.onRequest(requestEvent);
     Wire.onReceive(receiveEvent);
 }
