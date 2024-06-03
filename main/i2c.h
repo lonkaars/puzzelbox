@@ -47,5 +47,7 @@ int write_i2c(uint8_t addr, uint8_t *input, size_t len);
 */
 int write_read_i2c(uint8_t addr, uint8_t *input, size_t input_len, uint8_t *output, size_t output_len);
 
+uint8_t* scan_bus(uint8_t *array);
+
 /** \brief looking for slave addresses and requesting updates */
 void bus_task();
