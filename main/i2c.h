@@ -10,6 +10,7 @@
 #define SCL_PIN 17
 #define I2C_PORT i2c0
 #define MAX_SLAVES 10
+#define MAX_TIMEOUT_TIME 50 //ms
 
 /**
  * \brief initialize all required gpio for i2c usage on the pico
@@ -40,6 +41,11 @@ int read_i2c(uint8_t addr, uint8_t *output, size_t len);
  * address with length len.
  */
 int write_i2c(uint8_t addr, uint8_t *input, size_t len);
+
+/**
+ * \brief
+*/
+int write_read_i2c(uint8_t addr, uint8_t *input, size_t input_len, uint8_t *output, size_t output_len);
 
 /** \brief looking for slave addresses and requesting updates */
 void bus_task();

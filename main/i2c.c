@@ -1,11 +1,22 @@
 #include "i2c.h"
 #include "init.h"
+#include "sock.h"
+#include "pb/types.h"
 
 #include <stdio.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 #include <pico/stdlib.h>
 #include <hardware/i2c.h>
+
+#include <lwip/opt.h>
+#include <lwip/sys.h>
+#include <lwip/api.h>
+#include <string.h>
+
+uint8_t found[MAX_SLAVES];
+extern struct netconn* current_connection;
 
 void init_i2c() {
 	i2c_init(I2C_PORT, 100 * 1000); // currently at 100kHz
@@ -38,26 +49,55 @@ void init_addr_array(uint8_t array[], int size) {
 	}
 }
 
+int write_read_i2c(uint8_t addr, uint8_t *input, size_t input_len, uint8_t *output, size_t output_len){
+	// herhaalde start conditie voor direct lezen na i2c write (?)
+	int ret = write_i2c(addr, input, input_len);
+	if (ret < 0) {
+		printf("Write failure while writing data to bus.\n");
+		return ret;
+	}
+
+	// wait for response
+	absolute_time_t start_time = get_absolute_time();
+	while ( absolute_time_diff_us(start_time, get_absolute_time()) / 1000 < MAX_TIMEOUT_TIME ){
+		ret = read_i2c(addr, output, output_len);
+		if( ret > 0 ) {
+			return ret;
+		}
+		sleep_ms(1);
+	}
+
+	printf("Timeout occurred while waiting for slave response.\n");
+	return -1;
+}
+
 // Make sure that current addresses are checked (modules), and invalid addresses are ignore (neotrellis slave)
 uint8_t* scan_bus(uint8_t *array) {
 	int ret;
 	int i = 0;
-	uint8_t rxdata;
+	uint8_t rxdata, handshake_data;
+	init_addr_array(array, MAX_SLAVES);
 
-	for(int addr = 1; addr < (1<<7); addr++) {
-		// ignore reserved addresses
-		// These are any addresses of the form 000 0xxx or 111 1xxx
+	for(int addr = 1; addr < (1<<7); addr++) {	
+		// fix handshake
+		ret = read_i2c(addr, &rxdata, 1);
+
+		if ( ret <= 0 )
+			continue;
+
+		printf("found possible i2c slave on addr: %d\n", addr);
+			
+		// do handshake
+		ret = write_read_i2c(addr, (uint8_t*)pb_magic_msg, sizeof(pb_magic_msg), (uint8_t*)handshake_data, sizeof(pb_magic_res)); // fix data + length + everything	
 		
-		// if( reserved_addr(addr) ){
-		// 	ret = PICO_ERROR_GENERIC;
-		// }else{
-		// 	
-		ret = i2c_read_blocking(I2C_PORT, addr, &rxdata, 1, false);
-		//}
+		if ( ret != sizeof(pb_magic_res))
+			continue;
+		
+		if ( ret > 0 && (memcmp(handshake_data, pb_magic_res, sizeof(pb_magic_res)) == 0)) {
+			char buf[80];
+			size_t s = snprintf(buf, "found i2c puzzle module at address: 0x%02x\n");
+			netconn_write(current_connection, buf, s, NETCONN_COPY);
 
-		// if acknowledged -> ret == number of bytes sent
-		if(ret > 0){
-			printf("found i2c slave on addr: %d\n", addr);
 			array[i] = addr;
 			i++;
 		}
@@ -71,13 +111,10 @@ void bus_task() {
 	// send updates at regular intervals
 	await_init();
 	
-	int i = 0;
-	uint8_t found[MAX_SLAVES];
-	init_addr_array(found, MAX_SLAVES);
 	scan_bus(found);
 
 	while(1) {
-		// printf("Bus scan!");
+		// add check if bus is in use
 
 		uint8_t data;
 		for(int i = 0; i < MAX_SLAVES; i++){
@@ -90,5 +127,7 @@ void bus_task() {
 			}
 
 		}
+
+		sleep_ms(1000); // wait for one second before next loop
 	}
 }
