@@ -8,8 +8,14 @@
 #define DIO 3
 #define SOLVED_PIN 53
 #define I2C_MODULE_ADDRESS 0x08  // Address of the puzzle module
-#define HANDSHAKE_CMD 0x47      // 'G' as the magic command for the handshake
+#define HANDSHAKE_RECEIVED {0x70, 0x75, 0x7a, 0x62, 0x75, 0x73}   // Magic command for the handshake
+#define HANDSHAKE_SEND {0x67, 0x61, 0x6d, 0x69, 0x6e, 0x67}      // Magic command for the handshake
 #define REQUEST_STATE_CMD 0x53  // 'S' to request the game state
+
+//! TODO
+// Only the handshake should use master-slave logic
+// States use master-master logic (no request, just writes to correct address)
+
 
 //! TODO: Both codes below need to be generated using some sort of logic so that it matches the outcome of the game manual
 const int ROW_PINS[ROWS] = {7, 6, 5, 4};
@@ -71,21 +77,47 @@ void loop() {
 }
 
 void requestEvent() {
-    // Simply send the current state or the last received command as needed
-    Wire.write(puzzleState); // Send the current game state only when asked
+    if (puzzleState == STATE_PLAYING) {
+        uint8_t responseData[] = HANDSHAKE_SEND;
+        Wire.write(responseData, sizeof(responseData));
+        Serial.println("Handshake response sent.");
+    }
+    // } else {
+    //     // Optionally handle other states if needed, send different data or handle errors
+    //     Wire.write((uint8_t)STATE_UNINITIALIZED);
+    // }
 }
 
 void receiveEvent(int howMany) {
-    if (Wire.available()) {
-        uint8_t cmd = Wire.read(); // Properly read the command from the master
-        if (cmd == HANDSHAKE_CMD) {
-            Serial.println("Handshake command received.");
-            puzzleState = cmd;  // Update puzzleState to reflect received command, if you wish to echo it back
-            initialize_system();
+    if (howMany == 6) {
+        uint8_t expectedBytes[] = HANDSHAKE_RECEIVED;
+        uint8_t receivedBytes[6];
+        bool match = true;
+
+        for (int i = 0; i < 6; i++) {
+            receivedBytes[i] = Wire.read();
+            if (receivedBytes[i] != expectedBytes[i]) {
+                match = false;
+                break;
+            }
         }
-        // Implement other command receptions here if necessary
+
+        if (match) {
+            Serial.println("Correct handshake data received.");
+            puzzleState = STATE_PLAYING;
+            initialize_system();
+        } else {
+            Serial.println("Incorrect handshake data received.");
+            puzzleState = STATE_ERROR;
+        }
+    } else {
+        Serial.print("Received wrong number of bytes: ");
+        Serial.println(howMany);
+        puzzleState = STATE_ERROR;
     }
 }
+
+
 
 
 void display_final_code(const char* code) {
