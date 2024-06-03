@@ -6,8 +6,12 @@ extern "C" {
 #endif
 
 #ifdef __GNUC__
+#ifndef __packed
 #define __packed __attribute__((packed))
+#endif
+#ifndef __weak
 #define __weak __attribute__((weak))
+#endif
 #endif
 #ifndef __packed
 #error Could not determine packed attribute for current compiler

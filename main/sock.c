@@ -53,6 +53,7 @@ void recv_handler(struct netconn* conn, struct netbuf* buf) {
 		uint16_t len;
 		netbuf_data(buf, (void**)&data, &len);
 		
+		printf("now scanning the bus!!!!\n");
 		scan_bus(found);
 
 		// continue early if more data is needed to complete message

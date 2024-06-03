@@ -75,7 +75,8 @@ int write_read_i2c(uint8_t addr, uint8_t *input, size_t input_len, uint8_t *outp
 uint8_t* scan_bus(uint8_t *array) {
 	int ret;
 	int i = 0;
-	uint8_t* rxdata, handshake_data;
+	uint8_t * rxdata;
+	uint8_t * handshake_data;
 	init_addr_array(array, MAX_SLAVES);
 
 	for(int addr = 1; addr < (1<<7); addr++) {	
@@ -85,15 +86,19 @@ uint8_t* scan_bus(uint8_t *array) {
 		if ( ret <= 0 )
 			continue;
 
-		printf("found possible i2c slave on addr: %d\n", addr);
+		char buf[80];
+		size_t s = snprintf(buf, 80,"found i2c puzzle module at address: 0x%02x\n", addr);
+		netconn_write(current_connection, buf, s, NETCONN_COPY);
+		printf("%.*s", s, buf);
 			
 		// do handshake
-		ret = write_read_i2c(addr, (uint8_t*)pb_magic_msg, sizeof(pb_magic_msg), &handshake_data, sizeof(pb_magic_res)); // fix data + length + everything	
+		ret = write_read_i2c(addr, (uint8_t*)pb_magic_msg, sizeof(pb_magic_msg), handshake_data, sizeof(pb_magic_res)); // fix data + length + everything	
 		
 		if ( ret != sizeof(pb_magic_res))
 			continue;
 		
 		if ( ret > 0 && (memcmp(handshake_data, pb_magic_res, sizeof(pb_magic_res)) == 0)) {
+			printf("this was an actual device!!!1111!\n");
 			char buf[80];
 			size_t s = snprintf(buf, 80,"found i2c puzzle module at address: 0x%02x\n");
 			netconn_write(current_connection, buf, s, NETCONN_COPY);
