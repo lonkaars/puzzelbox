@@ -9,6 +9,7 @@
 #include "config.h"
 #include "i2ctcpv1.h"
 #include "sock.h"
+#include "i2c.h"
 #include <hardware/i2c.h>
 
 extern uint8_t found[MAX_SLAVES];
