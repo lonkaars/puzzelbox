@@ -1,8 +1,5 @@
 #include <mpack.h>
-#include <stdio.h>
-
-// MIN() macro
-#include <sys/param.h>
+#include <sys/param.h> // MIN() macro
 
 #include "i2ctcpv1.h"
 

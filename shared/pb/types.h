@@ -6,67 +6,83 @@ extern "C" {
 #endif
 
 #ifdef __GNUC__
-#define __packed __attribute__((packed))
 #define __weak __attribute__((weak))
-#endif
-#ifndef __packed
-#error Could not determine packed attribute for current compiler
-#define __packed
 #endif
 #ifndef __weak
 #error Could not determine weak attribute for current compiler
 #define __weak
 #endif
 
-/**
- * \brief puzzle bus command types
- *
- * The first byte of a puzzle bus message's data indicates the command type.
- */
-enum __packed pb_cmd {
-	PB_CMD_READ, //!< read a puzzle module property
-	PB_CMD_WRITE, //!< write to a puzzle module property
-	PB_CMD_SEX, //!< state exchange
-	PB_CMD_MAGIC, //!< magic message
+typedef uint16_t i2c_addr_t;
+
+//! puzzle bus command types
+enum pb_cmd_id {
+	PB_CMD_REQ_READ, //!< request a puzzle module property
+	PB_CMD_RES_READ, //!< respond to a puzzle module property request
+	PB_CMD_REQ_WRITE, //!< request to write a puzzle module property
+	PB_CMD_REQ_STATE, //!< request global state
+	PB_CMD_RES_STATE, //!< respond to a global state request
+	PB_CMD_MAGIC, //!< magic message (regular i2c command)
 };
-// typedef enum pb_cmd pb_cmd_t;
+typedef enum pb_cmd_id pb_cmd_id_t;
 
-/** \brief magic sent from main controller to puzzle module */
-static const char pb_magic_msg[] = { 0x70, 0x75, 0x7a, 0x62, 0x75, 0x73 };
-/** \brief magic reply from puzzle module back to main controller */
-static const char pb_magic_res[] = { 0x67, 0x61, 0x6d, 0x69, 0x6e, 0x67 };
+//! magic sent from main controller to puzzle module
+static const char pb_cmd_magic_msg[] = { 0x70, 0x75, 0x7a, 0x62, 0x75, 0x73 };
+//! magic reply from puzzle module back to main controller
+static const char pb_cmd_magic_res[] = { 0x67, 0x61, 0x6d, 0x69, 0x6e, 0x67 };
 
-/** \brief Puzzle bus global states */
-enum __packed pb_state {
-	PB_GS_NOINIT,  //!< uninitialized (only used by puzzle modules)
-	PB_GS_IDLE,    //!< puzzle not started yet
+//! puzzle bus global states
+enum pb_global_state {
+	PB_GS_NOINIT, //!< uninitialized (only used by puzzle modules)
+	PB_GS_IDLE, //!< puzzle not started yet
 	PB_GS_PLAYING, //!< puzzle actively being solved
-	PB_GS_SOLVED,  //!< puzzle completed
+	PB_GS_SOLVED, //!< puzzle completed
 };
-// typedef enum pb_state pb_state_t;
+typedef enum pb_global_state pb_global_state_t;
 
-typedef struct __packed {
-	const enum pb_cmd cmd;
-	const uint8_t data[];
-} pb_cmd_t;
+//! puzzle bus message header (shared by all commands)
+typedef struct {
+	const pb_cmd_id_t type; //!< command type
+	const i2c_addr_t sender; //!< i2c address of sender
+} pb_msg_header_t;
 
-typedef struct __packed {
-	const uint8_t address;
-	const uint8_t data[];
-} pb_cmd_read_t;
+//! PB_CMD_REQ_READ data
+typedef struct {
+	const pb_msg_header_t header;
+	const uint8_t propid; //!< state property id to return
+} pb_cmd_req_read_t;
 
-typedef struct __packed {
-	const uint8_t address;
-	const uint8_t data[];
-} pb_cmd_write_t;
+//! PB_CMD_RES_READ data
+typedef struct {
+	const pb_msg_header_t header;
+	const uint8_t propid; //!< id of returned state property
+	const uint8_t value[];
+} pb_cmd_res_read_t;
 
-typedef struct __packed {
-	const enum pb_state main_state;
-} pb_cmd_sex_t;
+//! PB_CMD_REQ_WRITE data
+typedef struct {
+	const pb_msg_header_t header;
+	const uint8_t propid; //!< state property id to write
+	const uint8_t value[]; //!< new value of property
+} pb_cmd_req_write_t;
 
-enum __packed {
-	PB_ADDR_GS = 0x00, //!< global state address
-};
+//! PB_CMD_REQ_STATE data
+typedef struct {
+	const pb_msg_header_t header;
+	const pb_global_state_t state; //!< global state of sender
+} pb_cmd_req_state_t;
+
+//! PB_CMD_RES_STATE data
+typedef struct {
+	const pb_msg_header_t header;
+	const pb_global_state_t state; //!< global state of sender
+} pb_cmd_res_state_t;
+
+//! PB_CMD_MAGIC data
+typedef struct {
+	const pb_msg_header_t header;
+	const char magic[]; //!< magic value
+} pb_cmd_magic_t;
 
 #ifdef __cplusplus
 }
