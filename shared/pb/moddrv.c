@@ -17,25 +17,8 @@ __weak void pbdrv_hook_mod_state_write(enum pb_state state) {
 	_global_state = state;
 }
 
-__weak void pbdrv_i2c_recv(uint16_t i2c_addr, const char * buf, size_t sz) {
-	if (sz == 0) return;
-	enum pb_cmd cmd = (enum pb_cmd) buf[0];
-
-	// shift buffer pointer to only contain the puzzle bus message buf
-	buf++;
-	sz--;
-
-	// allow user to implement custom commands
-	if (pbdrv_hook_cmd(i2c_addr, cmd, buf, sz))
-		return;
-
-	switch (cmd) {
-		case PB_CMD_READ: return pbdrv_handle_read(i2c_addr, buf, sz);
-		case PB_CMD_WRITE: return pbdrv_handle_write(i2c_addr, buf, sz);
-		case PB_CMD_MAGIC: return pbdrv_handle_magic(i2c_addr, buf, sz);
-		case PB_CMD_SEX: return pbdrv_handle_sex(i2c_addr, buf, sz);
-		default: return;
-	}
+__weak void pbdrv_i2c_recv(const char * buf, size_t sz) {
+	return;
 }
 
 __weak void pbdrv_handle_read(uint16_t i2c_addr, const char * buf, size_t sz) {

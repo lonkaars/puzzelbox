@@ -24,7 +24,7 @@
 extern "C" {
 #endif
 
-void pbdrv_i2c_recv(uint16_t i2c_addr, const char * buf, size_t sz);
+void pbdrv_i2c_recv(const char * buf, size_t sz);
 void pbdrv_i2c_send(uint16_t i2c_addr, const char * buf, size_t sz);
 
 enum pb_state pbdrv_hook_mod_state_read();
