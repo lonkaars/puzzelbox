@@ -7,15 +7,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 project(pbtest C CXX ASM)
 
 add_executable(test
-	ExampleTest.cpp
 	i2ctcp/main.cpp
+	pbdrv/main.cpp
 	)
 
 add_subdirectory(lib/googletest)
 add_subdirectory(lib/pbdrv)
 add_subdirectory(lib/i2ctcp)
 
-# target_include_directories(tests PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(test
 	gtest_main
 	i2ctcp

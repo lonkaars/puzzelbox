@@ -23,6 +23,7 @@ enum pb_cmd_id {
 	PB_CMD_REQ_WRITE, //!< request to write a puzzle module property
 	PB_CMD_REQ_STATE, //!< request global state
 	PB_CMD_RES_STATE, //!< respond to a global state request
+	PB_CMD_REQ_SET_STATE, //!< request to overwrite module global state
 	PB_CMD_MAGIC, //!< magic message (regular i2c command)
 };
 typedef enum pb_cmd_id pb_cmd_id_t;
@@ -78,6 +79,12 @@ typedef struct {
 	const pb_msg_header_t header;
 	const pb_global_state_t state; //!< global state of sender
 } pb_cmd_res_state_t;
+
+//! PB_CMD_REQ_SET_STATE data
+typedef struct {
+	const pb_msg_header_t header;
+	const pb_global_state_t state; //!< new global state
+} pb_cmd_req_set_state_t;
 
 //! PB_CMD_MAGIC data
 typedef struct {

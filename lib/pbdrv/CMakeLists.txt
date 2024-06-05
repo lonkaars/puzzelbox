@@ -10,6 +10,8 @@ add_compile_definitions(DEBUG)
 
 project(pbdrv C CXX)
 
+add_subdirectory(../mpack ${CMAKE_CURRENT_BINARY_DIR}/mpack)
+
 if(DEFINED ARDUINO)
 	set(PBDRV_ARDUINO true)
 endif()
@@ -18,6 +20,9 @@ include_directories(.)
 add_library(pbdrv STATIC
 	pb-read.c
 	pb-write.c
+	)
+target_link_libraries(pbdrv
+	mpack
 	)
 target_include_directories(pbdrv SYSTEM INTERFACE .)
 
