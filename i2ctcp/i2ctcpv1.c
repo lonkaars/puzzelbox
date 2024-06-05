@@ -1,5 +1,7 @@
 #include <mpack.h>
-#include <sys/param.h> // MIN() macro
+#ifndef MIN
+#define MIN(a,b) (((a) < (b)) ? (a) : (b))
+#endif
 
 #include "i2ctcpv1.h"
 
