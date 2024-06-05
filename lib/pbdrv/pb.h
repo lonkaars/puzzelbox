@@ -14,5 +14,5 @@
 // #define BUSADDR_MOD_AUTOMATION 0
 
 // main controller
-#define BUSADDR_MAIN 0x00
+#define BUSADDR_MOD_MAIN 0x00
 

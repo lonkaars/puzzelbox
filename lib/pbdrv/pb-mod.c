@@ -1,5 +1,5 @@
-#include "types.h"
-#include "moddrv.h"
+#include "pb-types.h"
+#include "pb.h"
 
 //! fallback module name
 __weak const char * PBDRV_MOD_NAME = "???";
@@ -23,3 +23,4 @@ __weak void pbdrv_i2c_recv(const uint8_t * buf, size_t sz) {
 }
  
 __weak void pbdrv_hook_main_state_update(pb_global_state_t state) { }
+

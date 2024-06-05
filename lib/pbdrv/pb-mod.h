@@ -14,14 +14,16 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-#include "types.h"
-
-extern const char * PBDRV_MOD_NAME;
-extern const i2c_addr_t PBDRV_MOD_ADDR;
+#include "pb-types.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+//! puzzle module name (optional, default = "???")
+extern const char * PBDRV_MOD_NAME;
+//! puzzle module bus address (required)
+extern const i2c_addr_t PBDRV_MOD_ADDR;
 
 void pbdrv_i2c_recv(const uint8_t * buf, size_t sz);
 void pbdrv_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz);

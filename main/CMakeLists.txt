@@ -7,7 +7,8 @@ set(PICO_BOARD pico_w)
 
 include(lib/pico-sdk/pico_sdk_init.cmake)
 include(lib/FreeRTOS-Kernel/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
-include(../i2ctcp/include.cmake)
+add_subdirectory(lib/mpack)
+add_subdirectory(lib/i2ctcp)
 
 project(puzzlebox_main C CXX ASM)
 

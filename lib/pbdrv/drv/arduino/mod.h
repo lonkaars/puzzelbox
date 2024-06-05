@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../moddrv.h"
+#include "../../pb-mod.h"
 
 #ifdef __cplusplus
 extern "C" {

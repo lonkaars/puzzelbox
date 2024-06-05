@@ -5,8 +5,8 @@
 #include "sock.h"
 #include "xxd.h"
 
-#include "pb/bus.h"
-#include "pb/types.h"
+#include "pb.h"
+#include "pb-types.h"
 
 // #include "pb/mod/main.h"
 

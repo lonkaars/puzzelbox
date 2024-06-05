@@ -14,7 +14,7 @@ set(ARDUINO_BOARD "Arduino Uno [avr.uno]")
 
 project(pb_mod_dummy C CXX)
 
-include(../../shared/pb.cmake)
+add_subdirectory(lib/pbdrv)
 
 add_executable(main
 	main.cpp
