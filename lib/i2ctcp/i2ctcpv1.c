@@ -15,21 +15,12 @@ int i2ctcp_read(i2ctcp_msg_t * target, const char * buf, size_t buf_sz) {
 		target->length = target->_rdata = mpack_expect_bin(&reader);
 		if (mpack_reader_error(&reader) != mpack_ok) return -1;
 		target->data = (char *) malloc(target->length);
-
-		// seek forward in buf to where binary data begins (to avoid having to read
-		// from private member reader.data in the memcpy below)
-		buf += buf_sz - mpack_reader_remaining(&reader, NULL);
 	}
 
 	// continue reading chunks of target->data until the amount of bytes
 	// specified in target->length
-	size_t to_read = MIN(mpack_reader_remaining(&reader, NULL), target->_rdata);
 	char * data = target->data + target->length - target->_rdata;
-	memcpy(data, buf, to_read);
-	target->_rdata -= to_read;
-	// NOTE: memcpy is used here because mpack_read_bytes requires that a tag was
-	// opened, which is not the case for the chunks following the initial mpack
-	// header
+	target->_rdata -= mpack_read_remaining_bytes(&reader, data, target->_rdata);
 
 	// if rdata = 0, the message was completely read
 	return target->_rdata;

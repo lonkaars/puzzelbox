@@ -16,8 +16,10 @@ add_library(mpack STATIC
 	src/src/mpack/mpack-platform.c
 	src/src/mpack/mpack-reader.c
 	src/src/mpack/mpack-writer.c
+	read-remaining.c
 	)
 target_include_directories(mpack SYSTEM INTERFACE
+	.
 	src/src/mpack
 	)
 
