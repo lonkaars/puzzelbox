@@ -7,7 +7,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 project(pbtest C CXX ASM)
 
 include(../i2ctcp/include.cmake)
-include(../shared/include.cmake)
+include(../shared/pb.cmake)
 
 add_executable(test
 	ExampleTest.cpp

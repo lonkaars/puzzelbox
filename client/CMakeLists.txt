@@ -11,7 +11,7 @@ add_compile_definitions(DEBUG)
 project(puzzlebox_client C CXX)
 
 include(../i2ctcp/include.cmake)
-include(../shared/include.cmake)
+include(../shared/pb.cmake)
 
 add_executable(pbc
 	main.cpp

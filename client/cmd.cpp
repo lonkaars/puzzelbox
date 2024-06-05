@@ -4,12 +4,12 @@
 #include <string.h>
 
 #include "cmd.h"
-#include "pb/types.h"
+// #include "pb/types.h"
 #include "rl.h"
 #include "i2c.h"
 #include "parse.h"
 
-#include "pb/bus.h"
+// #include "pb/bus.h"
 
 char* consume_token(char* input, const char* ifs) {
 	strtok(input, ifs);
@@ -68,30 +68,12 @@ void cmd_send(char * addr_str) {
 }
 
 void cmd_reset(char*) {
-	const char msg[] = {
-		PB_CMD_WRITE,
-		0x00,
-		PB_GS_IDLE,
-	};
-	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
 }
 
 void cmd_skip(char*) {
-	const char msg[] = {
-		PB_CMD_WRITE,
-		0x00,
-		PB_GS_SOLVED,
-	};
-	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
 }
 
 void cmd_ls(char*) {
-	return;
-	const char msg[] = {
-		PB_CMD_READ,
-		// TODO: which address is this?
-	};
-	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
 }
 
 extern bool i2c_dump_send;

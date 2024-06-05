@@ -14,16 +14,15 @@ set(ARDUINO_BOARD "Arduino Uno [avr.uno]")
 
 project(pb_mod_dummy C CXX)
 
-include(../../shared/include.cmake)
+include(../../shared/pb.cmake)
 
 add_executable(main
 	main.cpp
 	)
 
-# target_link_libraries(main
-# 	puzbus
-# 	# pbdrv-mod-arduino
-# 	)
+target_link_libraries(main
+	pbdrv-mod
+	)
 target_link_arduino_libraries(main
 	core
 	Wire

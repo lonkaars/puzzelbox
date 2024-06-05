@@ -16,45 +16,15 @@
 
 #include "types.h"
 
-#ifndef PBDRV_MOD_NAME
-#define PBDRV_MOD_NAME "???"
-#endif
+extern const char * PBDRV_MOD_NAME;
+extern const i2c_addr_t PBDRV_MOD_ADDR;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void pbdrv_i2c_recv(const char * buf, size_t sz);
-void pbdrv_i2c_send(uint16_t i2c_addr, const char * buf, size_t sz);
-
-enum pb_state pbdrv_hook_mod_state_read();
-void pbdrv_hook_mod_state_write(enum pb_state state);
-void pbdrv_hook_main_state_update(enum pb_state state);
-
-/**
- * \name hooks
- *
- * Implementing this function allows you to use the weak implementation of \c
- * pbdrv_i2c_recv() while being able to implement custom command handlers.
- *
- * \return true if the cmd was recognized, or false to forward the command to
- * the default handlers
- *
- * \{
- */
-
-/** \brief cmd receive hook */
-bool pbdrv_hook_cmd(uint16_t i2c_addr, enum pb_state cmd, const char * buf, size_t sz);
-/** \brief read cmd hook */
-bool pbdrv_hook_read(uint16_t i2c_addr, uint8_t addr);
-/** \brief write cmd hook */
-bool pbdrv_hook_write(uint16_t i2c_addr, uint8_t addr, const char * buf, size_t sz);
-//! \}
-
-void pbdrv_handle_read(uint16_t i2c_addr, const char * buf, size_t sz);
-void pbdrv_handle_write(uint16_t i2c_addr, const char * buf, size_t sz);
-void pbdrv_handle_magic(uint16_t i2c_addr, const char * buf, size_t sz);
-void pbdrv_handle_sex(uint16_t i2c_addr, const char * buf, size_t sz);
+void pbdrv_i2c_recv(const uint8_t * buf, size_t sz);
+void pbdrv_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz);
 
 #ifdef __cplusplus
 }

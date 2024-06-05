@@ -1,23 +1,17 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-void receiveEvent(int howMany){
-	while (Wire.available()){
-		char c = Wire.read();
-		Serial.print(c, HEX);
-	}
-	Serial.println();
-}
+#include "pb/drv/arduino/mod.h"
+
+const char * PBDRV_MOD_NAME = "dummy";
+const i2c_addr_t PBDRV_MOD_ADDR = 0x20;
 
 void setup() {
-	Wire.begin(0x00);
-	Wire.onReceive(receiveEvent);
+	pbdrv_setup();
 }
 
 void loop() {
-	const uint8_t data[] = {0xff, 0x00, 0xde, 0xad, 0xbe, 0xef};
-	Wire.beginTransmission(0x69);
-	Wire.write(data, sizeof(data));
-	Wire.endTransmission();
+	pbdrv_i2c_send(0x00, (uint8_t *) "hoi", 3);
+	delay(100);
 }
 
