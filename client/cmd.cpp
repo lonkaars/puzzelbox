@@ -101,19 +101,6 @@ void cmd_dump(char * mode) {
 }
 char** cmd_dump_complete(const char * text, int begin, int end) {
 	int word = rl_word(rl_line_buffer, begin);
-	if (word != 1) return NULL;
-
-	return rl_completion_matches(text, [](const char * text, int state) -> char * {
-		static size_t i = 0;
-		if (state == 0) i = 0;
-
-		while (dump_modes[i] != NULL) {
-			const char * mode = dump_modes[i++];
-			if (strncmp(text, mode, strlen(text)) == 0)
-				return strdup(mode);
-		}
-		return NULL;
-	});
-
+	if (word == 1) return rl_complete_list(text, dump_modes);
 	return NULL;
 }
