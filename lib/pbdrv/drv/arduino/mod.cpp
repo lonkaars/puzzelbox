@@ -43,5 +43,8 @@ __weak void pbdrv_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
 		if(retry == 0) break;
 		retry--;
 	} while (error);
+
+	if (error)
+		Serial.print(error, DEC);
 }
 
