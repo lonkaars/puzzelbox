@@ -14,9 +14,8 @@
 static void recv_event(int bytes) {
 	uint8_t * data = (uint8_t *) malloc(bytes);
 	size_t size = 0;
-	while (Wire.available()) {
+	while (Wire.available())
 		data[size++] = Wire.read();
-	}
 
 	pbdrv_i2c_recv(data, size);
 }
@@ -29,22 +28,8 @@ void pbdrv_setup() {
 }
 
 __weak void pbdrv_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
-	uint8_t error;
-	uint8_t retry = 4;
-	do {
-		error = 0;
-		Wire.beginTransmission((int) addr);
-		size_t written = Wire.write(buf, sz);
-		if (written != sz)
-			error++;
-		error += Wire.endTransmission(true);
-		Wire.setWireTimeout(PB_TIMEOUT_US, true);
-
-		if(retry == 0) break;
-		retry--;
-	} while (error);
-
-	if (error)
-		Serial.print(error, DEC);
+	Wire.beginTransmission((int) addr);
+	Wire.write(buf, sz);
+	Wire.endTransmission(true);
 }
 
