@@ -9,6 +9,7 @@ include(lib/pico-sdk/pico_sdk_init.cmake)
 include(lib/FreeRTOS-Kernel/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
 add_subdirectory(lib/mpack)
 add_subdirectory(lib/i2ctcp)
+add_subdirectory(lib/pbdrv)
 
 project(puzzlebox_main C CXX ASM)
 
@@ -36,5 +37,6 @@ target_link_libraries(main
 	FreeRTOS-Kernel-Heap4
 	i2ctcp
 	mpack
+	pbdrv-mod
 	)
 

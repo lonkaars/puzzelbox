@@ -1,4 +1,6 @@
-# this file is for lazy people (loek)
+# NOTE: CMAKE IS THE PRIMARY BUILD SYSTEM FOR SUBFOLDERS/LIBRARIES IN THIS
+# REPOSITORY. THIS FILE IS PROVIDED PURELY FOR CONVENIENCE, AND SHOULD NOT
+# BECOME AN ESSENTIAL PART OF THE BUILD SYSTEM!
 
 BUILD_DIR ?= build
 TARGET ?= $(BUILD_DIR)/main
@@ -17,12 +19,11 @@ $(BUILD_DIR)/build.ninja: CMakeLists.txt
 
 $(TARGET): $(BUILD_DIR)/build.ninja FORCE
 	@ninja -C $(BUILD_DIR)
-# ninja automatically builds in parallel, so is preferred
 
 clean: FORCE
 	$(RM) -r $(BUILD_DIR)
 
-# forward other targets to cmake
+# Forward any unknown targets to Ninja
 ifneq ($(MAKECMDGOALS),)
 %::
 	@ninja -C $(BUILD_DIR) $@

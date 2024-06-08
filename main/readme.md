@@ -5,17 +5,23 @@ This directory contains the software for the main controller of the Puzzle Box.
 ## building
 
 1. make sure the submodules are initialized
-2. copy [`config.def.h`](./config.def.h) to `config.h` and edit the defaults
-3. `mkdir build`
-4. `cmake -B build`
-5. `make -C build` or `ninja -C build` (choose your preference)
+2. create a `config.h` file and define some options (see `config.def.h` for all
+   options):
+   ```c
+   #pragma once
 
-alternatively, a makefile is provided for convenience
+   #define CFG_NET_SSID "network name"
+   #define CFG_NET_PASS "network password"
+   #define CFG_NET_AUTH CYW43_AUTH_WPA2_AES_PSK
 
-## "flashing"
+   #include "config.def.h"
+   ```
+3. use CMake to build
 
-1. [build](#building)
-2. (re)connect the raspberry pi pico while holding the BOOTSEL button (this is
-   the only button)
+## flashing
+
+1. build
+2. hold the BOOTSEL button while resetting the pico (by power cycling or
+   pulling pin 30 (RUN) to GND)
 3. `picotool load build/main.uf2`
 

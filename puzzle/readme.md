@@ -16,3 +16,16 @@ these subfolders, make sure you have done the following:
 - Install the "Arduino AVR Boards" package (1.8.6 works at the time of writing)
 
 [arduino-cmake]: https://github.com/a9183756-gh/Arduino-CMake-Toolchain
+
+## ESP-based puzzle modules
+
+### ESP-IDF SDK Setup instructions
+
+1. Install ESP-IDF extension in Visual Studio Code
+2. Install using 'express' option
+3. Install ESP-IDF v5.2.1 (release version)
+
+   Additional help:
+   - [For windows](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/windows-setup.html#get-started-windows-first-steps)
+   - [For Linux](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/linux-macos-setup.html#get-started-linux-macos-first-steps)
+
