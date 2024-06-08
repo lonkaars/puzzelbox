@@ -13,10 +13,10 @@ void blink_task() {
 	await_init(); // `blink_task` uses GPIO
 
 	while (true) {
-		cyw43_arch_gpio_put(CFG_LED_PIN, 0);
-		vTaskDelay(250 / portTICK_PERIOD_MS);
 		cyw43_arch_gpio_put(CFG_LED_PIN, 1);
-		vTaskDelay(250 / portTICK_PERIOD_MS);
+		vTaskDelay(50 / portTICK_PERIOD_MS);
+		cyw43_arch_gpio_put(CFG_LED_PIN, 0);
+		vTaskDelay(1000 / portTICK_PERIOD_MS);
 	}
 }
 

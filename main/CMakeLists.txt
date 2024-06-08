@@ -20,6 +20,7 @@ add_executable(main
 	init.c
 	sock.c
 	i2c.c
+	mod.c
 	)
 
 pico_enable_stdio_usb(main 1)
@@ -28,7 +29,7 @@ pico_add_extra_outputs(main)
 
 include_directories(lib/pico-sdk/lib/lwip/contrib/ports/freertos/include)
 
-target_include_directories(main PRIVATE ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(main PRIVATE .)
 target_link_libraries(main
 	pico_cyw43_arch_lwip_sys_freertos
 	pico_stdlib

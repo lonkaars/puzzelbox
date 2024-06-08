@@ -1,6 +1,6 @@
 #include "config.h"
 #include "init.h"
-#include "i2c.h"
+#include "drv/rp2040/mod.h"
 
 #include <FreeRTOS.h>
 #include <task.h>
@@ -30,6 +30,14 @@ static void init_wifi() {
 	printf("connected to Wi-Fi\n");
 
 	// TODO: announce hostname(?)
+}
+
+static void init_i2c() {
+	gpio_set_function(CFG_SDA_PIN, GPIO_FUNC_I2C);
+	gpio_set_function(CFG_SCL_PIN, GPIO_FUNC_I2C);
+
+	pbdrv_setup();
+	//printf("i2c setup\n");
 }
 
 static void async_init() {

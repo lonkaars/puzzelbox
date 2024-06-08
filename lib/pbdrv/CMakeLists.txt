@@ -12,34 +12,17 @@ project(pbdrv C CXX)
 
 add_subdirectory(../mpack ${CMAKE_CURRENT_BINARY_DIR}/mpack)
 
-if(DEFINED ARDUINO)
-	set(PBDRV_ARDUINO true)
-endif()
-
-include_directories(.)
-add_library(pbdrv STATIC
-	pb-read.c
-	pb-write.c
-	)
-target_link_libraries(pbdrv
-	mpack
-	)
+# generic puzzle bus (de)serializer library
+add_library(pbdrv STATIC pb-read.c pb-write.c)
+target_link_libraries(pbdrv mpack)
 target_include_directories(pbdrv SYSTEM INTERFACE .)
 
-list(APPEND PBDRV_SRCS pb-mod.c)
-
-if(PBDRV_ARDUINO)
-	list(APPEND PBDRV_SRCS drv/arduino/mod.cpp)
-endif()
-
-add_library(pbdrv-mod STATIC ${PBDRV_SRCS})
+# puzzle bus module specific code (superset of pbdrv)
+add_library(pbdrv-mod STATIC pb-mod.c)
 target_link_libraries(pbdrv-mod pbdrv)
-# add_dependencies(pbdrv-mod pbdrv)
+target_include_directories(pbdrv-mod SYSTEM INTERFACE .)
 
-if(PBDRV_ARDUINO)
-	target_link_arduino_libraries(pbdrv-mod
-		core
-		Wire
-		)
-endif()
+# supported puzzle bus drivers
+include(drv/arduino/cfg.cmake)
+include(drv/rp2040/cfg.cmake)
 
