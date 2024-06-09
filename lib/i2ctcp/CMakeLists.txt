@@ -6,9 +6,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 project(i2ctcp C CXX)
 
-add_subdirectory(../mpack ${CMAKE_CURRENT_BINARY_DIR}/mpack)
+add_subdirectory(lib/mpack)
 
-add_library(i2ctcp STATIC ./i2ctcpv1.c)
+add_library(i2ctcp STATIC i2ctcpv1.c)
 target_link_libraries(i2ctcp mpack)
 target_include_directories(i2ctcp SYSTEM INTERFACE .)
 

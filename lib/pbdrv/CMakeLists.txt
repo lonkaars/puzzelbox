@@ -10,7 +10,7 @@ add_compile_definitions(DEBUG)
 
 project(pbdrv C CXX)
 
-add_subdirectory(../mpack ${CMAKE_CURRENT_BINARY_DIR}/mpack)
+add_subdirectory(lib/mpack)
 
 # generic puzzle bus (de)serializer library
 add_library(pbdrv STATIC pb-read.c pb-write.c)
