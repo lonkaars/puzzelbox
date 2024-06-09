@@ -79,8 +79,6 @@ void accept_handler(struct netconn* conn) {
 }
 
 void serve_task() {
-	await_init();
-
 	printf("starting server...\n");
 	struct netconn* conn = netconn_new(NETCONN_TCP);
 	netconn_bind(conn, IP_ADDR_ANY, CFG_SRV_PORT);

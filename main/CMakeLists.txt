@@ -21,6 +21,8 @@ add_executable(main
 	sock.c
 	i2c.c
 	mod.c
+	tasks.c
+	blink.c
 	)
 
 pico_enable_stdio_usb(main 1)

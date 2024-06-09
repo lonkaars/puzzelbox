@@ -1,13 +1,13 @@
-#include "i2c.h"
-#include "init.h"
-
-#include "pb-mod.h"
-
+#include <FreeRTOS.h>
+#include <task.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <pico/stdlib.h>
 #include <hardware/i2c.h>
+
+#include "i2c.h"
+#include "pb-mod.h"
 
 uint8_t* scan_bus(uint8_t *array) {
 	int ret;
@@ -33,8 +33,6 @@ uint8_t* scan_bus(uint8_t *array) {
 void bus_task() {
 	// scan bus for slaves
 	// send updates at regular intervals
-	await_init();
-
 	vTaskDelay(1000 / portTICK_PERIOD_MS);
 	
 	// int i = 0;

@@ -1,15 +1,13 @@
-#include "config.h"
-#include "init.h"
-#include "drv/rp2040/mod.h"
-
 #include <FreeRTOS.h>
 #include <task.h>
-#include <event_groups.h>
 
 #include <pico/stdio.h>
 #include <pico/cyw43_arch.h>
 
-EventGroupHandle_t init_complete;
+#include "config.h"
+#include "init.h"
+#include "tasks.h"
+#include "drv/rp2040/mod.h"
 
 static void init_stdio() {
 	stdio_init_all();
@@ -46,24 +44,17 @@ static void async_init() {
 #ifndef CFG_NET_DISABLE
 	init_wifi();
 #endif
-
-	xEventGroupSetBits(init_complete, 1);
+	init_tasks();
 
 	// delete self
 	vTaskDelete(NULL);
 }
 
 void init() {
-	init_complete = xEventGroupCreate();
-
 	// used for debug `printf` and `panic` on errors
 	init_stdio();
 
 	// defer other initialization until the task scheduler is running (important)
 	xTaskCreate((TaskFunction_t) async_init, "init", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
-}
-
-void await_init() {
-	xEventGroupWaitBits(init_complete, 1, pdFALSE, pdFALSE, portMAX_DELAY);
 }
 
