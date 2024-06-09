@@ -11,13 +11,22 @@
 #define PBDRV_I2C i2c0
 #define BUF_SIZE 256
 
+static volatile bool pbdrv_i2c_msg_avail = false;
+static uint8_t data[BUF_SIZE];
+static size_t size = 0;
+
+// TODO: create event group instead of pbdrv_i2c_msg_avail
+// TODO: create freertos task that monitors the pbdrv_i2c_msg_avail flag and
+// calls pbdrv_i2c_recv when a message is received
+
+
 /**
  * \note this function is called from the I2C ISR, and should return as quickly
  * as possible.
  */
 static void recv_event(i2c_inst_t *i2c, i2c_slave_event_t event) {
-	static uint8_t data[BUF_SIZE];
-	static size_t size = 0;
+	// message needs to be handled first
+	if (pbdrv_i2c_msg_avail) return;
 
 	switch (event) {
 		case I2C_SLAVE_RECEIVE: {
@@ -27,7 +36,8 @@ static void recv_event(i2c_inst_t *i2c, i2c_slave_event_t event) {
 		}
 		case I2C_SLAVE_FINISH: {
 			// TODO: handle this w/ queue mechanism instead?
-			pbdrv_i2c_recv(data, size);
+			// pbdrv_i2c_recv(data, size);
+			pbdrv_i2c_msg_avail = true;
 			size = 0;
 			break;
 		}

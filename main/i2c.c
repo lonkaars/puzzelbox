@@ -30,6 +30,10 @@
 // 	return array;
 // }
 
+void pbdrv_i2c_recv(const uint8_t * a, size_t b) {
+	printf("%.*s", b, a);
+}
+
 void bus_task() {
 	// scan bus for slaves
 	// send updates at regular intervals
@@ -42,9 +46,6 @@ void bus_task() {
 	while (true) {
 		vTaskDelay(10 / portTICK_PERIOD_MS);
 		pbdrv_i2c_send(0x69, (uint8_t *) "bbbbbbbb", 9);
-
-		// i2c_write_blocking(i2c0, 0x69, (uint8_t *) "bbbbbbbb", 9, false);
-		// pbdrv_i2c_recv(NULL, 0);
 	}
 
 	// while(1) {
