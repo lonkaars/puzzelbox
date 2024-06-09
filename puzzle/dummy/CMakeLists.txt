@@ -12,6 +12,11 @@ add_compile_definitions(DEBUG)
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/lib/Arduino-CMake-Toolchain/Arduino-toolchain.cmake)
 set(ARDUINO_BOARD "Arduino Uno [avr.uno]")
 
+# used for testing
+# set(ARDUINO_BOARD "Raspberry Pi Pico W [rp2040.rpipicow]")
+# add_compile_definitions(USE_TINYUSB)
+# include_directories(/home/loek/.arduino15/packages/rp2040/hardware/rp2040/3.9.2/libraries/Adafruit_TinyUSB_Arduino/src/arduino)
+
 project(pb_mod_dummy C CXX)
 
 add_subdirectory(lib/pbdrv)

@@ -25,7 +25,6 @@ const i2c_addr_t PBDRV_MOD_ADDR = ADDR_RX;
 
 void setup() {
 	pbdrv_setup();
-	Serial.begin(115200);
 }
 
 void loop() {
