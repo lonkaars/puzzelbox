@@ -9,6 +9,7 @@
 #include <stdint.h>
 
 #include "../../pb.h"
+#include "../../pb-mod.h"
 #include "mod.h"
 
 static void recv_event(int bytes) {
@@ -31,5 +32,6 @@ __weak void pbdrv_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
 	Wire.beginTransmission((int) addr);
 	Wire.write(buf, sz);
 	Wire.endTransmission(true);
+	Wire.setWireTimeout(PB_TIMEOUT_US, true);
 }
 

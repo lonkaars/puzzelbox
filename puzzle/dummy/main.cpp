@@ -2,6 +2,7 @@
 #include <Wire.h>
 
 #include "drv/arduino/mod.h"
+#include "pb-mod.h"
 
 #ifdef TEST_A
 #define ADDR_RX 0x69
