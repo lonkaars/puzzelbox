@@ -25,8 +25,6 @@ static void init_wifi() {
 	if (cyw43_arch_wifi_connect_timeout_ms(CFG_NET_SSID, CFG_NET_PASS, CFG_NET_AUTH, CFG_NET_CONN_TIMEOUT))
 		panic("cyw43_arch_wifi_connect failed\n");
 
-	printf("connected to Wi-Fi\n");
-
 	// TODO: announce hostname(?)
 }
 
@@ -35,7 +33,6 @@ static void init_i2c() {
 	gpio_set_function(CFG_SCL_PIN, GPIO_FUNC_I2C);
 
 	pbdrv_setup();
-	//printf("i2c setup\n");
 }
 
 static void async_init() {
