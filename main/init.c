@@ -7,7 +7,7 @@
 #include "config.h"
 #include "init.h"
 #include "tasks.h"
-#include "drv/rp2040/mod.h"
+#include "pbdrv.h"
 
 static void init_stdio() {
 	stdio_init_all();

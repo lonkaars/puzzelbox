@@ -24,5 +24,5 @@ target_include_directories(pbdrv-mod SYSTEM INTERFACE .)
 
 # supported puzzle bus drivers
 include(drv/arduino/cfg.cmake)
-include(drv/rp2040/cfg.cmake)
+# include(drv/rp2040/cfg.cmake) # moved to /main/pbdrv.c
 

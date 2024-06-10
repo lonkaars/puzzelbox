@@ -23,18 +23,20 @@ add_executable(main
 	mod.c
 	tasks.c
 	blink.c
+	pbdrv.c
 	)
 
 pico_enable_stdio_usb(main 1)
 pico_enable_stdio_uart(main 0)
 pico_add_extra_outputs(main)
 
-include_directories(lib/pico-sdk/lib/lwip/contrib/ports/freertos/include)
+# include_directories(lib/pico-sdk/lib/lwip/contrib/ports/freertos/include)
 
 target_include_directories(main PRIVATE .)
 target_link_libraries(main
 	pico_cyw43_arch_lwip_sys_freertos
 	pico_stdlib
+	pico_i2c_slave
 	hardware_i2c
 	FreeRTOS-Kernel
 	FreeRTOS-Kernel-Heap4
