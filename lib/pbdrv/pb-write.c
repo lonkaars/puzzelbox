@@ -7,10 +7,8 @@ typedef struct {
 	pbdrv_buf_t buf;
 } pbdrv_writer_t;
 
-static pbdrv_writer_t pbdrv_write_init() {
-	pbdrv_writer_t writer;
-	mpack_writer_init_growable(&writer.writer, &writer.buf.data, &writer.buf.size);
-	return writer;
+static void pbdrv_write_init(pbdrv_writer_t * writer) {
+	mpack_writer_init_growable(&writer->writer, &writer->buf.data, &writer->buf.size);
 }
 
 static pbdrv_buf_t pbdrv_write_finish(pbdrv_writer_t * writer) {
@@ -27,7 +25,8 @@ static void pbdrv_write_msg_header(pbdrv_writer_t * writer, pb_msg_header_t head
 }
 
 pbdrv_buf_t pbdrv_write_cmd_req_set_state(pb_cmd_req_set_state_t data) {
-	pbdrv_writer_t writer = pbdrv_write_init();
+	pbdrv_writer_t writer;
+	pbdrv_write_init(&writer);
 	pbdrv_write_msg_header(&writer, data.header);
 	mpack_write_u8(&writer.writer, data.state);
 	return pbdrv_write_finish(&writer);

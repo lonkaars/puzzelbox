@@ -2,17 +2,13 @@
 
 #include "pb-write.h"
 
-TEST(pbdrv, write) {
-
+TEST(pbdrv, write_cmd_req_set_state) {
 	pbdrv_buf_t buf = pbdrv_write_cmd_req_set_state({
 		.header = { .sender = 0xf0, },
 		.state = PB_GS_PLAYING,
 	});
-	for (size_t i = 0; i < buf.size; i++) {
-		printf("%02x ", buf.data[i] & 0xff);
-	}
-	printf("\n");
 
-	ASSERT_TRUE(true);
+	ASSERT_NE(buf.data, nullptr);
+	ASSERT_GE(buf.size, 0);
 }
 
