@@ -7,8 +7,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 project(pbtest C CXX ASM)
 
 add_executable(test
-	i2ctcp/main.cpp
-	pbdrv/main.cpp
+	# i2ctcp/main.cpp
+	pbdrv/write.cpp
 	)
 
 add_subdirectory(lib/googletest)
