@@ -44,52 +44,55 @@ typedef enum pb_global_state pb_global_state_t;
 
 //! puzzle bus message header (shared by all commands)
 typedef struct {
-	const pb_cmd_id_t type; //!< command type
-	const i2c_addr_t sender; //!< i2c address of sender
+	pb_cmd_id_t type; //!< command type
+	i2c_addr_t sender; //!< i2c address of sender
 } pb_msg_header_t;
 
 //! PB_CMD_REQ_READ data
 typedef struct {
-	const pb_msg_header_t header;
-	const uint8_t propid; //!< state property id to return
+	pb_msg_header_t header;
+	uint8_t propid; //!< state property id to return
 } pb_cmd_req_read_t;
 
 //! PB_CMD_RES_READ data
 typedef struct {
-	const pb_msg_header_t header;
-	const uint8_t propid; //!< id of returned state property
-	const uint8_t value[];
+	pb_msg_header_t header;
+	uint8_t propid; //!< id of returned state property
+	const uint8_t * value;
+	size_t _value_size;
 } pb_cmd_res_read_t;
 
 //! PB_CMD_REQ_WRITE data
 typedef struct {
-	const pb_msg_header_t header;
-	const uint8_t propid; //!< state property id to write
-	const uint8_t value[]; //!< new value of property
+	pb_msg_header_t header;
+	uint8_t propid; //!< state property id to write
+	const uint8_t * value; //!< new value of property
+	size_t _value_size;
 } pb_cmd_req_write_t;
 
 //! PB_CMD_REQ_STATE data
 typedef struct {
-	const pb_msg_header_t header;
-	const pb_global_state_t state; //!< global state of sender
+	pb_msg_header_t header;
+	pb_global_state_t state; //!< global state of sender
 } pb_cmd_req_state_t;
 
 //! PB_CMD_RES_STATE data
 typedef struct {
-	const pb_msg_header_t header;
-	const pb_global_state_t state; //!< global state of sender
+	pb_msg_header_t header;
+	pb_global_state_t state; //!< global state of sender
 } pb_cmd_res_state_t;
 
 //! PB_CMD_REQ_SET_STATE data
 typedef struct {
-	const pb_msg_header_t header;
-	const pb_global_state_t state; //!< new global state
+	pb_msg_header_t header;
+	pb_global_state_t state; //!< new global state
 } pb_cmd_req_set_state_t;
 
 //! PB_CMD_MAGIC data
 typedef struct {
-	const pb_msg_header_t header;
-	const char magic[]; //!< magic value
+	pb_msg_header_t header;
+	const char * magic; //!< magic value
+	size_t _magic_size;
 } pb_cmd_magic_t;
 
 #ifdef __cplusplus
