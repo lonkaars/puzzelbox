@@ -1,72 +1,22 @@
 #include <gtest/gtest.h>
 
 #include "pb-write.h"
+#include "test.h"
 
-TEST(pbdrv, write_cmd_req_read) {
-	pbdrv_buf_t buf = pbdrv_write_cmd_req_read({
-		.propid = 0,
-	});
+// sorry for metaprogramming
+#define test_write_fn(fn) \
+	pbdrv_buf_t cmd_##fn; \
+	TEST(pbdrv, write_cmd_##fn) { \
+		cmd_##fn = pbdrv_write_cmd_##fn(expected_##fn); \
+		ASSERT_NE(cmd_##fn.data, nullptr); \
+		ASSERT_GE(cmd_##fn.size, 0); \
+	}
 
-	ASSERT_NE(buf.data, nullptr);
-	ASSERT_GE(buf.size, 0);
-}
-
-TEST(pbdrv, write_cmd_res_read) {
-	pbdrv_buf_t buf = pbdrv_write_cmd_res_read({
-		.propid = 0,
-		.value = (uint8_t[]) { 0x00, },
-		._value_size = 1,
-	});
-
-	ASSERT_NE(buf.data, nullptr);
-	ASSERT_GE(buf.size, 0);
-}
-
-TEST(pbdrv, write_cmd_req_write) {
-	pbdrv_buf_t buf = pbdrv_write_cmd_req_write({
-		.propid = 0,
-		.value = (uint8_t[]) { 0x00, },
-		._value_size = 1,
-	});
-
-	ASSERT_NE(buf.data, nullptr);
-	ASSERT_GE(buf.size, 0);
-}
-
-TEST(pbdrv, write_cmd_req_state) {
-	pbdrv_buf_t buf = pbdrv_write_cmd_req_state({
-		.state = PB_GS_PLAYING,
-	});
-
-	ASSERT_NE(buf.data, nullptr);
-	ASSERT_GE(buf.size, 0);
-}
-
-TEST(pbdrv, write_cmd_res_state) {
-	pbdrv_buf_t buf = pbdrv_write_cmd_res_state({
-		.state = PB_GS_IDLE,
-	});
-
-	ASSERT_NE(buf.data, nullptr);
-	ASSERT_GE(buf.size, 0);
-}
-
-TEST(pbdrv, write_cmd_req_set_state) {
-	pbdrv_buf_t buf = pbdrv_write_cmd_req_set_state({
-		.state = PB_GS_PLAYING,
-	});
-
-	ASSERT_NE(buf.data, nullptr);
-	ASSERT_GE(buf.size, 0);
-}
-
-TEST(pbdrv, write_cmd_magic) {
-	pbdrv_buf_t buf = pbdrv_write_cmd_magic({
-		.magic = pb_cmd_magic_msg,
-		._magic_size = sizeof(pb_cmd_magic_msg),
-	});
-
-	ASSERT_NE(buf.data, nullptr);
-	ASSERT_GE(buf.size, 0);
-}
+test_write_fn(req_read);
+test_write_fn(res_read);
+test_write_fn(req_write);
+test_write_fn(req_state);
+test_write_fn(res_state);
+test_write_fn(req_set_state);
+test_write_fn(magic);
 

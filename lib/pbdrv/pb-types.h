@@ -1,4 +1,5 @@
 #pragma once
+
 #include <stdint.h>
 #include <stddef.h>
 
@@ -14,7 +15,14 @@ extern "C" {
 #define __weak
 #endif
 
+//! I2C address (10 or 7 bit)
 typedef uint16_t i2c_addr_t;
+
+//! binary buffer struct
+typedef struct {
+	char * data; //! pointer to data
+	size_t size; //! size of data
+} pbdrv_buf_t;
 
 //! puzzle bus command types
 enum pb_cmd_id {
