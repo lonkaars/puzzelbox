@@ -8,8 +8,7 @@ project(pbtest C CXX ASM)
 
 add_executable(test
 	# i2ctcp/main.cpp
-	pbdrv/write.cpp
-	pbdrv/read.cpp
+	pbdrv/cmd.cpp
 	)
 
 add_subdirectory(lib/googletest)

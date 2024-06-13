@@ -1,18 +1,14 @@
 #pragma once
 
+#include <mpack.h>
+
 #include "pb-types.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-pbdrv_buf_t pbdrv_write_cmd_req_read(pb_cmd_req_read_t data);
-pbdrv_buf_t pbdrv_write_cmd_res_read(pb_cmd_res_read_t data);
-pbdrv_buf_t pbdrv_write_cmd_req_write(pb_cmd_req_write_t data);
-pbdrv_buf_t pbdrv_write_cmd_req_state(pb_cmd_req_state_t data);
-pbdrv_buf_t pbdrv_write_cmd_res_state(pb_cmd_res_state_t data);
-pbdrv_buf_t pbdrv_write_cmd_req_set_state(pb_cmd_req_set_state_t data);
-pbdrv_buf_t pbdrv_write_cmd_magic(pb_cmd_magic_t data);
+pbdrv_buf_t pbdrv_write_msg(const pb_msg_t * msg);
 
 #ifdef __cplusplus
 }
