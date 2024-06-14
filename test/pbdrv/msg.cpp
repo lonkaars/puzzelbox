@@ -34,7 +34,7 @@ TEST(pb_msg_rw, cmd_req_read) {
 }
 
 TEST(pb_msg_rw, cmd_req_magic) {
-	pb_buf_t buf = pb_send_req_magic();
+	pb_buf_t buf = pb_send_magic_req();
 
 	ASSERT_NE(buf.data, nullptr);
 	ASSERT_GE(buf.size, 0);

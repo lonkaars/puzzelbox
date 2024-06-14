@@ -25,6 +25,7 @@ target_include_directories(pbdrv SYSTEM INTERFACE .)
 add_library(pbdrv-mod STATIC
 	pb-mod.c
 	pb-send.c
+	pb-route.c
 	)
 target_link_libraries(pbdrv-mod pbdrv)
 target_include_directories(pbdrv-mod SYSTEM INTERFACE .)

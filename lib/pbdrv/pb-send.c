@@ -2,7 +2,7 @@
 #include "pb-mod.h"
 #include "pb-msg.h"
 
-pb_buf_t pb_send_req_read(uint8_t propid) {
+pb_buf_t pb_send_read_req(uint8_t propid) {
 	pb_cmd_prop_t cmd = {
 		.propid = propid,
 		.value = NULL,
@@ -17,7 +17,7 @@ pb_buf_t pb_send_req_read(uint8_t propid) {
 	return pb_msg_write(&msg);
 }
 
-pb_buf_t pb_send_res_read(uint8_t propid, uint8_t * value, size_t size) {
+pb_buf_t pb_send_read_res(uint8_t propid, uint8_t * value, size_t size) {
 	pb_cmd_prop_t cmd = {
 		.propid = propid,
 		.value = value,
@@ -32,7 +32,7 @@ pb_buf_t pb_send_res_read(uint8_t propid, uint8_t * value, size_t size) {
 	return pb_msg_write(&msg);
 }
 
-pb_buf_t pb_send_req_write(uint8_t propid, uint8_t * value, size_t size) {
+pb_buf_t pb_send_write_req(uint8_t propid, uint8_t * value, size_t size) {
 	pb_cmd_prop_t cmd = {
 		.propid = propid,
 		.value = value,
@@ -47,7 +47,7 @@ pb_buf_t pb_send_req_write(uint8_t propid, uint8_t * value, size_t size) {
 	return pb_msg_write(&msg);
 }
 
-pb_buf_t pb_send_req_state() {
+pb_buf_t pb_send_state_req() {
 	pb_cmd_state_t cmd = {
 		.state = pb_hook_mod_state_read(),
 	};
@@ -60,7 +60,7 @@ pb_buf_t pb_send_req_state() {
 	return pb_msg_write(&msg);
 }
 
-pb_buf_t pb_send_res_state(pb_global_state_t state) {
+pb_buf_t pb_send_state_res(pb_global_state_t state) {
 	pb_cmd_state_t cmd = {
 		.state = state,
 	};
@@ -73,7 +73,7 @@ pb_buf_t pb_send_res_state(pb_global_state_t state) {
 	return pb_msg_write(&msg);
 }
 
-pb_buf_t pb_send_req_set_state(pb_global_state_t state) {
+pb_buf_t pb_send_state_set(pb_global_state_t state) {
 	pb_cmd_state_t cmd = {
 		.state = state,
 	};
@@ -86,7 +86,7 @@ pb_buf_t pb_send_req_set_state(pb_global_state_t state) {
 	return pb_msg_write(&msg);
 }
 
-pb_buf_t pb_send_req_magic() {
+pb_buf_t pb_send_magic_req() {
 	pb_cmd_magic_t cmd = {
 		.magic = (char *) &pb_cmd_magic_req[0],
 		._magic_size = sizeof(pb_cmd_magic_req),
@@ -100,7 +100,7 @@ pb_buf_t pb_send_req_magic() {
 	return pb_msg_write(&msg);
 }
 
-pb_buf_t pb_send_res_magic() {
+pb_buf_t pb_send_magic_res() {
 	pb_cmd_magic_t cmd = {
 		.magic = (char *) &pb_cmd_magic_res[0],
 		._magic_size = sizeof(pb_cmd_magic_res),
