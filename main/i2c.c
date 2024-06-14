@@ -30,7 +30,7 @@
 // 	return array;
 // }
 
-void pbdrv_i2c_recv(const uint8_t * a, size_t b) {
+void pb_i2c_recv(const uint8_t * a, size_t b) {
 	printf("%.*s", b, a);
 }
 
@@ -45,7 +45,7 @@ void bus_task() {
 	
 	while (true) {
 		vTaskDelay(10 / portTICK_PERIOD_MS);
-		pbdrv_i2c_send(0x69, (uint8_t *) "bbbbbbbb", 9);
+		pb_i2c_send(0x69, (uint8_t *) "bbbbbbbb", 9);
 	}
 
 	// while(1) {

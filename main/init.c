@@ -32,7 +32,7 @@ static void init_i2c() {
 	gpio_set_function(CFG_SDA_PIN, GPIO_FUNC_I2C);
 	gpio_set_function(CFG_SCL_PIN, GPIO_FUNC_I2C);
 
-	pbdrv_setup();
+	pb_setup();
 }
 
 static void async_init() {

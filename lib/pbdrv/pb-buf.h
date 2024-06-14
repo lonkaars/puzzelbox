@@ -10,9 +10,9 @@ extern "C" {
 typedef struct {
 	char * data; //! pointer to data
 	size_t size; //! size of data
-} pbdrv_buf_t;
+} pb_buf_t;
 
-void pbdrv_buf_free(pbdrv_buf_t * buf);
+void pb_buf_free(pb_buf_t * buf);
 
 #ifdef __cplusplus
 }

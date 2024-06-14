@@ -7,9 +7,9 @@
 extern "C" {
 #endif
 
-pbdrv_buf_t pbdrv_msg_write(const pb_msg_t * msg);
-pb_msg_t * pbdrv_msg_read(const pbdrv_buf_t * buf);
-void pbdrv_msg_free(pb_msg_t * msg);
+pb_buf_t pb_msg_write(const pb_msg_t * msg);
+pb_msg_t * pb_msg_read(const pb_buf_t * buf);
+void pb_msg_free(pb_msg_t * msg);
 
 #ifdef __cplusplus
 }

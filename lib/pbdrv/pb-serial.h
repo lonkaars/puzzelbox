@@ -9,18 +9,18 @@ extern "C" {
 #endif
 
 #define __pb_cmd(name) \
-	pbdrv_serialize_t pbdrv_sr_##name; \
-	pbdrv_deserialize_t pbdrv_dsr_##name; \
-	pbdrv_free_t pbdrv_free_##name;
+	pb_ser_r_t pb_ser_r_##name; \
+	pb_ser_w_t pb_ser_w_##name; \
+	pb_ser_free_t pb_ser_free_##name;
 
-typedef void pbdrv_serialize_t(mpack_writer_t * writer, const pb_msg_t * msg);
-pbdrv_serialize_t pbdrv_serialize;
+typedef void pb_ser_w_t(mpack_writer_t * writer, const pb_msg_t * msg);
+pb_ser_w_t pb_ser_w;
 
-typedef void pbdrv_deserialize_t(mpack_reader_t * reader, pb_msg_t * msg);
-pbdrv_deserialize_t pbdrv_deserialize;
+typedef void pb_ser_r_t(mpack_reader_t * reader, pb_msg_t * msg);
+pb_ser_r_t pb_ser_r;
 
-typedef void pbdrv_free_t(pb_msg_t * msg);
-pbdrv_free_t pbdrv_free;
+typedef void pb_ser_free_t(pb_msg_t * msg);
+pb_ser_free_t pb_ser_free;
 
 __pb_cmd(msg_header)
 __pb_cmd(cmd_req_read)

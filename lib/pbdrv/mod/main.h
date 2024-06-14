@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../types.h"
+#include "../pb-types.h"
 
 typedef struct {
 	const i2c_addr_t mod_addr;

@@ -9,7 +9,7 @@ extern "C" {
  *
  * This function should be called from the Arduino \c setup() function.
  */
-void pbdrv_setup();
+void pb_setup();
 
 #ifdef __cplusplus
 }

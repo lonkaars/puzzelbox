@@ -20,17 +20,17 @@
 #define MSG_DELAY 10
 #endif
 
-const char * PBDRV_MOD_NAME = "dummy";
-const i2c_addr_t PBDRV_MOD_ADDR = ADDR_RX;
+const char * PB_MOD_NAME = "dummy";
+const i2c_addr_t PB_MOD_ADDR = ADDR_RX;
 
 void setup() {
-	pbdrv_setup();
+	pb_setup();
 }
 
 void loop() {
-	pbdrv_i2c_send(ADDR_TX, (uint8_t *) MSG, MSG_SIZE);
+	pb_i2c_send(ADDR_TX, (uint8_t *) MSG, MSG_SIZE);
 	delay(MSG_DELAY);
 }
 
-void pbdrv_i2c_recv(const uint8_t * data, size_t size) { }
+void pb_i2c_recv(const uint8_t * data, size_t size) { }
 

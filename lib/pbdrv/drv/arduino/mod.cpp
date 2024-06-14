@@ -18,17 +18,17 @@ static void recv_event(int bytes) {
 	while (Wire.available())
 		data[size++] = Wire.read();
 
-	pbdrv_i2c_recv(data, size);
+	pb_i2c_recv(data, size);
 }
 
-void pbdrv_setup() {
-	Wire.begin((int) PBDRV_MOD_ADDR);
+void pb_setup() {
+	Wire.begin((int) PB_MOD_ADDR);
 	Wire.setWireTimeout(PB_TIMEOUT_US, true);
 	Wire.setClock(PB_CLOCK_SPEED_HZ);
 	Wire.onReceive(recv_event);
 }
 
-__weak void pbdrv_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
+__weak void pb_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
 	Wire.beginTransmission((int) addr);
 	Wire.write(buf, sz);
 	Wire.endTransmission(true);
