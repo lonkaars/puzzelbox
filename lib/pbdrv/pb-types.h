@@ -18,12 +18,6 @@ extern "C" {
 //! I2C address (10 or 7 bit)
 typedef uint16_t i2c_addr_t;
 
-//! binary buffer struct
-typedef struct {
-	char * data; //! pointer to data
-	size_t size; //! size of data
-} pbdrv_buf_t;
-
 //! puzzle bus command types
 enum pb_cmd_id {
 	PB_CMD_REQ_READ, //!< request a puzzle module property
@@ -66,14 +60,14 @@ typedef struct {
 //! PB_CMD_RES_READ data
 typedef struct {
 	uint8_t propid; //!< id of returned state property
-	const uint8_t * value;
+	uint8_t * value;
 	size_t _value_size;
 } pb_cmd_res_read_t;
 
 //! PB_CMD_REQ_WRITE data
 typedef struct {
 	uint8_t propid; //!< state property id to write
-	const uint8_t * value; //!< new value of property
+	uint8_t * value; //!< new value of property
 	size_t _value_size;
 } pb_cmd_req_write_t;
 

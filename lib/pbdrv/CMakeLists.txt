@@ -12,17 +12,23 @@ project(pbdrv C CXX)
 
 add_subdirectory(lib/mpack)
 
-# generic puzzle bus (de)serializer library
-add_library(pbdrv STATIC pb-read.c pb-write.c pb-serial.c)
+# generic puzzle bus message handling library functions
+add_library(pbdrv STATIC
+	pb-msg.c
+	pb-serial.c
+	pb-buf.c
+	)
 target_link_libraries(pbdrv mpack)
 target_include_directories(pbdrv SYSTEM INTERFACE .)
 
 # puzzle bus module specific code (superset of pbdrv)
-add_library(pbdrv-mod STATIC pb-mod.c)
+add_library(pbdrv-mod STATIC
+	pb-mod.c
+	)
 target_link_libraries(pbdrv-mod pbdrv)
 target_include_directories(pbdrv-mod SYSTEM INTERFACE .)
 
 # supported puzzle bus drivers
 include(drv/arduino/cfg.cmake)
-# include(drv/rp2040/cfg.cmake) # moved to /main/pbdrv.c
+# include(drv/rp2040/cfg.cmake) # please see /main/pbdrv.h
 

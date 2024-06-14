@@ -8,29 +8,29 @@
 extern "C" {
 #endif
 
+#define __pb_cmd(name) \
+	pbdrv_serialize_t pbdrv_sr_##name; \
+	pbdrv_deserialize_t pbdrv_dsr_##name; \
+	pbdrv_free_t pbdrv_free_##name;
 
-void pbdrv_serialize(mpack_writer_t * writer, const pb_msg_t * msg);
+typedef void pbdrv_serialize_t(mpack_writer_t * writer, const pb_msg_t * msg);
+pbdrv_serialize_t pbdrv_serialize;
 
-void pbdrv_s_msg_header(mpack_writer_t * writer, const pb_msg_t * msg);
-void pbdrv_s_cmd_req_read(mpack_writer_t * writer, const pb_cmd_req_read_t * msg);
-void pbdrv_s_cmd_res_read(mpack_writer_t * writer, const pb_cmd_res_read_t * msg);
-void pbdrv_s_cmd_req_write(mpack_writer_t * writer, const pb_cmd_req_write_t * msg);
-void pbdrv_s_cmd_req_state(mpack_writer_t * writer, const pb_cmd_req_state_t * msg);
-void pbdrv_s_cmd_res_state(mpack_writer_t * writer, const pb_cmd_res_state_t * msg);
-void pbdrv_s_cmd_req_set_state(mpack_writer_t * writer, const pb_cmd_req_set_state_t * msg);
-void pbdrv_s_cmd_req_magic(mpack_writer_t * writer, const pb_cmd_req_magic_t * msg);
-void pbdrv_s_cmd_res_magic(mpack_writer_t * writer, const pb_cmd_res_magic_t * msg);
+typedef void pbdrv_deserialize_t(mpack_reader_t * reader, pb_msg_t * msg);
+pbdrv_deserialize_t pbdrv_deserialize;
 
-// typedef void pbdrv_deserialize_t(mpack_reader_t * reader);
-// pbdrv_deserialize_t pbdrv_d_msg_header;
-// pbdrv_deserialize_t pbdrv_d_cmd_req_read;
-// pbdrv_deserialize_t pbdrv_d_cmd_res_read;
-// pbdrv_deserialize_t pbdrv_d_cmd_req_write;
-// pbdrv_deserialize_t pbdrv_d_cmd_req_state;
-// pbdrv_deserialize_t pbdrv_d_cmd_res_state;
-// pbdrv_deserialize_t pbdrv_d_cmd_req_set_state;
-// pbdrv_deserialize_t pbdrv_d_cmd_req_magic;
-// pbdrv_deserialize_t pbdrv_d_cmd_res_magic;
+typedef void pbdrv_free_t(pb_msg_t * msg);
+pbdrv_free_t pbdrv_free;
+
+__pb_cmd(msg_header)
+__pb_cmd(cmd_req_read)
+__pb_cmd(cmd_res_read)
+__pb_cmd(cmd_req_write)
+__pb_cmd(cmd_req_state)
+__pb_cmd(cmd_res_state)
+__pb_cmd(cmd_req_set_state)
+__pb_cmd(cmd_req_magic)
+__pb_cmd(cmd_res_magic)
 
 #ifdef __cplusplus
 }
