@@ -88,13 +88,13 @@ typedef struct {
 
 //! PB_CMD_REQ_MAGIC data
 typedef struct {
-	const char * magic; //!< magic value
+	char * magic; //!< magic value
 	size_t _magic_size;
 } pb_cmd_req_magic_t;
 
 //! PB_CMD_RES_MAGIC data
 typedef struct {
-	const char * magic; //!< magic value
+	char * magic; //!< magic value
 	size_t _magic_size;
 } pb_cmd_res_magic_t;
 

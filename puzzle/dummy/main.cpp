@@ -4,6 +4,8 @@
 #include "drv/arduino/mod.h"
 #include "pb-mod.h"
 
+#define TEST_A
+
 #ifdef TEST_A
 #define ADDR_RX 0x69
 #define ADDR_TX 0x20
@@ -28,8 +30,8 @@ void setup() {
 }
 
 void loop() {
-	pb_i2c_send(ADDR_TX, (uint8_t *) MSG, MSG_SIZE);
-	delay(MSG_DELAY);
+	// pb_i2c_send(ADDR_TX, (uint8_t *) MSG, MSG_SIZE);
+	// delay(MSG_DELAY);
 }
 
 void pb_i2c_recv(const uint8_t * data, size_t size) { }

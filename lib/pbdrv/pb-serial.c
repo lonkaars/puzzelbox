@@ -9,6 +9,8 @@ void pb_ser_w(mpack_writer_t * writer, const pb_msg_t * msg) {
 	switch (msg->type) {
 		case PB_CMD_REQ_READ: return pb_ser_w_cmd_req_read(writer, msg);
 		case PB_CMD_RES_READ: return pb_ser_w_cmd_res_read(writer, msg);
+		case PB_CMD_REQ_MAGIC: return pb_ser_w_cmd_req_magic(writer, msg);
+		case PB_CMD_RES_MAGIC: return pb_ser_w_cmd_res_magic(writer, msg);
 		default: break;
 	}
 }
@@ -17,6 +19,8 @@ void pb_ser_r(mpack_reader_t * reader, pb_msg_t * msg) {
 	switch (msg->type) {
 		case PB_CMD_REQ_READ: return pb_ser_r_cmd_req_read(reader, msg);
 		case PB_CMD_RES_READ: return pb_ser_r_cmd_res_read(reader, msg);
+		case PB_CMD_REQ_MAGIC: return pb_ser_r_cmd_req_magic(reader, msg);
+		case PB_CMD_RES_MAGIC: return pb_ser_r_cmd_res_magic(reader, msg);
 		default: break;
 	}
 }
@@ -26,6 +30,8 @@ void pb_ser_free(pb_msg_t * msg) {
 	switch (msg->type) {
 		case PB_CMD_REQ_READ: return pb_ser_free_cmd_req_read(msg);
 		case PB_CMD_RES_READ: return pb_ser_free_cmd_res_read(msg);
+		case PB_CMD_REQ_MAGIC: return pb_ser_free_cmd_req_magic(msg);
+		case PB_CMD_RES_MAGIC: return pb_ser_free_cmd_res_magic(msg);
 		default: break;
 	}
 	pb_ser_free_msg_header(msg);
@@ -78,6 +84,54 @@ void pb_ser_free_cmd_res_read(pb_msg_t * _msg) {
 		if (msg->value != NULL) {
 			MPACK_FREE(msg->value);
 			msg->value = NULL;
+		}
+		free(_msg->msg);
+		_msg->msg = NULL;
+	}
+}
+
+void pb_ser_w_cmd_req_magic(mpack_writer_t * writer, const pb_msg_t * _msg) {
+	pb_cmd_req_magic_t * msg = _msg->msg;
+
+	mpack_write_bin(writer, (char *) msg->magic, msg->_magic_size);
+}
+void pb_ser_r_cmd_req_magic(mpack_reader_t * reader, pb_msg_t * _msg) {
+	pb_cmd_req_magic_t * msg = _msg->msg = malloc(sizeof(pb_cmd_req_magic_t));
+
+	msg->_magic_size = mpack_expect_bin(reader);
+	msg->magic = mpack_read_bytes_alloc(reader, msg->_magic_size);
+	mpack_done_bin(reader);
+}
+void pb_ser_free_cmd_req_magic(pb_msg_t * _msg) {
+	if (_msg->msg != NULL) {
+		pb_cmd_req_magic_t * msg = _msg->msg;
+		if (msg->magic != NULL) {
+			MPACK_FREE(msg->magic);
+			msg->magic = NULL;
+		}
+		free(_msg->msg);
+		_msg->msg = NULL;
+	}
+}
+
+void pb_ser_w_cmd_res_magic(mpack_writer_t * writer, const pb_msg_t * _msg) {
+	pb_cmd_res_magic_t * msg = _msg->msg;
+
+	mpack_write_bin(writer, (char *) msg->magic, msg->_magic_size);
+}
+void pb_ser_r_cmd_res_magic(mpack_reader_t * reader, pb_msg_t * _msg) {
+	pb_cmd_res_magic_t * msg = _msg->msg = malloc(sizeof(pb_cmd_res_magic_t));
+
+	msg->_magic_size = mpack_expect_bin(reader);
+	msg->magic = mpack_read_bytes_alloc(reader, msg->_magic_size);
+	mpack_done_bin(reader);
+}
+void pb_ser_free_cmd_res_magic(pb_msg_t * _msg) {
+	if (_msg->msg != NULL) {
+		pb_cmd_res_magic_t * msg = _msg->msg;
+		if (msg->magic != NULL) {
+			MPACK_FREE(msg->magic);
+			msg->magic = NULL;
 		}
 		free(_msg->msg);
 		_msg->msg = NULL;

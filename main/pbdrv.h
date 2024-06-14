@@ -35,6 +35,17 @@ void pb_setup();
  */
 void pb_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz);
 
+/**
+ * \brief Scan the bus for I2C slaves, and send handshake messages to ACK-ing
+ * slaves.
+ *
+ * As a result of the RP2040 hardware limitations detailed at the top of this
+ * file, this function is also implemented in this file, even through it does
+ * not belong to the puzzle bus driver. In order to not miss any handshake
+ * responses, the bus should remain busy during the entire scan.
+ */
+void bus_scan();
+
 #ifdef __cplusplus
 }
 #endif

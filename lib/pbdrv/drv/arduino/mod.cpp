@@ -25,6 +25,7 @@ void pb_setup() {
 	Wire.begin((int) PB_MOD_ADDR);
 	Wire.setWireTimeout(PB_TIMEOUT_US, true);
 	Wire.setClock(PB_CLOCK_SPEED_HZ);
+	// TODO: check if onReceive replaces or appends a handler function
 	Wire.onReceive(recv_event);
 }
 

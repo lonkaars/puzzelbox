@@ -28,3 +28,24 @@ TEST(pb_msg_rw, cmd_req_read) {
 	pb_msg_free(msg_read);
 }
 
+TEST(pb_msg_rw, cmd_req_magic) {
+	pb_buf_t buf = pb_msg_write_req_magic();
+
+	ASSERT_NE(buf.data, nullptr);
+	ASSERT_GE(buf.size, 0);
+
+	pb_msg_t * msg_read = pb_msg_read(&buf);
+	pb_buf_free(&buf);
+
+	ASSERT_EQ(buf.data, nullptr);
+
+	EXPECT_EQ(msg_read->type, PB_CMD_REQ_MAGIC);
+	EXPECT_EQ(msg_read->sender, 0);
+	EXPECT_NE(msg_read->msg, nullptr);
+	pb_cmd_res_magic_t * magic = (pb_cmd_res_magic_t *) msg_read->msg;
+	EXPECT_EQ(magic->_magic_size, sizeof(pb_cmd_magic_req));
+	EXPECT_EQ(0, memcmp(pb_cmd_magic_req, magic->magic, magic->_magic_size));
+
+	pb_msg_free(msg_read);
+}
+

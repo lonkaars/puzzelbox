@@ -32,6 +32,9 @@ static void init_i2c() {
 	gpio_set_function(CFG_SDA_PIN, GPIO_FUNC_I2C);
 	gpio_set_function(CFG_SCL_PIN, GPIO_FUNC_I2C);
 
+	gpio_pull_up(CFG_SDA_PIN);
+	gpio_pull_up(CFG_SCL_PIN);
+
 	pb_setup();
 }
 

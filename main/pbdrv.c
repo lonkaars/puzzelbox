@@ -3,12 +3,15 @@
 #include "pb.h"
 #include "pb-types.h"
 #include "pb-mod.h"
+#include "pb-msg.h"
 
 #include <hardware/i2c.h>
 #include <hardware/gpio.h>
 #include <pico/i2c_slave.h>
+#include <pico/stdio.h>
 
 #include <FreeRTOS.h>
+#include <stdio.h>
 #include <timers.h>
 
 #define PB_I2C i2c0
@@ -66,6 +69,22 @@ __weak void pb_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
 
 	// false to write stop condition to i2c bus
 	i2c_write_timeout_us(PB_I2C, addr, buf, sz, false, PB_TIMEOUT_US);
+
+	i2c_set_slave_mode(PB_I2C, true, PB_MOD_ADDR);
+}
+
+void bus_scan() {
+	i2c_set_slave_mode(PB_I2C, false, PB_MOD_ADDR);
+
+	pb_buf_t buf = pb_msg_write_req_magic();
+
+	// check for all 7-bit addresses
+	uint16_t addr_max = 1 << 7;
+	for (uint16_t addr = 0x00; addr < addr_max; addr++) {
+		i2c_write_timeout_us(PB_I2C, addr, (uint8_t *) buf.data, buf.size, false, PB_TIMEOUT_US);
+	}
+
+	pb_buf_free(&buf);
 
 	i2c_set_slave_mode(PB_I2C, true, PB_MOD_ADDR);
 }
