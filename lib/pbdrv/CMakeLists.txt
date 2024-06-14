@@ -24,6 +24,7 @@ target_include_directories(pbdrv SYSTEM INTERFACE .)
 # puzzle bus module specific code (superset of pbdrv)
 add_library(pbdrv-mod STATIC
 	pb-mod.c
+	pb-send.c
 	)
 target_link_libraries(pbdrv-mod pbdrv)
 target_include_directories(pbdrv-mod SYSTEM INTERFACE .)

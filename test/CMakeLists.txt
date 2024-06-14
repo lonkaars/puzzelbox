@@ -11,6 +11,7 @@ project(pbtest C CXX ASM)
 add_executable(test
 	# i2ctcp/main.cpp
 	pbdrv/msg.cpp
+	pbdrv/mod.c
 	)
 
 add_subdirectory(lib/googletest)
@@ -21,6 +22,6 @@ target_link_libraries(test
 	gtest_main
 	i2ctcp
 	mpack
-	pbdrv
+	pbdrv-mod
 	)
 

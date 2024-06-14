@@ -5,8 +5,9 @@
 
 pb_buf_t pb_msg_write(const pb_msg_t * msg) {
 	pb_buf_t buf = { 0 };
-	mpack_writer_t writer;
+	if (msg == NULL) return buf;
 
+	mpack_writer_t writer;
 	mpack_writer_init_growable(&writer, &buf.data, &buf.size);
 
 	pb_ser_w(&writer, msg);
@@ -33,19 +34,5 @@ void pb_msg_free(pb_msg_t * msg) {
 
 	// free message container that was created in \p pb_msg_read
 	free(msg);
-}
-
-pb_buf_t pb_msg_write_req_magic() {
-	pb_cmd_magic_t content = {
-		.magic = (char *) &pb_cmd_magic_req[0],
-		._magic_size = sizeof(pb_cmd_magic_req),
-	};
-	pb_msg_t msg_write = {
-		.type = PB_CMD_MAGIC,
-		.action = PB_ACTION_REQ,
-		.sender = 0,
-		.msg = &content,
-	};
-	return pb_msg_write(&msg_write);
 }
 

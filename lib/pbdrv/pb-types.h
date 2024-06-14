@@ -54,7 +54,7 @@ typedef struct {
 	pb_cmd_id_t type; //!< command type
 	pb_action_t action; //!< command action
 	i2c_addr_t sender; //!< i2c address of sender
-	void * msg; //!< remaining message (type dependant)
+	void * cmd; //!< command data (type dependant)
 } pb_msg_t;
 
 //! PB_CMD_PROP data
