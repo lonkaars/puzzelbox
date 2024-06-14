@@ -36,14 +36,16 @@ void pb_msg_free(pb_msg_t * msg) {
 }
 
 pb_buf_t pb_msg_write_req_magic() {
-	pb_cmd_req_magic_t content = {
+	pb_cmd_magic_t content = {
 		.magic = (char *) &pb_cmd_magic_req[0],
 		._magic_size = sizeof(pb_cmd_magic_req),
 	};
 	pb_msg_t msg_write = {
-		.type = PB_CMD_REQ_MAGIC,
+		.type = PB_CMD_MAGIC,
+		.action = PB_ACTION_REQ,
 		.sender = 0,
 		.msg = &content,
 	};
 	return pb_msg_write(&msg_write);
 }
+

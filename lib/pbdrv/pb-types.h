@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <stddef.h>
 
@@ -20,21 +21,19 @@ typedef uint16_t i2c_addr_t;
 
 //! puzzle bus command types
 enum pb_cmd_id {
-	PB_CMD_REQ_READ, //!< request a puzzle module property
-	PB_CMD_RES_READ, //!< respond to a puzzle module property request
-	PB_CMD_REQ_WRITE, //!< request to write a puzzle module property
-	PB_CMD_REQ_STATE, //!< request global state
-	PB_CMD_RES_STATE, //!< respond to a global state request
-	PB_CMD_REQ_SET_STATE, //!< request to overwrite module global state
-	PB_CMD_REQ_MAGIC, //!< magic request
-	PB_CMD_RES_MAGIC, //!< magic response
+	PB_CMD_PROP, //!< puzzle module property
+	PB_CMD_STATE, //!< global state
+	PB_CMD_MAGIC, //!< magic (handshake)
 };
 typedef enum pb_cmd_id pb_cmd_id_t;
 
-//! magic sent from main controller to puzzle module
-static const char pb_cmd_magic_req[] = { 0x70, 0x75, 0x7a, 0x62, 0x75, 0x73 };
-//! magic reply from puzzle module back to main controller
-static const char pb_cmd_magic_res[] = { 0x67, 0x61, 0x6d, 0x69, 0x6e, 0x67 };
+//! puzzle bus command action types
+enum pb_action {
+	PB_ACTION_REQ, //!< request
+	PB_ACTION_RES, //!< response
+	PB_ACTION_SET, //!< (over)write
+};
+typedef enum pb_action pb_action_t;
 
 //! puzzle bus global states
 enum pb_global_state {
@@ -45,58 +44,36 @@ enum pb_global_state {
 };
 typedef enum pb_global_state pb_global_state_t;
 
+//! magic sent from main controller to puzzle module
+static const char pb_cmd_magic_req[] = { 0x70, 0x75, 0x7a, 0x62, 0x75, 0x73 };
+//! magic reply from puzzle module back to main controller
+static const char pb_cmd_magic_res[] = { 0x67, 0x61, 0x6d, 0x69, 0x6e, 0x67 };
+
 //! puzzle bus message header (shared by all commands)
 typedef struct {
 	pb_cmd_id_t type; //!< command type
+	pb_action_t action; //!< command action
 	i2c_addr_t sender; //!< i2c address of sender
 	void * msg; //!< remaining message (type dependant)
 } pb_msg_t;
 
-//! PB_CMD_REQ_READ data
+//! PB_CMD_PROP data
 typedef struct {
-	uint8_t propid; //!< state property id to return
-} pb_cmd_req_read_t;
+	uint8_t propid; //!< id of state property
+	uint8_t * value; //!< new or current value
+	size_t _value_size; //!< [META] size of \p value
+} pb_cmd_prop_t;
 
-//! PB_CMD_RES_READ data
+//! PB_CMD_STATE data
 typedef struct {
-	uint8_t propid; //!< id of returned state property
-	uint8_t * value;
-	size_t _value_size;
-} pb_cmd_res_read_t;
+	pb_global_state_t state; //!< global state
+} pb_cmd_state_t;
 
-//! PB_CMD_REQ_WRITE data
-typedef struct {
-	uint8_t propid; //!< state property id to write
-	uint8_t * value; //!< new value of property
-	size_t _value_size;
-} pb_cmd_req_write_t;
-
-//! PB_CMD_REQ_STATE data
-typedef struct {
-	pb_global_state_t state; //!< global state of sender
-} pb_cmd_req_state_t;
-
-//! PB_CMD_RES_STATE data
-typedef struct {
-	pb_global_state_t state; //!< global state of sender
-} pb_cmd_res_state_t;
-
-//! PB_CMD_REQ_SET_STATE data
-typedef struct {
-	pb_global_state_t state; //!< new global state
-} pb_cmd_req_set_state_t;
-
-//! PB_CMD_REQ_MAGIC data
+//! PB_CMD_MAGIC data
 typedef struct {
 	char * magic; //!< magic value
-	size_t _magic_size;
-} pb_cmd_req_magic_t;
-
-//! PB_CMD_RES_MAGIC data
-typedef struct {
-	char * magic; //!< magic value
-	size_t _magic_size;
-} pb_cmd_res_magic_t;
+	size_t _magic_size; //!< [META] size of \p magic
+} pb_cmd_magic_t;
 
 #ifdef __cplusplus
 }

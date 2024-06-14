@@ -22,15 +22,9 @@ pb_ser_r_t pb_ser_r;
 typedef void pb_ser_free_t(pb_msg_t * msg);
 pb_ser_free_t pb_ser_free;
 
-__pb_cmd(msg_header)
-__pb_cmd(cmd_req_read)
-__pb_cmd(cmd_res_read)
-__pb_cmd(cmd_req_write)
-__pb_cmd(cmd_req_state)
-__pb_cmd(cmd_res_state)
-__pb_cmd(cmd_req_set_state)
-__pb_cmd(cmd_req_magic)
-__pb_cmd(cmd_res_magic)
+__pb_cmd(cmd_prop)
+__pb_cmd(cmd_state)
+__pb_cmd(cmd_magic)
 
 #ifdef __cplusplus
 }
