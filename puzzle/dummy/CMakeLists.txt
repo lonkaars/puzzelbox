@@ -12,6 +12,12 @@ add_compile_definitions(DEBUG)
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/lib/Arduino-CMake-Toolchain/Arduino-toolchain.cmake)
 set(ARDUINO_BOARD "Arduino Uno [avr.uno]")
 
+# freertos
+add_library(freertos_config INTERFACE)
+target_include_directories(freertos_config SYSTEM INTERFACE .)
+set(FREERTOS_PORT GCC_ATMEGA)
+set(FREERTOS_HEAP 4)
+
 # used for testing
 # set(ARDUINO_BOARD "Raspberry Pi Pico W [rp2040.rpipicow]")
 # add_compile_definitions(USE_TINYUSB)
@@ -20,6 +26,7 @@ set(ARDUINO_BOARD "Arduino Uno [avr.uno]")
 project(pb_mod_dummy C CXX)
 
 add_subdirectory(lib/pbdrv)
+add_subdirectory(lib/FreeRTOS-Kernel)
 
 add_executable(main
 	main.cpp

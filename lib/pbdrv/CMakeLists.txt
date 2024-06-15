@@ -21,13 +21,21 @@ add_library(pbdrv STATIC
 target_link_libraries(pbdrv mpack)
 target_include_directories(pbdrv SYSTEM INTERFACE .)
 
-# puzzle bus module specific code (superset of pbdrv)
+# puzzle bus *module* specific code
 add_library(pbdrv-mod STATIC
 	pb-mod.c
 	pb-send.c
 	pb-route.c
 	)
-target_link_libraries(pbdrv-mod pbdrv)
+target_link_libraries(pbdrv-mod
+	# freertos is used to defer the handling of i2c messages outside the receive
+	# interrupt service routine
+	freertos_kernel
+	freertos_kernel_include
+	freertos_config
+	# pbdrv-mod is a superset of pbdrv
+	pbdrv
+	)
 target_include_directories(pbdrv-mod SYSTEM INTERFACE .)
 
 # supported puzzle bus drivers

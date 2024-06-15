@@ -1,6 +1,13 @@
 #include "pb-route.h"
 #include "pb-mod.h"
 #include "pb-send.h"
+#include "pb-types.h"
+
+#include <string.h>
+
+// FIXME: this should be removed (see handover: RP2040 I2C limitations)
+#include <FreeRTOS.h>
+#include <task.h>
 
 __weak bool pb_hook_route_msg(pb_msg_t * msg) { return false; }
 __weak void pb_route_msg(pb_msg_t * msg) {
@@ -59,7 +66,7 @@ __weak void pb_hook_main_state_update(pb_global_state_t state) {}
 __weak void pb_route_cmd_state_req(pb_msg_t * msg) {
 	pb_global_state_t own_state = pb_hook_mod_state_read();
 	pb_buf_t buf = pb_send_state_res(own_state);
-	pb_reply(msg, &buf);
+	pb_send_reply(msg, &buf);
 	pb_buf_free(&buf);
 
 	// notify of new global state variable
@@ -77,8 +84,16 @@ __weak void pb_route_cmd_state_set(pb_msg_t * msg) {
 }
 
 __weak void pb_route_cmd_magic_req(pb_msg_t * msg) {
+	pb_cmd_magic_t * cmd = msg->cmd;
+	// return early if magic is invalid
+	if (cmd->_magic_size != sizeof(pb_cmd_magic_req)) return;
+	if (memcmp(cmd->magic, pb_cmd_magic_req, cmd->_magic_size) != 0) return;
+
+	// FIXME: this should be removed (see handover: RP2040 I2C limitations)
+	vTaskDelay(2000 / portTICK_PERIOD_MS);
+
 	pb_buf_t buf = pb_send_magic_res();
-	pb_reply(msg, &buf);
+	pb_send_reply(msg, &buf);
 	pb_buf_free(&buf);
 }
 

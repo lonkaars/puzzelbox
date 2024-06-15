@@ -32,7 +32,3 @@ __weak void pb_i2c_recv(const uint8_t * data, size_t sz) {
 	pb_msg_free(msg);
 }
 
-void pb_reply(pb_msg_t * msg, pb_buf_t * reply) {
-	return pb_i2c_send(msg->sender, (uint8_t *) reply->data, reply->size);
-}
-

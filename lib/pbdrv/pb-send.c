@@ -2,6 +2,10 @@
 #include "pb-mod.h"
 #include "pb-msg.h"
 
+void pb_send_reply(pb_msg_t * msg, pb_buf_t * reply) {
+	return pb_i2c_send(msg->sender, (uint8_t *) reply->data, reply->size);
+}
+
 pb_buf_t pb_send_read_req(uint8_t propid) {
 	pb_cmd_prop_t cmd = {
 		.propid = propid,

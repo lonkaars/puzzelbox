@@ -8,9 +8,23 @@ went. We found the previous handover documents to be unhelpful when determining
 the 'actual' state of the project in the first few weeks, and felt they did not
 address the pitfalls of this project.
 
-== Incidents
-
 == Project History
+
+=== Garbage workarounds
+
+This section details unelegant workarounds that should be removed from the
+code. All workarounds are marked with ``FIXME:`` comments referring to one of
+the workarounds mentioned in this section.
+
+RP2040 I^2^C limitations::
+- All puzzle module drivers have a hard-coded 2 second delay between receiving
+	the MAGIC handshake request and the MAGIC handshake response handler. This
+	was done to ensure responses are not ignored by the RP2040 (main controller)
+	while it is still in I^2^C master mode.
+
+=== Incidents
+
+== Group History
 
 === 19-20
 

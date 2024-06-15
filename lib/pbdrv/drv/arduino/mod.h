@@ -4,12 +4,17 @@
 extern "C" {
 #endif
 
+//! Arduino init variant (called before user setup)
+void initVariant(void);
+
 /**
- * \brief puzzle bus driver setup
+ * \brief Arduino loop function
  *
- * This function should be called from the Arduino \c setup() function.
+ * Loop won't run because everything is handled by the freertos scheduler. It
+ * is defined in this driver to cause compiler warnings if the user has defined
+ * the loop() function anyways.
  */
-void pb_setup();
+extern void loop(void);
 
 #ifdef __cplusplus
 }

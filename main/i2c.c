@@ -17,3 +17,7 @@ void bus_task() {
 	vTaskDelete(NULL);
 }
 
+void pb_route_cmd_magic_res(pb_msg_t * msg) {
+	printf("got a magic response from 0x%02x!\n", msg->sender);
+}
+
