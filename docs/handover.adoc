@@ -1,13 +1,16 @@
 :document: Handover
 include::share/meta.adoc[]
 
-=== A Note Before Reading
+== A Note Before Reading
 The team of year 2023-2024 consisted of only software students, meaning no 
 hardware was developed in this year. We were tasked with simplifying the 
 software to the point where it would only have to be ported into the new hardware,
 which was designed in the year 2022-2023. The goal of this year would be to create
 a software framework which can be used to implement new puzzles and to make the 
 development process of these puzzles easier. 
+
+At the moment of writing, the documentation of previous years can be found at the 
+following link: 'https://media.pipeframe.xyz/puzzlebox'.
 
 == Project State
 The current project state is as follows: No new hardware has been designed 
@@ -22,29 +25,61 @@ new puzzle modules on startup, and does not check for new modules afterwards. A
 simple CLI application has been developed, which can communicate with the main 
 controller through a tcp connection and simple commands. 
 
-== What Went Wrong
-Vorige week hadden Elwin en Thomas wat moeite met het werkend krijgen van de multi-master I2C driver voor de Raspberry Pi Pico, en na wat rond puzzelen bleek dit een hardware limitatie van de RP2040 te zijn. De Atmega328P (van de Arduino) heeft de TWI-interface met ondersteuning voor I2C multi-master waarbij deze tegelijkertijd nog steeds adresseerbaar is als I2C slave. Dit kan de RP2040 niet, dus heb ik afgelopen maandag een workaround geïmplementeerd in de puzzel bus driver voor de RP2040. 
-Nu Lars uit onze groep is hebben we besloten zijn puzzel module te laten liggen. Door de slechte communicatie weten wij nu niet wat er mis is met deze puzzel module, en we zien het nu als een te groot risico om hier nu nog tijd in te steken.
-Omdat ik nu beide Pico's thuis heb kunnen Elwin en Thomas momenteel weinig aan de software doen. Dit had heel makkelijk opgelost kunnen worden als ik meer dan 2 Pico's had laten bestellen, en dit zal ook zeker meegenomen worden in het overdrachtsdocument. 
+In short: A puzzle bus driver has been implemented, to allow for communication 
+between the main controller and the puzzle modules. A CLI application was developed 
+which connects with the main controller to monitor/edit the gamestate. And the 
+software for the puzzle modules 'Vault' and 'Neotrellis' is in the product state.
 
+The hardware design can be derived from the year 2022-2023, and you can derive the 
+game rules from the year 2020-2021. 
+
+== Challenges
+There were a multitude of different challenges we had to face before getting to a 
+working product. Most of these have been documented here, and it is highly recommended 
+to have a look at this before development.
+
+=== Misconceptions
+Make sure to know what you are developing and do some research beforehand, to make 
+sure you have the complete picture about what you are using. Sounds stupid, but it 
+happened for multiple project attempts, and cause time-loss. This also includes 
+documentation of previous years: go through the documentation and verify it on the 
+lowest possible level for the same reason as previously mentioned. 
+
+=== I^2^C
+I^2^C is easy to implement but also easy to underestimate, this project requires a 
+multi-master structure as communication is otherwise too complicated compared to 
+other means of communication.
+
+For I^2^C on hardware level: make sure to use pull-up resistors, 2k2 if bus is on 
+100khz, as it is otherwise impossible to use I^2^C due to incorrect messages. This 
+is also recommended for controllers which are connected to the I^2^C bus. Make sure 
+to use I^2^C arbitration to check if the bus is not busy when writing to it, as 
+this will result in complictions in the communication. 
+
+The RPI Pico W (RP2040) does not support multi-master to the point of being able to 
+receive messages from other multi-masters as a slave while being configured as master. 
+Everything else about the I^2^C bus works, but due to this limitation a workaround has 
+been implemented to be able to continue using the RPI Pico W. Under ideal circumstances 
+a different controller could be found which does support this, but one was not found at 
+the time of writing. To simplify; a controller is needed which supports multi-master 
+while being able to be addressed as a slave-type controller.
+
+=== Available Hardware/SDKs
+When choosing or using specific chips/sdks make sure it is available for (at least) 
+a few years. This makes it easier for the next project team to use the same chips/sdks
+instead of having to find new ones because the previous project team did not think about 
+this possibility. This also includes having enough sdks for multiple people to program 
+using the same setup, eg. the RPI Pico W requires another RPI Pico W to be debugged. 
+Effectively requiring the project team to have at least 4 RPI Pico Ws to be able to develop 
+in the same environment (if there are 2 software students).
 
 == Recommendations
-Start creating prototypes as fast as possible, 
-kijk naar de documentatie maar verifieer alles op het laagste niveau
-
-Voor de volgende jaren: maak zo snel mogelijk prototypes, laat zien dat *iets* werkt
-
-ER MOET ONDERZOCHT WORDEN NAAR MULTIMASTER CONTROLLERS DIE OOK ALS SLAVE KUNNEN WORDEN GEADDRESSEERD (INTENS MOEILIJK TE VINDEN)
-
-i2c MOET, arbitration moet, Atmega328p zou geschikt zijn voor losse puzzelmodules
-
---
-Maak een duidelijke waarschuwing"
-- ga er niet van uit dat je het al weet, doe ff wat low level research over de onderwerpen
-
-rpi heeft programmable io modules, mogelijk via deze omweg rp2040 wel als MULTIMASTER met slave adresseerbaar
-- rp2040 kan alleen 7-bit adressen hebben
-
-Momenteel verwijs ik in het overdrachtsdocument naar https://media.pipeframe.xyz/puzzlebox;
+* Start creating prototypes as fast as possible, this benefits the project in the long run, 
+as you have already shown that certain parts of the project are already working and only 
+need to be integrated.
+* The Atmega328P-chip is sufficient for the puzzle modules as it has enough IO and I^2^C 
+connectivity possibilities.
+* The RPI Pico W has programmable IO modules, making it possible to create an I^2^C driver 
+that allows multi-master communication while still being addressable as a slave.
 
 include::share/footer.adoc[]
