@@ -52,14 +52,25 @@ __weak void pb_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
 
 //! Arduino setup function
 extern void setup(void);
+//! Arduino loop function
+extern void loop(void);
 //! Arduino internal initialization
 void init(void);
+
+//! FreeRTOS loop task
+void loop_task() {
+	for(;;) {
+		loop();
+		if (serialEventRun) serialEventRun();
+	}
+}
 
 //! Application entrypoint
 int main(void) {
 	init(); // call arduino internal setup
 	setup(); // call regular arduino setup
 	pb_setup(); // call pbdrv-mod setup
+	xTaskCreate((TaskFunction_t) loop_task, "loop", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
 	vTaskStartScheduler(); // start freertos scheduler
 	return 0;
 }
