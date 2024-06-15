@@ -2,6 +2,7 @@ all: plan.pdf
 all: reqs.pdf
 all: research.pdf
 all: design.pdf
+all: handover.pdf
 
 # include font.mk
 
