@@ -16,11 +16,6 @@
 #include "../../pb.h"
 #include "../../pb-mod.h"
 #include "../../pb-buf.h"
-#include "mod.h"
-
-//! Arduino setup function
-extern void setup(void);
-void loop(void) {}
 
 static void async_pb_i2c_recv(void * _msg, uint32_t _) {
 	pb_buf_t * msg = (pb_buf_t *) _msg;
@@ -48,22 +43,32 @@ static void pb_setup() {
 	Wire.onReceive(recv_event);
 }
 
-void initVariant(void) {
-	// call regular arduino setup
-	setup();
-	Serial.print("regular setup done and in initVariant\r\n"); // DEBUG
-
-	// call pbdrv-mod setup
-	pb_setup();
-
-	// start freertos scheduler
-	vTaskStartScheduler();
-}
-
 __weak void pb_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
 	Wire.beginTransmission((int) addr);
 	Wire.write(buf, sz);
 	Wire.endTransmission(true);
 	Wire.setWireTimeout(PB_TIMEOUT_US, true);
 }
+
+//! Arduino setup function
+extern void setup(void);
+//! Arduino internal initialization
+void init(void);
+
+//! Application entrypoint
+int main(void) {
+	init(); // call arduino internal setup
+	setup(); // call regular arduino setup
+	pb_setup(); // call pbdrv-mod setup
+	vTaskStartScheduler(); // start freertos scheduler
+	return 0;
+}
+
+/**
+ * \note I should really be able to use Arduino's initVariant function for
+ * this, but I can't seem to get it to link properly using the CMake setup in
+ * this repository. Overriding the main() function seems to work, and the
+ * USBCON thing in the default Arduino main() function isn't needed because
+ * puzzle modules are likely not using USB.
+ */
 
