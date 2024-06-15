@@ -10,14 +10,26 @@ a software framework which can be used to implement new puzzles and to make the
 development process of these puzzles easier. 
 
 == Project State
-The current project state is as follows: No new hardware has been designed
+The current project state is as follows: No new hardware has been designed 
 or developed this year. The software was completely revised, now consisting of a 
-main controller, and multiple puzzle modules. The main controller (a RPI Pico W) 
-can interact with the different puzzle modules using an I^2^C bus.
+a puzzle bus driver, a main controller, a simple CLI application, and two puzzle 
+modules. Namely the puzzle modules 'Vault' and 'Neotrellis', both using an arduino 
+as the controller. The main controller (a RPI Pico W) can interact with the 
+different puzzle modules using an I^2^C bus. The I^2^C bus has been configured to 
+be a multi-master I^2^C bus. allowing the puzzle modules and the main controller 
+to send and recieve messages on their own. The main controller is able to find 
+new puzzle modules on startup, and does not check for new modules afterwards. A 
+simple CLI application has been developed, which can communicate with the main 
+controller through a tcp connection and simple commands. 
 
 == What Went Wrong
+Vorige week hadden Elwin en Thomas wat moeite met het werkend krijgen van de multi-master I2C driver voor de Raspberry Pi Pico, en na wat rond puzzelen bleek dit een hardware limitatie van de RP2040 te zijn. De Atmega328P (van de Arduino) heeft de TWI-interface met ondersteuning voor I2C multi-master waarbij deze tegelijkertijd nog steeds adresseerbaar is als I2C slave. Dit kan de RP2040 niet, dus heb ik afgelopen maandag een workaround geïmplementeerd in de puzzel bus driver voor de RP2040. 
+Nu Lars uit onze groep is hebben we besloten zijn puzzel module te laten liggen. Door de slechte communicatie weten wij nu niet wat er mis is met deze puzzel module, en we zien het nu als een te groot risico om hier nu nog tijd in te steken.
+Omdat ik nu beide Pico's thuis heb kunnen Elwin en Thomas momenteel weinig aan de software doen. Dit had heel makkelijk opgelost kunnen worden als ik meer dan 2 Pico's had laten bestellen, en dit zal ook zeker meegenomen worden in het overdrachtsdocument. 
+
 
 == Recommendations
+Start creating prototypes as fast as possible, 
 kijk naar de documentatie maar verifieer alles op het laagste niveau
 
 Voor de volgende jaren: maak zo snel mogelijk prototypes, laat zien dat *iets* werkt
@@ -32,4 +44,7 @@ Maak een duidelijke waarschuwing"
 
 rpi heeft programmable io modules, mogelijk via deze omweg rp2040 wel als MULTIMASTER met slave adresseerbaar
 - rp2040 kan alleen 7-bit adressen hebben
+
+Momenteel verwijs ik in het overdrachtsdocument naar https://media.pipeframe.xyz/puzzlebox;
+
 include::share/footer.adoc[]
