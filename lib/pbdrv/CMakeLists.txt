@@ -11,6 +11,8 @@ add_compile_definitions(DEBUG)
 project(pbdrv C CXX)
 
 add_subdirectory(lib/mpack)
+add_compile_definitions(MPACK_HAS_CONFIG=1)
+target_include_directories(mpack INTERFACE .) # mpack-config.h
 
 # generic puzzle bus message handling library functions
 add_library(pbdrv STATIC
@@ -18,25 +20,29 @@ add_library(pbdrv STATIC
 	pb-serial.c
 	pb-buf.c
 	)
-target_link_libraries(pbdrv mpack)
 target_include_directories(pbdrv SYSTEM INTERFACE .)
+target_compile_definitions(pbdrv PRIVATE PB_TARGET_STDLIB)
+target_link_libraries(pbdrv mpack)
 
 # puzzle bus *module* specific code
 add_library(pbdrv-mod STATIC
+	pb-msg.c
+	pb-serial.c
+	pb-buf.c
 	pb-mod.c
 	pb-send.c
 	pb-route.c
 	)
+target_include_directories(pbdrv-mod SYSTEM INTERFACE .)
+target_compile_definitions(pbdrv-mod PRIVATE PB_TARGET_FREERTOS)
 target_link_libraries(pbdrv-mod
+	mpack
 	# freertos is used to defer the handling of i2c messages outside the receive
 	# interrupt service routine
 	freertos_kernel
 	freertos_kernel_include
 	freertos_config
-	# pbdrv-mod is a superset of pbdrv
-	pbdrv
 	)
-target_include_directories(pbdrv-mod SYSTEM INTERFACE .)
 
 # supported puzzle bus drivers
 include(drv/arduino/cfg.cmake)

@@ -10,23 +10,22 @@
 #include <timers.h>
 #include <task.h>
 
-#include <stdlib.h>
-#include <stdint.h>
-
 #include "../../pb.h"
 #include "../../pb-mod.h"
+#include "../../pb-types.h"
 #include "../../pb-buf.h"
+#include "../../pb-mem.h"
 
 static void async_pb_i2c_recv(void * _msg, uint32_t _) {
 	pb_buf_t * msg = (pb_buf_t *) _msg;
 	pb_i2c_recv((uint8_t *) msg->data, msg->size);
 	pb_buf_free(msg);
-	free(msg);
+	pb_free(msg);
 }
 
 static void recv_event(int bytes) {
-	pb_buf_t * msg = (pb_buf_t *) malloc(sizeof(pb_buf_t));
-	msg->data = (char *) malloc(bytes);
+	pb_buf_t * msg = (pb_buf_t *) pb_malloc(sizeof(pb_buf_t));
+	msg->data = (char *) pb_malloc(bytes);
 	msg->size = 0;
 	while (Wire.available())
 		msg->data[msg->size++] = Wire.read();

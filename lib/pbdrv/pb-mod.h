@@ -10,10 +10,6 @@
  * use the puzzle bus driver library.
  */
 
-#include <stdint.h>
-#include <stddef.h>
-#include <stdbool.h>
-
 #include "pb-types.h"
 
 #ifdef __cplusplus

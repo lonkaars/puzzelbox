@@ -1,13 +1,12 @@
+#include <FreeRTOS.h>
+#include <task.h>
+
 #include "pb-route.h"
 #include "pb-mod.h"
 #include "pb-send.h"
 #include "pb-types.h"
 
 #include <string.h>
-
-// FIXME: this should be removed (see handover: RP2040 I2C limitations)
-#include <FreeRTOS.h>
-#include <task.h>
 
 __weak bool pb_hook_route_msg(pb_msg_t * msg) { return false; }
 __weak void pb_route_msg(pb_msg_t * msg) {

@@ -48,7 +48,7 @@ void pb_ser_w_cmd_prop(mpack_writer_t * writer, const pb_msg_t * _msg) {
 	mpack_write_bin(writer, (char *) cmd->value, cmd->_value_size);
 }
 void pb_ser_r_cmd_prop(mpack_reader_t * reader, pb_msg_t * _msg) {
-	pb_cmd_prop_t * cmd = _msg->cmd = malloc(sizeof(pb_cmd_prop_t));
+	pb_cmd_prop_t * cmd = _msg->cmd = pb_malloc(sizeof(pb_cmd_prop_t));
 
 	cmd->propid = mpack_expect_u8(reader);
 	cmd->_value_size = mpack_expect_bin(reader);
@@ -62,7 +62,7 @@ void pb_ser_free_cmd_prop(pb_msg_t * _msg) {
 			MPACK_FREE(cmd->value);
 			cmd->value = NULL;
 		}
-		free(_msg->cmd);
+		pb_free(_msg->cmd);
 		_msg->cmd = NULL;
 	}
 }
@@ -73,13 +73,13 @@ void pb_ser_w_cmd_state(mpack_writer_t * writer, const pb_msg_t * _msg) {
 	mpack_write_u8(writer, cmd->state);
 }
 void pb_ser_r_cmd_state(mpack_reader_t * reader, pb_msg_t * _msg) {
-	pb_cmd_state_t * cmd = _msg->cmd = malloc(sizeof(pb_cmd_state_t));
+	pb_cmd_state_t * cmd = _msg->cmd = pb_malloc(sizeof(pb_cmd_state_t));
 
 	cmd->state = mpack_expect_u8(reader);
 }
 void pb_ser_free_cmd_state(pb_msg_t * _msg) {
 	if (_msg->cmd != NULL) {
-		free(_msg->cmd);
+		pb_free(_msg->cmd);
 		_msg->cmd = NULL;
 	}
 }
@@ -90,7 +90,7 @@ void pb_ser_w_cmd_magic(mpack_writer_t * writer, const pb_msg_t * _msg) {
 	mpack_write_bin(writer, (char *) cmd->magic, cmd->_magic_size);
 }
 void pb_ser_r_cmd_magic(mpack_reader_t * reader, pb_msg_t * _msg) {
-	pb_cmd_magic_t * cmd = _msg->cmd = malloc(sizeof(pb_cmd_magic_t));
+	pb_cmd_magic_t * cmd = _msg->cmd = pb_malloc(sizeof(pb_cmd_magic_t));
 
 	cmd->_magic_size = mpack_expect_bin(reader);
 	cmd->magic = mpack_read_bytes_alloc(reader, cmd->_magic_size);
@@ -103,7 +103,7 @@ void pb_ser_free_cmd_magic(pb_msg_t * _msg) {
 			MPACK_FREE(cmd->magic);
 			cmd->magic = NULL;
 		}
-		free(_msg->cmd);
+		pb_free(_msg->cmd);
 		_msg->cmd = NULL;
 	}
 }

@@ -2,6 +2,7 @@
 
 #include "pb-msg.h"
 #include "pb-serial.h"
+#include "pb-mem.h"
 
 pb_buf_t pb_msg_write(const pb_msg_t * msg) {
 	pb_buf_t buf = { 0 };
@@ -20,7 +21,7 @@ pb_msg_t * pb_msg_read(const pb_buf_t * buf) {
 	mpack_reader_t reader;
 	mpack_reader_init_data(&reader, buf->data, buf->size);
 
-	pb_msg_t * msg = malloc(sizeof(pb_msg_t));
+	pb_msg_t * msg = pb_malloc(sizeof(pb_msg_t));
 
 	pb_ser_r(&reader, msg);
 
@@ -33,6 +34,6 @@ void pb_msg_free(pb_msg_t * msg) {
 	pb_ser_free(msg);
 
 	// free message container that was created in \p pb_msg_read
-	free(msg);
+	pb_free(msg);
 }
 

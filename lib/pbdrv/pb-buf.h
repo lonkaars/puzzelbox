@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stddef.h>
+#include "pb-types.h"
 
 #ifdef __cplusplus
 extern "C" {
