@@ -73,7 +73,7 @@ using the same setup, eg. the RPI Pico W requires another RPI Pico W to be debug
 Effectively requiring the project team to have at least 4 RPI Pico Ws to be able to develop 
 in the same environment (if there are 2 software students).
 
-== Recommendations
+== Imperatives
 * Start creating prototypes as fast as possible, this benefits the project in the long run, 
 as you have already shown that certain parts of the project are already working and only 
 need to be integrated.
