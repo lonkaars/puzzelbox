@@ -10,6 +10,7 @@ include(lib/FreeRTOS-Kernel/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_impor
 add_subdirectory(lib/mpack)
 add_subdirectory(lib/i2ctcp)
 add_subdirectory(lib/pbdrv)
+include(lib/pbdrv/ext/stdlib/include.cmake) # pico-stdlib is compatible with C stdlib
 
 project(puzzlebox_main C CXX ASM)
 
