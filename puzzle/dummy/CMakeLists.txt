@@ -7,6 +7,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 # enable debug features
 set(CMAKE_BUILD_TYPE Debug)
 add_compile_definitions(DEBUG)
+# add_compile_options(-O0) # no optimizations
 
 # arduino
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/lib/Arduino-CMake-Toolchain/Arduino-toolchain.cmake)

@@ -2,7 +2,7 @@
 #include "pb-mod.h"
 #include "pb-msg.h"
 
-void pb_send_reply(pb_msg_t * msg, pb_buf_t * reply) {
+__weak void pb_send_reply(pb_msg_t * msg, pb_buf_t * reply) {
 	return pb_i2c_send(msg->sender, (uint8_t *) reply->data, reply->size);
 }
 

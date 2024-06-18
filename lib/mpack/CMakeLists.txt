@@ -7,6 +7,8 @@ cmake_minimum_required(VERSION 3.29)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
+# set(CMAKE_BUILD_TYPE Debug)
+
 project(mpack C)
 
 add_library(mpack STATIC
@@ -24,5 +26,5 @@ target_include_directories(mpack SYSTEM INTERFACE
 	)
 
 # causes some wild crashes, please leave off
-add_compile_definitions(MPACK_READ_TRACKING=0)
+target_compile_definitions(mpack PRIVATE MPACK_READ_TRACKING=0)
 

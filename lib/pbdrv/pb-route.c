@@ -6,8 +6,6 @@
 #include "pb-send.h"
 #include "pb-types.h"
 
-#include <string.h>
-
 __weak bool pb_hook_route_msg(pb_msg_t * msg) { return false; }
 __weak void pb_route_msg(pb_msg_t * msg) {
 	if (pb_hook_route_msg(msg)) return;
@@ -84,9 +82,11 @@ __weak void pb_route_cmd_state_set(pb_msg_t * msg) {
 
 __weak void pb_route_cmd_magic_req(pb_msg_t * msg) {
 	pb_cmd_magic_t * cmd = msg->cmd;
-	// return early if magic is invalid
+	// return early if magic has wrong size
 	if (cmd->_magic_size != sizeof(pb_cmd_magic_req)) return;
-	if (memcmp(cmd->magic, pb_cmd_magic_req, cmd->_magic_size) != 0) return;
+	// // return early if magic doesn't match
+	// for (size_t i = 0; i < sizeof(pb_cmd_magic_req); i++)
+	// 	if (cmd->magic[i] != pb_cmd_magic_req[i]) return;
 
 	// FIXME: this should be removed (see handover: RP2040 I2C limitations)
 	vTaskDelay(2000 / portTICK_PERIOD_MS);
