@@ -1,5 +1,6 @@
 #include <mpack.h>
 
+#include "pb-mem.h"
 #include "pb-serial.h"
 #include "pb-types.h"
 

@@ -1,10 +1,8 @@
-#include <FreeRTOS.h>
-#include <task.h>
-
 #include "pb-route.h"
 #include "pb-mod.h"
 #include "pb-send.h"
 #include "pb-types.h"
+#include "pb-mem.h"
 
 __weak bool pb_hook_route_msg(pb_msg_t * msg) { return false; }
 __weak void pb_route_msg(pb_msg_t * msg) {
@@ -85,11 +83,10 @@ __weak void pb_route_cmd_magic_req(pb_msg_t * msg) {
 	// return early if magic has wrong size
 	if (cmd->_magic_size != sizeof(pb_cmd_magic_req)) return;
 	// // return early if magic doesn't match
-	// for (size_t i = 0; i < sizeof(pb_cmd_magic_req); i++)
-	// 	if (cmd->magic[i] != pb_cmd_magic_req[i]) return;
+	if (pb_memcmp(cmd->magic, pb_cmd_magic_req, sizeof(pb_cmd_magic_req)) != 0) return;
 
 	// FIXME: this should be removed (see handover: RP2040 I2C limitations)
-	vTaskDelay(2000 / portTICK_PERIOD_MS);
+	pb_mod_blocking_delay_ms(2000);
 
 	pb_buf_t buf = pb_send_magic_res();
 	pb_send_reply(msg, &buf);

@@ -17,13 +17,12 @@ target_compile_definitions(mpack PRIVATE MPACK_HAS_CONFIG=1)
 target_include_directories(mpack PRIVATE .)
 
 # generic puzzle bus message handling library functions
-add_library(pbdrv STATIC
+add_library(pbdrv OBJECT
 	pb-msg.c
 	pb-serial.c
 	pb-buf.c
 	)
 target_include_directories(pbdrv SYSTEM INTERFACE .)
-target_compile_definitions(pbdrv PRIVATE PB_TARGET_STDLIB)
 target_link_libraries(pbdrv mpack)
 
 # puzzle bus *module* specific code
@@ -34,20 +33,11 @@ add_library(pbdrv-mod OBJECT
 	pb-mod.c
 	pb-send.c
 	pb-route.c
-	pb-mem.c
 	)
 target_include_directories(pbdrv-mod SYSTEM INTERFACE .)
-target_compile_definitions(pbdrv-mod PRIVATE PB_TARGET_FREERTOS)
-target_link_libraries(pbdrv-mod
-	mpack
-	# freertos is used to defer the handling of i2c messages outside the receive
-	# interrupt service routine
-	freertos_kernel
-	freertos_kernel_include
-	freertos_config
-	)
+target_link_libraries(pbdrv-mod mpack)
 
-# supported puzzle bus drivers
-include(drv/arduino/cfg.cmake)
-# include(drv/rp2040/cfg.cmake) # please see /main/pbdrv.h
+# puzzle bus drivers
+include(drv/arduino/include.cmake)
+# include(drv/rp2040/include.cmake) # please see /main/pbdrv.h
 

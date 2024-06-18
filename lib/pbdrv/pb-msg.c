@@ -1,9 +1,10 @@
+#include "mpack-config.h"
+
 #include <mpack.h>
 
 #include "pb-msg.h"
 #include "pb-serial.h"
 #include "pb-mem.h"
-#include "mpack-config.h"
 
 pb_buf_t pb_msg_write(const pb_msg_t * msg) {
 	pb_buf_t buf = { 0 };

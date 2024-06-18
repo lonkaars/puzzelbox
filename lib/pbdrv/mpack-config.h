@@ -9,6 +9,8 @@
 #define MPACK_FREE pb_free
 #define MPACK_MALLOC pb_malloc
 #define MPACK_REALLOC pb_realloc
+#define MPACK_MEMCPY pb_memcpy
+#define MPACK_MEMCMP pb_memcmp
 
 // more reasonable buffer size (all messages are small)
 #define MPACK_BUFFER_SIZE 256
