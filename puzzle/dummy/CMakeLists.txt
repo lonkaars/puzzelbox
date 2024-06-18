@@ -33,6 +33,7 @@ add_subdirectory(lib/FreeRTOS-Kernel)
 
 add_executable(main
 	main.cpp
+	mod.c
 	)
 
 target_link_libraries(main

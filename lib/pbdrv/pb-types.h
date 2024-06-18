@@ -75,9 +75,6 @@ typedef struct {
 	size_t _magic_size; //!< [META] size of \p magic
 } pb_cmd_magic_t;
 
-// DEBUG: remove
-void pb_null_err(const char * from);
-
 #ifdef __cplusplus
 }
 #endif

@@ -11,11 +11,11 @@
 #define MPACK_REALLOC pb_realloc
 
 // more reasonable buffer size (all messages are small)
-#define MPACK_BUFFER_SIZE 80
-#define MPACK_STACK_SIZE 80
-#define MPACK_PAGE_SIZE 80
+#define MPACK_BUFFER_SIZE 256
+#define MPACK_STACK_SIZE MPACK_BUFFER_SIZE
+#define MPACK_PAGE_SIZE MPACK_BUFFER_SIZE
 
-// // disable unused features (causes errors?)
-// #define MPACK_NODE 0
-// #define MPACK_BUILDER 0
+// disable unused features (causes errors?)
+#define MPACK_NODE 0
+#define MPACK_BUILDER 0
 

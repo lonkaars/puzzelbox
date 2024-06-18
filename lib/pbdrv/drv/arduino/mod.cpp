@@ -82,7 +82,3 @@ int main(void) {
  * puzzle modules are likely not using USB.
  */
 
-void pb_null_err(const char * from) {
-	Serial.println(from);
-}
-

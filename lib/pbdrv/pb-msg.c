@@ -3,17 +3,26 @@
 #include "pb-msg.h"
 #include "pb-serial.h"
 #include "pb-mem.h"
+#include "mpack-config.h"
 
 pb_buf_t pb_msg_write(const pb_msg_t * msg) {
 	pb_buf_t buf = { 0 };
 	if (msg == NULL) return buf;
 
+	buf.data = pb_malloc(MPACK_BUFFER_SIZE);
+	if (buf.data == NULL) return buf;
+
 	mpack_writer_t writer;
-	mpack_writer_init_growable(&writer, &buf.data, &buf.size);
+	mpack_writer_init(&writer, buf.data, buf.size);
 
 	pb_ser_w(&writer, msg);
 
-	mpack_writer_destroy(&writer);
+	buf.size = mpack_writer_buffer_used(&writer);
+	if (mpack_writer_destroy(&writer) != mpack_ok) {
+		pb_free(buf.data);
+		buf.data = NULL;
+		buf.size = 0;
+	}
 	return buf;
 }
 
