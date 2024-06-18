@@ -10,12 +10,14 @@ project(pbtest C CXX ASM)
 
 add_executable(test
 	# i2ctcp/main.cpp
+	pbdrv/pb-route.c
 	pbdrv/msg.cpp
 	pbdrv/mod.c
 	)
 
 add_subdirectory(lib/googletest)
 add_subdirectory(lib/pbdrv)
+include(lib/pbdrv/ext/stdlib/include.cmake)
 add_subdirectory(lib/i2ctcp)
 
 target_link_libraries(test

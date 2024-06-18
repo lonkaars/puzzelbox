@@ -10,7 +10,7 @@
 
 // #include "pb/mod/main.h"
 
-bool i2c_dump_send = false;
+bool i2c_dump_send = true;
 bool i2c_dump_recv = true;
 
 void i2c_send(uint16_t addr, const char * data, size_t data_size) {

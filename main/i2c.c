@@ -10,13 +10,35 @@
 #include "pb-mod.h"
 #include "pbdrv.h"
 #include "config.h"
+#include "pb-buf.h"
+#include "pb-send.h"
 
 i2c_addr_t modules[CFG_PB_MOD_MAX];
 size_t modules_size = 0;
 
+static void state_exchange() {
+	for (size_t i = 0; i < modules_size; i++) {
+		pb_buf_t buf = pb_send_state_req();
+		
+		pb_buf_free(&buf);
+	}
+}
+
 void bus_task() {
+	// do a scan of the bus
 	bus_scan();
-	vTaskDelete(NULL);
+
+	// FIXME: this should be removed (see handover: RP2040 I2C limitations)
+	// wait for 5 seconds until all handshake responses are received
+	pb_mod_blocking_delay_ms(5e3);
+
+	while(1) {
+		// send my state to all puzzle modules
+		state_exchange();
+
+		// wait 1 second
+		pb_mod_blocking_delay_ms(1e3);
+	}
 }
 
 void pb_route_cmd_magic_res(pb_msg_t * msg) {

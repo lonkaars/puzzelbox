@@ -45,3 +45,8 @@ send 0x39     68:65:6c:6c:6f  44      0x20    'world'    33
 
 The data is concatenated, and may contain mixed types of literals
 
+## known bugs (TODO)
+
+- tab completion for `dump` seems to print garbage sometimes
+- the send command with an address but no data causes a segmentation fault
+

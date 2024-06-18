@@ -9,6 +9,7 @@
 #include "config.h"
 #include "i2ctcpv1.h"
 #include "sock.h"
+#include "pb-mod.h"
 
 struct netconn* current_connection = NULL;
 i2ctcp_msg_t recv_msg;
@@ -34,16 +35,14 @@ void i2c_send(uint16_t addr, const char * data, size_t data_size) {
 	free(buf);
 }
 
-void i2c_recv(uint16_t addr, const char * data, size_t data_size) {
-	printf("address: 0x%02x\n", addr);
-	printf("data:    \"%.*s\"\n", data_size, data);
-
-	// send message back
-	char reply[] = "Test message back!";
-	i2c_send(0x69, reply, strlen(reply));
-
-	// TODO: this function should forward the recieved message onto the puzzle
-	// bus instead of printing/replying
+static void i2c_recv_fwd(uint16_t addr, const uint8_t * data, size_t data_size) {
+	if (addr == PB_MOD_ADDR) {
+		// addressed to me = act as recieved
+		pb_i2c_recv(data, data_size);
+	} else {
+		// addressed to other puzzle module = forward
+		pb_i2c_send(addr, data, data_size);
+	}
 }
 
 void recv_handler(struct netconn* conn, struct netbuf* buf) {
@@ -55,10 +54,10 @@ void recv_handler(struct netconn* conn, struct netbuf* buf) {
 		netbuf_data(buf, (void**)&data, &len);
 
 		// continue early if more data is needed to complete message
-		if (!i2ctcp_read(&recv_msg, data, len)) continue;
+		if (i2ctcp_read(&recv_msg, data, len) != 0) continue;
 
 		// forward received message to puzzle bus
-		i2c_recv(recv_msg.addr, recv_msg.data, recv_msg.length);
+		i2c_recv_fwd(recv_msg.addr, (uint8_t *) recv_msg.data, recv_msg.length);
 		free(recv_msg.data);
 	} while (netbuf_next(buf) >= 0);
 
