@@ -1,3 +1,113 @@
+:document: Handover Report
+include::share/meta.adoc[]
+
+== Introduction
+
+This is an informal document that summarizes how the 23-24 run of this project
+went. We found the previous handover documents to be unhelpful when determining
+the 'actual' state of the project in the first few weeks, and felt they did not
+address the pitfalls of this project.
+
+== Incidents
+
+== Project History
+
+=== 19-20
+
+.19-20 group composition
+[%autowidth]
+|===
+| Name | Study path
+
+| Daniël Janssen | Software
+| Dion Legierse | Software
+| Jop van Laanen | Hardware
+| Max van den Heijkant | Software
+|===
+
+=== 20-21
+
+.20-21 group composition
+[%autowidth]
+|===
+| Name | Study path
+
+| Joost van Wiechen | Hardware
+| Justin Maas | Software
+| [[pn:creemers,Merel Creemers]]Merel Creemers | Hardware{empty}footnote:[The
+handover report from 20-21 mentions: _"Het frame zelf is niet gelukt om te
+realiseren, omdat er communicatie tussen het projectgroep en de CMD-student uit
+het niets is verdwenen"_. <<pn:creemers>> was introduced as a hardware-student
+in the project plan, but is no longer mentioned in the handover report, which
+may indicate that they were removed from the project group. I am unsure if they
+were a hardware student that worked on the PCBs or a CMD student working on the
+puzzle box chassis.]
+| Vincent Lengowski | Hardware
+|===
+
+=== 21-22
+
+.21-22 group composition
+[%autowidth]
+|===
+| Name | Study path
+
+| Alex van Kuijk | Hardware
+| Jef Baars | Software
+| Julian de Bruin | Software
+| Lucas van Gastel | Software
+| Toon Rockx | Hardware
+|===
+
+=== 22-23
+
+.22-23 group composition
+[%autowidth]
+|===
+| Name | Study path
+
+| Frank Bekema | Hardware
+| Jasper Gense | Hardware
+|===
+
+=== 23-24 (current)
+
+.23-24 group composition
+[%autowidth]
+|===
+| Name | Study path
+
+| Elwin Hammer | Software
+| [[pn:faase,Lars Faase]]Lars Faase{empty}footnote:[<<pn:faase>> was removed
+from the project group on 2024-06-03 following complaints about the lack of
+communication.] | Software
+| [[pn:blansch,Loek Le Blansch]]Loek Le Blansch | Software
+| Thomas in 't Anker | Software
+|===
+
+== Resources
+
+Previous years' groups have put their predecessor's documents inside their own
+project folder, which has resulted in what we called the 'Russian doll folder
+structure'. <<pn:blansch>> has separated out each year's project folder
+('master file'), and is hosting these on
+<https://media.pipeframe.xyz/puzzlebox>. This directory is also mountable as a
+read-only WebDAV share on Windows, MacOS and Linux (using davfs2), and does not
+require credentials to log in. Please note that this is very much unofficial,
+and is not managed or endorsed by Avans. <<pn:blansch>> is the contact for
+removal or transfer of these files.
+
+== Recommendations
+
+- The 22-23 design document already mentions that the application of the I^2^C
+	bus is in a multi-master configuration, but does not mention that this only
+	works when pull-up resistors are used on the SCL and SDA lines. The pull-up
+	resistors are required, as omitting them makes the bus arbitration process
+	very inconsistent which causes frames to be dropped entirely.
+
+include::share/footer.adoc[]
+
+
 :document: Handover
 include::share/meta.adoc[]
 

@@ -8,10 +8,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 set(CMAKE_BUILD_TYPE Debug)
 add_compile_definitions(DEBUG)
 
-project(puzzlebox_client C CXX)
+project(pbc C CXX)
 
-include(../i2ctcp/include.cmake)
-include(../shared/include.cmake)
+add_subdirectory(lib/mpack)
+add_subdirectory(lib/i2ctcp)
+add_subdirectory(lib/pbdrv)
 
 add_executable(pbc
 	main.cpp
@@ -27,5 +28,6 @@ target_link_libraries(pbc
 	i2ctcp
 	mpack
 	readline # this is such a common library that I did not bother adding it as a submodule
+	pbdrv
 	)
 

@@ -119,3 +119,26 @@ int rl_word(const char * line, int cursor) {
 	return word;
 }
 
+typedef struct {
+	const char * word;
+	const char ** suggestions;
+} __rl_complete_list_data_t;
+char** rl_complete_list(const char * word, const char ** suggestions) {
+	__rl_complete_list_data_t data = {
+		.word = word,
+		.suggestions = suggestions,
+	};
+	return rl_completion_matches((char *) &data, [](const char * text, int state) -> char * {
+		__rl_complete_list_data_t data = *(__rl_complete_list_data_t *) text;
+		static size_t i = 0;
+		if (state == 0) i = 0;
+
+		while (data.suggestions[i] != NULL) {
+			const char * suggestion = data.suggestions[i++];
+			if (strncmp(data.word, suggestion, strlen(data.word)) == 0)
+				return strdup(suggestion);
+		}
+		return NULL;
+	});
+}
+

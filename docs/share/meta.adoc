@@ -11,7 +11,7 @@ endif::[]
 :revnumber: 0.0
 :revdate: 2024-04-01
 :revremark: draft
-:author_1: Thomas in ‘t Anker
+:author_1: Thomas in 't Anker
 :author_2: Loek Le Blansch
 :author_3: Lars Faase
 :author_4: Elwin Hammer

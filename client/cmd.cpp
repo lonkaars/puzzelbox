@@ -4,12 +4,12 @@
 #include <string.h>
 
 #include "cmd.h"
-#include "pb/types.h"
+// #include "pb/types.h"
 #include "rl.h"
 #include "i2c.h"
 #include "parse.h"
 
-#include "pb/bus.h"
+// #include "pb/bus.h"
 
 char* consume_token(char* input, const char* ifs) {
 	strtok(input, ifs);
@@ -68,30 +68,12 @@ void cmd_send(char * addr_str) {
 }
 
 void cmd_reset(char*) {
-	const char msg[] = {
-		PB_CMD_WRITE,
-		0x00,
-		PB_GS_IDLE,
-	};
-	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
 }
 
 void cmd_skip(char*) {
-	const char msg[] = {
-		PB_CMD_WRITE,
-		0x00,
-		PB_GS_SOLVED,
-	};
-	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
 }
 
 void cmd_ls(char*) {
-	return;
-	const char msg[] = {
-		PB_CMD_READ,
-		// TODO: which address is this?
-	};
-	i2c_send(BUSADDR_MAIN, msg, sizeof(msg));
 }
 
 extern bool i2c_dump_send;
@@ -119,19 +101,6 @@ void cmd_dump(char * mode) {
 }
 char** cmd_dump_complete(const char * text, int begin, int end) {
 	int word = rl_word(rl_line_buffer, begin);
-	if (word != 1) return NULL;
-
-	return rl_completion_matches(text, [](const char * text, int state) -> char * {
-		static size_t i = 0;
-		if (state == 0) i = 0;
-
-		while (dump_modes[i] != NULL) {
-			const char * mode = dump_modes[i++];
-			if (strncmp(text, mode, strlen(text)) == 0)
-				return strdup(mode);
-		}
-		return NULL;
-	});
-
+	if (word == 1) return rl_complete_list(text, dump_modes);
 	return NULL;
 }

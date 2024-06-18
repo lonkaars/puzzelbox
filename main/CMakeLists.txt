@@ -7,8 +7,9 @@ set(PICO_BOARD pico_w)
 
 include(lib/pico-sdk/pico_sdk_init.cmake)
 include(lib/FreeRTOS-Kernel/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
-include(../i2ctcp/include.cmake)
-include(../shared/include.cmake)
+add_subdirectory(lib/mpack)
+add_subdirectory(lib/i2ctcp)
+add_subdirectory(lib/pbdrv)
 
 project(puzzlebox_main C CXX ASM)
 
@@ -19,6 +20,9 @@ add_executable(main
 	init.c
 	sock.c
 	i2c.c
+	mod.c
+	tasks.c
+	blink.c
 	)
 
 pico_enable_stdio_usb(main 1)
@@ -27,7 +31,7 @@ pico_add_extra_outputs(main)
 
 include_directories(lib/pico-sdk/lib/lwip/contrib/ports/freertos/include)
 
-target_include_directories(main PRIVATE ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(main PRIVATE .)
 target_link_libraries(main
 	pico_cyw43_arch_lwip_sys_freertos
 	pico_stdlib
@@ -36,5 +40,6 @@ target_link_libraries(main
 	FreeRTOS-Kernel-Heap4
 	i2ctcp
 	mpack
+	pbdrv-mod
 	)
 

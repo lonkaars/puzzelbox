@@ -17,16 +17,18 @@ Please keep this repository tidy by being aware of the following conventions!
 
 ### Folder structure
 
-|folder|contains|
-|-|-|
-|`/client`|Desktop PC application for controlling the puzzle box
-|`/docs`|Project documentation in AsciiDoc(tor) format
-|`/i2ctcp`|I<sup>2</sup>C over TCP protocol functions (used by main and client)
-|`/lib`|Libraries (tracked as [submodules](#submodules))
-|`/main`|Main controller (RPi pico) software
-|`/puzzle/<name>`|Puzzle sources, each puzzle has its own subdirectory
-|`/shared`|Shared code
-|`/test`|Unit test framework (currently unutilized)
+```
+/client           desktop PC application for controlling the puzzle box
+/docs             project documentation in AsciiDoc(tor) format
+/lib              custom libraries and submodules
+├───/i2ctcp       I2C over TCP protocol functions (used by main and client)
+├───/mpack        MsgPack CMake configuration and extension
+└───/pbdrv        puzzle bus driver (module driver + (de)serializing functions)
+/main             main controller (RPi pico) software
+/puzzle/<name>    puzzle sources, each puzzle has its own subdirectory
+/shared           (unused) shared code
+/test             unit tests
+```
 
 ### Code style
 
@@ -49,25 +51,12 @@ git submodule update --init --recursive --depth 1
 
 until your problems go away.
 
-<!--
-## Tests
+## lazy\.mk
 
-```
-mkdir -p test/build
-cd test/build
-cmake ..
-make
-make test
-```
--->
-
-## ESP SDK setup
-
-1. Install ESP-IDF extension in Visual Studio Code
-2. Install using 'express' option
-3. Install ESP-IDF v5.2.1 (release version)
-
-   Additional help:
-   - [For windows](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/windows-setup.html#get-started-windows-first-steps)
-   - [For Linux](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/linux-macos-setup.html#get-started-linux-macos-first-steps)
+[`lazy.mk`](./lazy.mk) is a file made by Loek, and includes some rules for
+forwarding `make` calls to `cmake` and `ninja`. **This is purely for
+convenience, and should not become an essential part of the build system**.
+This file should be included at the end of a regular makefile. Any targets
+defined in a makefile can be used as-is, while targets that would otherwise be
+unknown will be forwarded to Ninja.
 

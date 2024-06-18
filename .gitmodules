@@ -13,8 +13,14 @@
 	url = https://github.com/FreeRTOS/FreeRTOS-Kernel
 	branch = V11.1.0
 	shallow = true
-[submodule "lib/mpack"]
-	path = lib/mpack
+[submodule "lib/mpack/src"]
+	path = lib/mpack/src
 	url = https://github.com/ludocode/mpack
 	branch = v1.1.1
 	shallow = true
+[submodule "lib/Arduino-CMake-Toolchain"]
+	path = lib/Arduino-CMake-Toolchain
+	url = https://github.com/a9183756-gh/Arduino-CMake-Toolchain
+	branch = e745a9bed3c3fb83442d55bf05630f31574674f2
+	shallow = true
+

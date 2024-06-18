@@ -81,14 +81,12 @@ void accept_handler(struct netconn* conn) {
 }
 
 void serve_task() {
-	await_init();
-
 	printf("starting server...\n");
 	struct netconn* conn = netconn_new(NETCONN_TCP);
-	netconn_bind(conn, IP_ADDR_ANY, CONF_SRV_PORT);
+	netconn_bind(conn, IP_ADDR_ANY, CFG_SRV_PORT);
 	netconn_listen(conn);
 
-	printf("listening on %s:%d\n", ip4addr_ntoa(netif_ip4_addr(netif_list)), CONF_SRV_PORT);
+	printf("listening on %s:%d\n", ip4addr_ntoa(netif_ip4_addr(netif_list)), CFG_SRV_PORT);
 	while (1) {
 		struct netconn* incoming;
 		if (netconn_accept(conn, &incoming) == ERR_OK)
