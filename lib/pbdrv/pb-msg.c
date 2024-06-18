@@ -11,6 +11,7 @@ pb_buf_t pb_msg_write(const pb_msg_t * msg) {
 
 	buf.data = pb_malloc(MPACK_BUFFER_SIZE);
 	if (buf.data == NULL) return buf;
+	buf.size = MPACK_BUFFER_SIZE;
 
 	mpack_writer_t writer;
 	mpack_writer_init(&writer, buf.data, buf.size);
@@ -18,11 +19,7 @@ pb_buf_t pb_msg_write(const pb_msg_t * msg) {
 	pb_ser_w(&writer, msg);
 
 	buf.size = mpack_writer_buffer_used(&writer);
-	if (mpack_writer_destroy(&writer) != mpack_ok) {
-		pb_free(buf.data);
-		buf.data = NULL;
-		buf.size = 0;
-	}
+	mpack_writer_destroy(&writer);
 	return buf;
 }
 
