@@ -17,7 +17,7 @@ target_compile_definitions(mpack PRIVATE MPACK_HAS_CONFIG=1)
 target_include_directories(mpack PRIVATE .)
 
 # generic puzzle bus message handling library functions
-add_library(pbdrv OBJECT
+add_library(pbdrv STATIC
 	pb-msg.c
 	pb-serial.c
 	pb-buf.c
@@ -25,21 +25,14 @@ add_library(pbdrv OBJECT
 target_include_directories(pbdrv SYSTEM INTERFACE .)
 target_link_libraries(pbdrv mpack)
 
-# TODO: pbdrv-mod should ideally only include sources specific to it, and link
-# 'plain' pbdrv to provide the other functions. this seems to cause linker
-# errors and I don't know why
-
 # puzzle bus *module* specific code
 add_library(pbdrv-mod OBJECT
-	pb-msg.c
-	pb-serial.c
-	pb-buf.c
 	pb-mod.c
 	pb-send.c
 	pb-route.c
 	)
 target_include_directories(pbdrv-mod SYSTEM INTERFACE .)
-target_link_libraries(pbdrv-mod mpack)
+target_link_libraries(pbdrv-mod pbdrv)
 
 # puzzle bus drivers
 include(drv/arduino/include.cmake)

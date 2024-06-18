@@ -10,13 +10,14 @@
 #define PB_ADDR_ADA_NEO_3 0x30
 #define PB_ADDR_ADA_NEO_4 0x32
 
-// TODO: ???
-#define PB_ADDR_MOD_NEOTRELLIS 0
-#define PB_ADDR_MOD_SOFTWARE 0
-#define PB_ADDR_MOD_HARDWARE 0
-#define PB_ADDR_MOD_VAULT 0
-// #define BUSADDR_MOD_AUTOMATION 0
+// Main controller
+#define PB_ADDR_MOD_MAIN 0x08
 
-// main controller
-#define PB_ADDR_MOD_MAIN 0x00
+// Puzzle modules
+#define PB_ADDR_MOD_NEOTRELLIS 0x21
+#define PB_ADDR_MOD_SOFTWARE 0x22
+#define PB_ADDR_MOD_HARDWARE 0x23
+#define PB_ADDR_MOD_VAULT 0x24
+// #define BUSADDR_MOD_AUTOMATION 0x25
+#define PB_ADDR_MOD_DUMMY 0x69
 

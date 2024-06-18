@@ -56,11 +56,10 @@
 #endif
 /** \} */
 
-#ifndef CFG_LED_PIN
-//! status LED pin
-#define CFG_LED_PIN CYW43_WL_GPIO_LED_PIN
-#endif
-
+/**
+ * \name I2C configuration
+ * \{
+ */
 #ifndef CFG_SDA_PIN
 //! I^2^C SDA pin
 #define CFG_SDA_PIN 16
@@ -68,5 +67,16 @@
 #ifndef CFG_SCL_PIN
 //! I^2^C SCL pin
 #define CFG_SCL_PIN 17
+#endif
+/** \} */
+
+#ifndef CFG_LED_PIN
+//! status LED pin
+#define CFG_LED_PIN CYW43_WL_GPIO_LED_PIN
+#endif
+
+#ifndef CFG_PB_MOD_MAX
+//! maximum number of simultaniously connected puzzle modules
+#define CFG_PB_MOD_MAX 8
 #endif
 

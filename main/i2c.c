@@ -9,15 +9,19 @@
 #include "i2c.h"
 #include "pb-mod.h"
 #include "pbdrv.h"
+#include "config.h"
+
+i2c_addr_t modules[CFG_PB_MOD_MAX];
+size_t modules_size = 0;
 
 void bus_task() {
-	vTaskDelay(1000 / portTICK_PERIOD_MS);
-	
 	bus_scan();
 	vTaskDelete(NULL);
 }
 
 void pb_route_cmd_magic_res(pb_msg_t * msg) {
-	printf("got a magic response from 0x%02x!\n", msg->sender);
+	if (modules_size == CFG_PB_MOD_MAX) return;
+	modules[modules_size++] = msg->sender;
+	printf("i2c: registered puzzle module w/ address 0x%02x\n", msg->sender);
 }
 

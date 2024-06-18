@@ -13,6 +13,7 @@ project(pbc C CXX)
 add_subdirectory(lib/mpack)
 add_subdirectory(lib/i2ctcp)
 add_subdirectory(lib/pbdrv)
+include(lib/pbdrv/ext/stdlib/include.cmake)
 
 add_executable(pbc
 	main.cpp
