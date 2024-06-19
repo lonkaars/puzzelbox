@@ -1,0 +1,55 @@
+:document: FAT document
+include::share/meta.adoc[]
+
+== Introduction
+// TODO: Make a splashing intro
+
+=== Neotrellis-puzzle
+==== Requirement 34
+There is an 8x8 LED matrix where each LED can display different colors.
+===== Test setup
+
+==== Requirement 36
+When a button is pressed, the adjacent LEDs and the pressed LED toggle (If an LED is off, it turns on. If an LED is on, it turns off).
+===== Test setup
+
+==== Requirement 37
+All LEDs in the Neotrellis that are turned on are blue.
+===== Test setup
+
+==== Requirement 38
+The puzzle is considered solved when all LEDs are turned off, and then the software puzzle starts.
+===== Test setup
+
+=== Vault-puzzle
+==== Requirement 75 and 76
+The vault puzzle board features a red 7-segment 4-digit display.
+
+On the vault puzzle board, there is a 4x4 grid of holes for ventilation and sound.
+===== Test setup
+
+==== Requirement 81
+Initially, the 7-segment display shows a code consisting of a letter and a digit. This code represents a valid key combination for level 1 (Refer to Figure 9 for all combinations).
+===== Test setup
+
+==== Requirement 82
+There are a total of 5 levels. After each level, a key combination is displayed, starting with a letter followed by a digit, which is valid for that level (Refer to Figure 9).
+===== Test setup
+
+==== Requirement 83
+Each level has unique key combinations for the button locations (Refer to Figure 9).
+===== Test setup
+
+==== Requirement 84
+Pressing the button corresponding to the letter-digit combinations advances the puzzle to the next level.
+===== Test setup
+
+==== Requirement 85
+If an incorrect button is pressed, the game resets to level 1.
+===== Test setup
+
+==== Requirement 87
+The 7-segment display blinks when an incorrect button is pressed.
+===== Test setup
+
+
