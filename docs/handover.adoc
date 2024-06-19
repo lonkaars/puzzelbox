@@ -99,7 +99,14 @@ communication.] | Software
 | Thomas in 't Anker | Software
 |===
 
-== Resources
+
+== A Note Before Reading
+The team of year 2023-2024 consisted of only software students, meaning no 
+hardware was developed in this year. We were tasked with simplifying the 
+software to the point where it would only have to be ported into the new hardware,
+which was designed in the year 2022-2023. The goal of this year would be to create
+a software framework which can be used to implement new puzzles and to make the 
+development process of these puzzles easier. 
 
 Previous years' groups have put their predecessor's documents inside their own
 project folder, which has resulted in what we called the 'Russian doll folder
@@ -111,13 +118,83 @@ require credentials to log in. Please note that this is very much unofficial,
 and is not managed or endorsed by Avans. <<pn:blansch>> is the contact for
 removal or transfer of these files.
 
-== Recommendations
+== Project State
+The current project state is as follows: No new hardware has been designed 
+or developed this year. The software was completely revised, now consisting of a 
+a puzzle bus driver, a main controller, a simple CLI application, and two puzzle 
+modules. Namely the puzzle modules 'Vault' and 'Neotrellis', both using an arduino 
+as the controller. The main controller (a RPI Pico W) can interact with the 
+different puzzle modules using an I^2^C bus. The I^2^C bus has been configured to 
+be a multi-master I^2^C bus. allowing the puzzle modules and the main controller 
+to send and recieve messages on their own. The main controller is able to find 
+new puzzle modules on startup, and does not check for new modules afterwards. A 
+simple CLI application has been developed, which can communicate with the main 
+controller through a tcp connection and simple commands. 
 
-- The 22-23 design document already mentions that the application of the I^2^C
-	bus is in a multi-master configuration, but does not mention that this only
-	works when pull-up resistors are used on the SCL and SDA lines. The pull-up
-	resistors are required, as omitting them makes the bus arbitration process
-	very inconsistent which causes frames to be dropped entirely.
+In short: A puzzle bus driver has been implemented, to allow for communication 
+between the main controller and the puzzle modules. A CLI application was developed 
+which connects with the main controller to monitor/edit the gamestate. And the 
+software for the puzzle modules 'Vault' and 'Neotrellis' is in the product state.
+
+The hardware design can be derived from the year 2022-2023, and you can derive the 
+game rules from the year 2020-2021. 
+
+== Challenges
+There were a multitude of different challenges we had to face before getting to a 
+working product. Most of these have been documented here, and it is highly recommended 
+to have a look at this before development.
+
+=== Misconceptions
+Make sure to know what you are developing and do some research beforehand, to make 
+sure you have the complete picture about what you are using. Sounds stupid, but it 
+happened for multiple project attempts, and cause time-loss. This also includes 
+documentation of previous years: go through the documentation and verify it on the 
+lowest possible level for the same reason as previously mentioned. 
+
+=== I^2^C
+I^2^C is easy to implement but also easy to underestimate, this project requires a 
+multi-master structure as communication is otherwise too complicated compared to 
+other means of communication.
+
+For I^2^C on hardware level: make sure to use pull-up resistors, 2k2 if bus is on 
+100khz, as it is otherwise impossible to use I^2^C due to incorrect messages. This 
+is also recommended for controllers which are connected to the I^2^C bus. Make sure 
+to use I^2^C arbitration to check if the bus is not busy when writing to it, as 
+this will result in complictions in the communication. 
+
+The RPI Pico W (RP2040) does not support multi-master to the point of being able to 
+receive messages from other multi-masters as a slave while being configured as master. 
+Everything else about the I^2^C bus works, but due to this limitation a workaround has 
+been implemented to be able to continue using the RPI Pico W. Under ideal circumstances 
+a different controller could be found which does support this, but one was not found at 
+the time of writing. To simplify; a controller is needed which supports multi-master 
+while being able to be addressed as a slave-type controller.
+
+=== Available Hardware/SDKs
+When choosing or using specific chips/sdks make sure it is available for (at least) 
+a few years. This makes it easier for the next project team to use the same chips/sdks
+instead of having to find new ones because the previous project team did not think about 
+this possibility. This also includes having enough sdks for multiple people to program 
+using the same setup, eg. the RPI Pico W requires another RPI Pico W to be debugged. 
+Effectively requiring the project team to have at least 4 RPI Pico Ws to be able to develop 
+in the same environment (if there are 2 software students).
+
+=== Arduino
+Allocating memory using 'realloc' on arduino is not possible, which also denies usage of 
+the 'mpack_writer_init_growable'
+
+== Imperatives
+* Start creating prototypes as fast as possible, this benefits the project in the long run, 
+as you have already shown that certain parts of the project are already working and only 
+need to be integrated.
+* The Atmega328P-chip is sufficient for the puzzle modules as it has enough IO and I^2^C 
+connectivity possibilities.
+* The RPI Pico W has programmable IO modules, making it possible to create an I^2^C driver 
+that allows multi-master communication while still being addressable as a slave.
+* The 22-23 design document already mentions that the application of the I^2^C
+bus is in a multi-master configuration, but does not mention that this only
+works when pull-up resistors are used on the SCL and SDA lines. The pull-up
+resistors are required, as omitting them makes the bus arbitration process
+very inconsistent which causes frames to be dropped entirely.
 
 include::share/footer.adoc[]
-

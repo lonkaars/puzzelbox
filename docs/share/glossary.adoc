@@ -5,6 +5,6 @@
 RPI:: Raspberry Pi
 Main board:: The main board is the PCB on the bottom of the puzzle box, this communicates with the puzzles and the bomb
 Puzzle box hub:: The puzzle box hub communicates with the puzzle box and the bomb, as well as helps with configuring them
-SID:: security identifiers
-game operator:: person who organizes a puzzle box play session
+SID:: Security identifiers
+game operator:: Person who organizes a puzzle box play session
 

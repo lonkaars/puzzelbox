@@ -52,7 +52,7 @@ void recv_handler(struct netconn* conn, struct netbuf* buf) {
 		char* data;
 		uint16_t len;
 		netbuf_data(buf, (void**)&data, &len);
-
+		
 		// continue early if more data is needed to complete message
 		if (i2ctcp_read(&recv_msg, data, len) != 0) continue;
 
