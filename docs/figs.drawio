@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2024-03-17T13:05:37.082Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/23.1.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="7STPuaY27yiGeP_RMlUo" version="23.1.5" type="device" pages="12">
+<mxfile host="Electron" modified="2024-06-20T12:26:00.414Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.5.3 Chrome/124.0.6367.207 Electron/30.0.6 Safari/537.36" etag="bh9oF_6ZjHwPEw7YpXsL" version="24.5.3" type="device" pages="12">
   <diagram name="planning-condensed" id="ntlEKQOA_ElMvQzKZB-_">
     <mxGraphModel dx="1646" dy="488" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -213,11 +213,11 @@
     </mxGraphModel>
   </diagram>
   <diagram id="n9IdmxlkFl1pJjqhBrGT" name="system-bus">
-    <mxGraphModel dx="1422" dy="822" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="566" dy="347" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="EFqebEYhPqh4IJWovyJC-1" value="Puzzle bus&lt;br&gt;(I²C + power)" style="line;strokeWidth=4;html=1;perimeter=backbonePerimeter;points=[];outlineConnect=0;align=right;labelPosition=left;verticalLabelPosition=middle;verticalAlign=middle;spacingTop=0;spacing=8;fontFamily=Arial;" parent="1" vertex="1">
+        <mxCell id="EFqebEYhPqh4IJWovyJC-1" value="puzzle bus&lt;br&gt;(I²C + power)" style="line;strokeWidth=4;html=1;perimeter=backbonePerimeter;points=[];outlineConnect=0;align=right;labelPosition=left;verticalLabelPosition=middle;verticalAlign=middle;spacingTop=0;spacing=8;fontFamily=Arial;" parent="1" vertex="1">
           <mxGeometry x="80" y="110" width="320" height="20" as="geometry" />
         </mxCell>
         <mxCell id="EFqebEYhPqh4IJWovyJC-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;fontFamily=Arial;" parent="1" source="EFqebEYhPqh4IJWovyJC-2" target="EFqebEYhPqh4IJWovyJC-1" edge="1">
@@ -228,7 +228,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="EFqebEYhPqh4IJWovyJC-2" value="Main controller" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
+        <mxCell id="EFqebEYhPqh4IJWovyJC-2" value="main controller" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
           <mxGeometry x="80" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="EFqebEYhPqh4IJWovyJC-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;fontFamily=Arial;" parent="1" source="EFqebEYhPqh4IJWovyJC-4" target="EFqebEYhPqh4IJWovyJC-1" edge="1">
@@ -239,7 +239,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="EFqebEYhPqh4IJWovyJC-4" value="Puzzle module 3&lt;br&gt;(neotrellis)" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
+        <mxCell id="EFqebEYhPqh4IJWovyJC-4" value="neotrellis puzzle module" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
           <mxGeometry x="200" y="160" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="EFqebEYhPqh4IJWovyJC-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;fontFamily=Arial;" parent="1" source="EFqebEYhPqh4IJWovyJC-5" target="EFqebEYhPqh4IJWovyJC-1" edge="1">
@@ -250,7 +250,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="EFqebEYhPqh4IJWovyJC-5" value="Puzzle module 4&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;(safe)" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
+        <mxCell id="EFqebEYhPqh4IJWovyJC-5" value="vault puzzle module" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
           <mxGeometry x="320" y="160" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="EFqebEYhPqh4IJWovyJC-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;fontFamily=Arial;" parent="1" source="EFqebEYhPqh4IJWovyJC-6" target="EFqebEYhPqh4IJWovyJC-1" edge="1">
@@ -261,7 +261,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="EFqebEYhPqh4IJWovyJC-6" value="Puzzle module 1&lt;br&gt;(software)" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
+        <mxCell id="EFqebEYhPqh4IJWovyJC-6" value="software puzzle module" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
           <mxGeometry x="200" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="EFqebEYhPqh4IJWovyJC-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;fontFamily=Arial;" parent="1" source="EFqebEYhPqh4IJWovyJC-7" target="EFqebEYhPqh4IJWovyJC-1" edge="1">
@@ -272,7 +272,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="EFqebEYhPqh4IJWovyJC-7" value="Puzzle module 2&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;(hardware)" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
+        <mxCell id="EFqebEYhPqh4IJWovyJC-7" value="hardware puzzle module" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
           <mxGeometry x="320" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="EFqebEYhPqh4IJWovyJC-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Arial;" parent="1" source="EFqebEYhPqh4IJWovyJC-12" target="EFqebEYhPqh4IJWovyJC-1" edge="1">
@@ -283,19 +283,19 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="EFqebEYhPqh4IJWovyJC-12" value="Power supply&lt;br&gt;(battery pack)" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
+        <mxCell id="EFqebEYhPqh4IJWovyJC-12" value="power supply&lt;br&gt;(battery pack)" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
           <mxGeometry x="80" y="160" width="80" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram id="h3DvyZ0KajeRp1tPME5F" name="system-top">
-    <mxGraphModel dx="1422" dy="822" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="566" dy="347" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="nQz1uFQE7kBfjPpRPLva-4" value="Puzzle outputs" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacing=8;fontFamily=Arial;" parent="1" source="nQz1uFQE7kBfjPpRPLva-1" target="nQz1uFQE7kBfjPpRPLva-3" edge="1">
-          <mxGeometry x="-0.8049" y="-20" relative="1" as="geometry">
+        <mxCell id="nQz1uFQE7kBfjPpRPLva-4" value="puzzle outputs" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacing=8;fontFamily=Arial;" parent="1" source="nQz1uFQE7kBfjPpRPLva-1" target="nQz1uFQE7kBfjPpRPLva-3" edge="1">
+          <mxGeometry x="-0.8054" y="-20" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="230" y="110" />
               <mxPoint x="230" y="30" />
@@ -311,10 +311,10 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="nQz1uFQE7kBfjPpRPLva-1" value="Puzzle box" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
+        <mxCell id="nQz1uFQE7kBfjPpRPLva-1" value="puzzle box" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
           <mxGeometry x="110" y="90" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="nQz1uFQE7kBfjPpRPLva-2" value="Puzzle inputs" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;elbow=vertical;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;spacing=8;fontFamily=Arial;" parent="1" source="nQz1uFQE7kBfjPpRPLva-3" target="nQz1uFQE7kBfjPpRPLva-1" edge="1">
+        <mxCell id="nQz1uFQE7kBfjPpRPLva-2" value="puzzle inputs" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;elbow=vertical;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;spacing=8;fontFamily=Arial;" parent="1" source="nQz1uFQE7kBfjPpRPLva-3" target="nQz1uFQE7kBfjPpRPLva-1" edge="1">
           <mxGeometry x="0.6098" width="50" height="50" relative="1" as="geometry">
             <mxPoint x="70" y="110" as="sourcePoint" />
             <mxPoint x="120" y="130" as="targetPoint" />
@@ -325,10 +325,10 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="nQz1uFQE7kBfjPpRPLva-3" value="Player(s)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Arial;" parent="1" vertex="1">
+        <mxCell id="nQz1uFQE7kBfjPpRPLva-3" value="player(s)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Arial;" parent="1" vertex="1">
           <mxGeometry x="135" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="nQz1uFQE7kBfjPpRPLva-6" value="Charger" style="endArrow=classic;html=1;rounded=0;edgeStyle=elbowEdgeStyle;elbow=vertical;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;dashed=1;spacing=8;fontFamily=Arial;" parent="1" target="nQz1uFQE7kBfjPpRPLva-1" edge="1">
+        <mxCell id="nQz1uFQE7kBfjPpRPLva-6" value="charger" style="endArrow=classic;html=1;rounded=0;edgeStyle=elbowEdgeStyle;elbow=vertical;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;dashed=1;spacing=8;fontFamily=Arial;" parent="1" target="nQz1uFQE7kBfjPpRPLva-1" edge="1">
           <mxGeometry x="-1" width="50" height="50" relative="1" as="geometry">
             <mxPoint x="70" y="150" as="sourcePoint" />
             <mxPoint x="90" y="150.2" as="targetPoint" />
@@ -342,18 +342,18 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="rSJYnGe5hIWkDpeJhH4a-5" value="Bomb" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fontFamily=Arial;" parent="1" vertex="1">
+        <mxCell id="rSJYnGe5hIWkDpeJhH4a-5" value="bomb" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fontFamily=Arial;" parent="1" vertex="1">
           <mxGeometry x="310" y="90" width="80" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram id="V5677hnVqFOUu4LEfIlK" name="main-controller-top">
-    <mxGraphModel dx="1422" dy="822" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="673" dy="413" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="E0vY4Tb27X8IZZSuRO_E-1" value="Main controller" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
+        <mxCell id="E0vY4Tb27X8IZZSuRO_E-1" value="main controller" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="1" vertex="1">
           <mxGeometry x="70" y="60" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="E0vY4Tb27X8IZZSuRO_E-2" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=Arial;" parent="1" source="_QeJvxVuYCE5Bx7Zj5Sh-1" target="E0vY4Tb27X8IZZSuRO_E-1" edge="1">
@@ -362,7 +362,7 @@
             <mxPoint x="140" y="110" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="_QeJvxVuYCE5Bx7Zj5Sh-1" value="Puzzle bus" style="line;strokeWidth=4;html=1;perimeter=backbonePerimeter;points=[];outlineConnect=0;align=right;labelPosition=left;verticalLabelPosition=middle;verticalAlign=middle;spacingTop=0;spacing=8;fontFamily=Arial;" parent="1" vertex="1">
+        <mxCell id="_QeJvxVuYCE5Bx7Zj5Sh-1" value="puzzle bus" style="line;strokeWidth=4;html=1;perimeter=backbonePerimeter;points=[];outlineConnect=0;align=right;labelPosition=left;verticalLabelPosition=middle;verticalAlign=middle;spacingTop=0;spacing=8;fontFamily=Arial;" parent="1" vertex="1">
           <mxGeometry x="70" y="170" width="80" height="20" as="geometry" />
         </mxCell>
         <mxCell id="eXW24AF1M1Q80XVxQB3d-1" value="Wi-Fi" style="shape=link;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;dashed=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;fontFamily=Arial;" parent="1" source="E0vY4Tb27X8IZZSuRO_E-1" edge="1">
@@ -376,11 +376,11 @@
     </mxGraphModel>
   </diagram>
   <diagram name="puzzle-module-top" id="5pAH2Yn7Y32GPKnI9U_5">
-    <mxGraphModel dx="1422" dy="822" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="566" dy="347" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="BVMe8izj958RTkFm3z60-0" />
         <mxCell id="BVMe8izj958RTkFm3z60-1" parent="BVMe8izj958RTkFm3z60-0" />
-        <mxCell id="BVMe8izj958RTkFm3z60-2" value="Puzzle module" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="BVMe8izj958RTkFm3z60-1" vertex="1">
+        <mxCell id="BVMe8izj958RTkFm3z60-2" value="puzzle module" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="BVMe8izj958RTkFm3z60-1" vertex="1">
           <mxGeometry x="120" y="10" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="BVMe8izj958RTkFm3z60-3" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=Arial;" parent="BVMe8izj958RTkFm3z60-1" source="BVMe8izj958RTkFm3z60-4" target="BVMe8izj958RTkFm3z60-2" edge="1">
@@ -389,17 +389,17 @@
             <mxPoint x="190" y="60" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BVMe8izj958RTkFm3z60-4" value="Puzzle bus" style="line;strokeWidth=4;html=1;perimeter=backbonePerimeter;points=[];outlineConnect=0;align=right;labelPosition=left;verticalLabelPosition=middle;verticalAlign=middle;spacingTop=0;spacing=8;fontFamily=Arial;" parent="BVMe8izj958RTkFm3z60-1" vertex="1">
+        <mxCell id="BVMe8izj958RTkFm3z60-4" value="puzzle bus" style="line;strokeWidth=4;html=1;perimeter=backbonePerimeter;points=[];outlineConnect=0;align=right;labelPosition=left;verticalLabelPosition=middle;verticalAlign=middle;spacingTop=0;spacing=8;fontFamily=Arial;" parent="BVMe8izj958RTkFm3z60-1" vertex="1">
           <mxGeometry x="120" y="120" width="80" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="tTlcU9ZqAkPjyI4FRPs--0" value="Puzzle outputs" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacing=8;fontFamily=Arial;" parent="BVMe8izj958RTkFm3z60-1" source="BVMe8izj958RTkFm3z60-2" edge="1">
+        <mxCell id="tTlcU9ZqAkPjyI4FRPs--0" value="puzzle outputs" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacing=8;fontFamily=Arial;" parent="BVMe8izj958RTkFm3z60-1" source="BVMe8izj958RTkFm3z60-2" edge="1">
           <mxGeometry x="1" width="50" height="50" relative="1" as="geometry">
             <mxPoint x="150" y="130" as="sourcePoint" />
             <mxPoint x="240" y="50" as="targetPoint" />
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="tTlcU9ZqAkPjyI4FRPs--1" value="Puzzle inputs" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;spacing=8;fontFamily=Arial;" parent="BVMe8izj958RTkFm3z60-1" target="BVMe8izj958RTkFm3z60-2" edge="1">
+        <mxCell id="tTlcU9ZqAkPjyI4FRPs--1" value="puzzle inputs" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;spacing=8;fontFamily=Arial;" parent="BVMe8izj958RTkFm3z60-1" target="BVMe8izj958RTkFm3z60-2" edge="1">
           <mxGeometry x="-1" width="50" height="50" relative="1" as="geometry">
             <mxPoint x="80" y="50" as="sourcePoint" />
             <mxPoint x="270" y="60" as="targetPoint" />
@@ -410,11 +410,11 @@
     </mxGraphModel>
   </diagram>
   <diagram name="power-supply-top" id="OyUTR4VJhJkLCMkp9sBg">
-    <mxGraphModel dx="1422" dy="822" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="471" dy="289" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="JhLPvhhKfH0WU0wtARFb-0" />
         <mxCell id="JhLPvhhKfH0WU0wtARFb-1" parent="JhLPvhhKfH0WU0wtARFb-0" />
-        <mxCell id="JhLPvhhKfH0WU0wtARFb-2" value="Power supply" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="JhLPvhhKfH0WU0wtARFb-1" vertex="1">
+        <mxCell id="JhLPvhhKfH0WU0wtARFb-2" value="power supply" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Arial;" parent="JhLPvhhKfH0WU0wtARFb-1" vertex="1">
           <mxGeometry x="120" y="10" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="JhLPvhhKfH0WU0wtARFb-3" value="" style="endArrow=none;startArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=Arial;endFill=0;" parent="JhLPvhhKfH0WU0wtARFb-1" source="JhLPvhhKfH0WU0wtARFb-4" target="JhLPvhhKfH0WU0wtARFb-2" edge="1">
@@ -423,10 +423,10 @@
             <mxPoint x="190" y="60" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="JhLPvhhKfH0WU0wtARFb-4" value="Puzzle bus" style="line;strokeWidth=4;html=1;perimeter=backbonePerimeter;points=[];outlineConnect=0;align=right;labelPosition=left;verticalLabelPosition=middle;verticalAlign=middle;spacingTop=0;spacing=8;fontFamily=Arial;" parent="JhLPvhhKfH0WU0wtARFb-1" vertex="1">
+        <mxCell id="JhLPvhhKfH0WU0wtARFb-4" value="puzzle bus" style="line;strokeWidth=4;html=1;perimeter=backbonePerimeter;points=[];outlineConnect=0;align=right;labelPosition=left;verticalLabelPosition=middle;verticalAlign=middle;spacingTop=0;spacing=8;fontFamily=Arial;" parent="JhLPvhhKfH0WU0wtARFb-1" vertex="1">
           <mxGeometry x="120" y="120" width="80" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="G88CfNIh1Ql9ssuBFCwE-0" value="Charger" style="endArrow=classic;html=1;rounded=0;edgeStyle=elbowEdgeStyle;elbow=vertical;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;dashed=1;spacing=8;fontFamily=Arial;" parent="JhLPvhhKfH0WU0wtARFb-1" target="JhLPvhhKfH0WU0wtARFb-2" edge="1">
+        <mxCell id="G88CfNIh1Ql9ssuBFCwE-0" value="charger" style="endArrow=classic;html=1;rounded=0;edgeStyle=elbowEdgeStyle;elbow=vertical;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;dashed=1;spacing=8;fontFamily=Arial;" parent="JhLPvhhKfH0WU0wtARFb-1" target="JhLPvhhKfH0WU0wtARFb-2" edge="1">
           <mxGeometry x="-1" width="50" height="50" relative="1" as="geometry">
             <mxPoint x="80" y="50" as="sourcePoint" />
             <mxPoint x="110" y="150" as="targetPoint" />
