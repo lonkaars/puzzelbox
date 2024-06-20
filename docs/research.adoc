@@ -1,7 +1,7 @@
 :document: Research
 include::share/meta.adoc[]
 
-== Microcontrollers used in the current state.
+== Microcontrollers used in the current state (Elwin)
 
 === Research
 
@@ -39,7 +39,7 @@ see <<fig:hardware-pcb>>. The other custom-made PCB's do not have any
 microcontroller installed but seem to be made to be used by a ESP32-PICO-KIT
 V4/V4.1.
 
-=== Summery
+=== Summary
 
 There seems to be four games implemented where of only one may work because of
 its integrated ESP32, the other three also may work if the missing ESP32's are
@@ -87,7 +87,7 @@ Issues
 . Button row 4, col 1 for the safe side needs to be replaced (missing a pin)
 . LED strips for the software and hardware sides only work for 50%.
 
-==== (Appendix Loek)
+==== Appendix (Loek)
 
 The puzzle bus connector (see <<fig:bus-connector>>) appears to have 10
 conductors in total. The hardware schematics from 21-22 reveal the pinout of
@@ -112,7 +112,7 @@ Source: cite:[2122_design] +
 (Connector key is next to pin 5)
 ====
 
-== Controllers
+== Controllers (Loek)
 
 To mitigate power consumption issues discovered by the 21-22 group, new
 controllers were chosen for this year's (23-24) run of the puzzle box project.
@@ -205,7 +205,7 @@ the Raspberry Pi RP2040 on the Raspberry Pi Pico W. The recommended MCU for new
 puzzle modules is the Microchip PIC16F15276. The existing puzzle modules still
 utilize the ESP32 development kits chosen by the 21-22 group.
 
-== Main Controller OS
+== Main Controller OS (Loek)
 
 Because the hardware produced by the 21-22 group uses a Raspberry Pi 3B+ as
 main controller, the usage of this specific board was turned into a
@@ -522,7 +522,7 @@ The way these puzzles are solved has been summarized in this research document,
 but the most complete versions of how to solve these puzzles are given in the
 group's respective design document.
 
-== Research of hardware designs of previous groups (21-22 and 22-23)
+== Research of hardware designs of previous groups (21-22 and 22-23) (Lars)
 
 This part of the research looks at the hardware designs of the previous groups
 that did this project. These are compared with each other and finally the
