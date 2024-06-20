@@ -117,7 +117,7 @@ the following:
 ** Aggregating game state for all installed puzzle modules.
 ** Reading and writing game state for all installed puzzle modules.
 ** Broadcasting updates internally.
-* Serve TCP socket connections for—
+* Serve a TCP socket for—
 ** Sending state updates
 ** Manually updating game state
 ** Integration with the bomb
@@ -146,6 +146,7 @@ The criteria for the main controller are:
 The requirements document compares various microcontrollers that fit these
 criteria. After this comparison, the decision was made to utilize the Raspberry
 Pi Pico W as main controller during development.
+// TODO: this was a bad choice
 
 [[fig:main-controller-top]]
 .Main controller top-level block diagram
@@ -165,9 +166,22 @@ peripherals is handled through a central I^2^C bus referred to as the 'puzzle
 bus'. This design was again carried over from the hardware design from the
 21-22 group cite:[2122_design].
 
-The only notable difference made this year was the removal of the
-"HarwareInterrupt" line1{empty}footnote:[This is not a typo], which was
-connected but not utilized cite:[research].
+The previously specified "HarwareInterrupt" line1{empty}footnote:[This is not a
+typo] has been removed this year, as it was connected but not utilized
+cite:[research].
+
+To optimize for flexibility and extensibility, the puzzle bus should ideally
+function as a network (similar to the CAN bus), to allow puzzle modules to send
+responses asynchronously. I^2^C was initially chosen for the puzzle bus due to
+its widespread availability on microcontrollers and in peripherals, but does
+not provide any network-like capabilities.
+
+To archive network-like capabilities, the puzzle bus is specified to be a
+multi-master I^2^C bus, and all puzzle modules are specified to be I^2^C
+multi-master controllers that are slave-addressible. The multi-master part is
+required to prevent I^2^C transmissions from being corrupted in the event of a
+bus collision, and the slave-addressible part is required to both send and
+receive messages on the same controller.
 
 Address definitions and protocol specifications are further detailed in
 <<sec:lv2-bus>>.
@@ -202,15 +216,15 @@ image::img/system-bus.svg[]
 [[sec:lv2]]
 == Modules
 
-This section elaborates on the top-level specifications from <<sec:lv1>> with
-additional hardware specifications and software design decisions.
+This section elaborates on the top-level (hardware) specifications from
+<<sec:lv1>> with software design decisions.
 
 === Puzzle Module Framework
 
 This subsection defines aspects of the 'puzzle framework' and the interface
 that allows puzzle modules to integrate with this framework. All communication
 described within this subsection refers to 'internal' communication between the
-main controller and puzzle module.
+main controller and puzzle modules on the puzzle bus.
 
 The puzzle framework is the foundation of the puzzle box software, and is
 designed to facilitate the following:
@@ -226,56 +240,52 @@ designed to facilitate the following:
 ==== State
 
 All puzzle modules implement the same state machine shown in
-<<fig:puzzle-module-common-state>>. Note that the arrows indicate state
-transitions that a puzzle module may take on its own. The main controller also
-allows the game operator to manually set the current state as one of the states
-on the right half of <<fig:puzzle-module-common-state>>, which can be used to
-skip a puzzle if a player is stuck (<<reqs.adoc#req:edge-skip-puzzle>>) or
-reset a game if it is malfunctioning (<<reqs.adoc#req:edge-manual-reset>>).
+<<fig:puzzle-module-common-state>>. Note that solid arrows indicate state
+transitions that a puzzle module may take on its own, while dashed arrows
+indicate state transitions forced by the main controller. The main controller
+also allows the game operator to manually set the current state as one of the
+states on the right half of <<fig:puzzle-module-common-state>>, which can be
+used to skip a puzzle if a player is stuck (<<reqs.adoc#req:edge-skip-puzzle>>)
+or reset a game if it is malfunctioning (<<reqs.adoc#req:edge-manual-reset>>).
 
-Puzzle modules start in the 'uninitialized' state, where they repeatedly send
-messages to the main controller (see <<sec:main-bridge>>). The state transition
-from 'uninitialized' to 'reset' is forced by the main controller upon
-initialization. States on the right half of <<fig:puzzle-module-common-state>>
-are used during gameplay.
+Puzzle modules start in the 'uninitialized' state, where they wait until the
+main controller sends a SET STATE command. Receiving this command indicates to
+the puzzle module that it was successfully registered by the main controller,
+and that it may transition from the 'uninitialized' state to the 'reset' state.
 
 [[fig:puzzle-module-common-state]]
 .Global puzzle module state machine
 image::img/puzzle-module-common-state.svg[]
 
 The state machine described in <<fig:puzzle-module-common-state>> is referred
-to as the global state. Puzzle modules may also declare and define custom state
-variables, which is referred to as auxiliary state. These auxiliary state
-variables contain game-specific variables; e.g. the binary state of each button
-on the Neotrellis puzzle module, or the last passcode entered on the vault
-puzzle module.
+to as the global state. Puzzle modules may also declare and define custom
+variables, which are referred to as properties. These properties may contain
+game-specific variables; e.g. the binary state of each button on the Neotrellis
+puzzle module, or the last passcode entered on the vault puzzle module.
 
-Separating the auxiliary state from the generic state allows the main
-controller to handle the auxiliary state as an arbitrary blob, which allows for
-future expansion without modification of the main controller software.
+Separating properties from the global state allows the main controller to
+handle these property values as an arbitrary blob, which allows for future
+expansion without modification of the main controller software.
 
 ==== Commands
 
-The puzzle module framework describes the following commands:
+The puzzle module framework describes the following command *types*:
 
-* Read state
-* Write state
-* Update
+* ``PROP``: property
+* ``MAGIC``: handshake
+* ``STATE``: global state
 
-The 'read' and 'write' commands are used to communicate both types of state
-defined in <<sec:framework-state>>.
+Each command also has a specific *action*:
 
-To avoid issues caused by state synchronization memory consumption on the main
-controller and puzzle modules, auxiliary state is only stored on each
-respective puzzle module's controller. Only global state is cached on the main
-controller to reduce the number of back-and-forth messages required for state
-updates.
+* ``REQ``: request
+* ``RES``: response
+* ``SET``: (over)write
 
-These commands are sufficient to realize the puzzle box, but this means that
-the puzzle box would rely heavily on polling-based updates internally. To solve
-this, the 'update' command was created. This command is utilized for various
-kinds of updates, including registering new puzzle modules and updating global
-state.
+Not all commands define behavior for all actions (e.g. there is no MAGIC SET
+command).
+
+The Doxygen-generated pages for these command types explain their usage, and
+will not be repeated here.
 
 === Main Controller
 

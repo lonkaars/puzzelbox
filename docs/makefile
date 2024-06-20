@@ -20,3 +20,8 @@ ASCIIDOCTOR_ARGS += --backend pdf
 %.pdf: %.adoc $(PDFDEPS)
 	bundle exec asciidoctor $(ASCIIDOCTOR_ARGS) $<
 
+%.svg: %.puml
+	plantuml -tsvg $<
+
+design.pdf: img/software-components.svg
+

@@ -21,9 +21,17 @@ typedef uint16_t i2c_addr_t;
 
 //! puzzle bus command types
 enum pb_cmd_id {
-	PB_CMD_PROP, //!< puzzle module property
-	PB_CMD_STATE, //!< global state
-	PB_CMD_MAGIC, //!< magic (handshake)
+	/** \brief puzzle module property (REQ, RES, SET) */
+	PB_CMD_PROP,
+	/** \brief puzzle module global state variable (REQ, RES, SET) */
+	PB_CMD_STATE,
+	/**
+	 * \brief magic (handshake) (REQ, RES)
+	 *
+	 * This message is used to distinguish between puzzle modules and regular I2C
+	 * slaves on the puzzle bus.
+	 */
+	PB_CMD_MAGIC,
 };
 typedef enum pb_cmd_id pb_cmd_id_t;
 
@@ -51,10 +59,31 @@ static const char pb_cmd_magic_res[] = { 0x67, 0x61, 0x6d, 0x69, 0x6e, 0x67 };
 
 //! puzzle bus message header (shared by all commands)
 typedef struct {
-	pb_cmd_id_t type; //!< command type
-	pb_action_t action; //!< command action
-	i2c_addr_t sender; //!< i2c address of sender
-	void * cmd; //!< command data (type dependant)
+	/**
+	 * \brief command type
+	 *
+	 * This is used to identify what the message is about.
+	 */
+	pb_cmd_id_t type;
+	/**
+	 * \brief command action
+	 *
+	 * This is used to specify what should happen as a result of this message.
+	 */
+	pb_action_t action;
+	/**
+	 * \brief I2C address of sender
+	 *
+	 * This is used to facilitate the 'network' features, as the sender of an I2C
+	 * write is unknown.
+	 */
+	i2c_addr_t sender;
+	/**
+	 * \brief command data (type dependent)
+	 *
+	 * Struct containing command type-specific data.
+	 */
+	void * cmd;
 } pb_msg_t;
 
 //! PB_CMD_PROP data
