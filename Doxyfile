@@ -1,0 +1,21 @@
+# Doxyfile 1.11.0
+DOXYFILE_ENCODING = UTF-8
+PROJECT_NAME = "puzzlebox"
+OUTPUT_DIRECTORY = doxygen
+
+INPUT += client
+INPUT += lib/mpack
+INPUT += lib/i2ctcp
+INPUT += lib/pbdrv
+INPUT += main
+INPUT += puzzle/dummy
+
+EXCLUDE = lib/mpack/src
+EXCLUDE_PATTERNS = **/build
+EXCLUDE_SYMLINKS = YES
+
+FILE_PATTERNS = *.c *.cpp *.h *.hpp *.md
+RECURSIVE = YES
+
+GENERATE_LATEX = NO
+

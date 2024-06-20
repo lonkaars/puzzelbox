@@ -120,11 +120,14 @@ which connects with the main controller to monitor/edit the game state. And the
 software for the puzzle modules 'Vault' and 'Neotrellis' is in the prototype state.
 
 == Incidents
-There were a multitude of different challenges we had to face before getting to a 
-working product. The majority of these have been documented here, and it is highly 
-recommended to have a look at this before development.
+
+During this year's run of the project, we encountered several difficuties we
+feel need to be addressed. We recommend that these incidents are analyzed by
+future project groups and incorporated into the risk analysis section of future
+project plan documents.
 
 === Misconceptions
+
 Make sure to know what you are developing and do some research beforehand, to make 
 sure you have the complete picture about what you are using. Sounds stupid, but it 
 happened for multiple project attempts, and caused time loss. This also includes 
@@ -133,6 +136,7 @@ and verify it on the lowest possible level for the same reason as previously
 mentioned.  
 
 === I^2^C
+
 I^2^C is easy to implement but also easy to underestimate, this project requires a 
 multi-master structure as communication is otherwise too complicated compared to 
 other means of communication.
@@ -149,30 +153,39 @@ been implemented to be able to continue using the RPI Pico W.
 To simplify; a controller is needed which supports multi-master 
 while being able to be addressed as a slave.
 
-=== Available Hardware/SDKs
-When choosing or using specific chips/SDKs make sure it is available for (at least) 
-a few years. This makes it easier for the next project team to use the same chips/SDKs
-instead of having to find new ones. This also includes having enough development boards 
-for multiple people to program using the same setup, e.g. the RPI Pico W requires 
-another RPI Pico W to be debugged. Effectively requiring the project team to have at 
-least 4 RPI Pico Ws to be able to develop in the same environment (if there are 2 
-software students).
+=== Development hardware availability
 
-=== Arduino
-Allocating memory using 'realloc' on Arduino is not possible, which makes it impossible 
-to use the 'mpack_writer_init_growable'.
+When choosing or using specific chips or development boards, make sure to
+include research on the product lifecycle. Choosing boards/chips that have
+planned long term support makes it easier for the next project team to order
+and use the same chips/boards instead of having to find new ones.
 
-=== Garbage workarounds
+This also includes having enough development boards for multiple people to
+program using the same setup, e.g. the RPI Pico W requires another RPI Pico W
+to be debugged, effectively requiring the project team to have at least 4 RPI
+Pico Ws to be able to develop in the same environment (if there are 2 software
+students).
+
+=== Auxiliary workarounds and technical limitations
 
 This section details unelegant workarounds that should be removed from the
-code. All workarounds are marked with ``FIXME:`` comments referring to one of
-the workarounds mentioned in this section.
+code. Workarounds that should be removed are marked with ``FIXME:`` comments
+referring to one of the workarounds mentioned in this section.
 
 RP2040 I^2^C limitations::
 - All puzzle module drivers have a hard-coded 2 second delay between receiving
 	the MAGIC handshake request and the MAGIC handshake response handler. This
 	was done to ensure responses are not ignored by the RP2040 (main controller)
 	while it is still in I^2^C master mode.
+
+Memory management on Arduino::
+The Arduino's built-in memory management functions do not seem to work
+properly. The FreeRTOS heap 4 memory management functions are used on the
+puzzle modules instead. FreeRTOS does not have an implementation of the
+``realloc()`` function.
+- mpack's writer API cannot be used with a writer initialized using the
+	``mpack_writer_init_growable`` function on Arduino-based puzzle modules. The
+	``mpack_writer_init`` function is used with a static size buffer instead.
 
 == Recommendations
 
