@@ -17,6 +17,9 @@ i2c_addr_t modules[CFG_PB_MOD_MAX];
 size_t modules_size = 0;
 
 static void state_exchange() {
+
+	// TODO: Add calculation(?) to get global state
+
 	for (size_t i = 0; i < modules_size; i++) {
 		pb_buf_t buf = pb_send_state_req();
 		
@@ -47,3 +50,11 @@ void pb_route_cmd_magic_res(pb_msg_t * msg) {
 	printf("i2c: registered puzzle module w/ address 0x%02x\n", msg->sender);
 }
 
+void pb_route_cmd_state_res(pb_msg_t * msg) {
+	pb_cmd_state_t * cmd = msg->cmd;
+	// return early if state has wrong size
+	if (cmd->_magic_size != sizeof(pb_cmd_state_t))
+		return;
+
+	// TODO: Get msg sender & update state in array struct (?)
+}
