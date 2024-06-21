@@ -27,6 +27,7 @@ void pb_route_cmd_state_res(pb_msg_t * msg);
 void pb_route_cmd_state_set(pb_msg_t * msg);
 
 void pb_hook_main_state_update(pb_global_state_t state);
+void pb_hook_module_init();
 
 void pb_route_cmd_magic_req(pb_msg_t * msg);
 void pb_route_cmd_magic_res(pb_msg_t * msg);

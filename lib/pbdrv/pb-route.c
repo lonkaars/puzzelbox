@@ -56,8 +56,12 @@ __weak void pb_route_cmd_prop_req(pb_msg_t * msg) {}
 __weak void pb_route_cmd_prop_res(pb_msg_t * msg) {}
 __weak void pb_route_cmd_prop_set(pb_msg_t * msg) {}
 
+//! last known global state of last STATE REQ sender (i.e. main controller)
 static pb_global_state_t _main_state = PB_GS_NOINIT;
 __weak void pb_hook_main_state_update(pb_global_state_t state) {}
+__weak void pb_hook_module_init() {
+	pb_hook_mod_state_write(PB_GS_IDLE);
+}
 __weak void pb_route_cmd_state_req(pb_msg_t * msg) {
 	pb_global_state_t own_state = pb_hook_mod_state_read();
 	pb_buf_t buf = pb_send_state_res(own_state);
@@ -66,8 +70,11 @@ __weak void pb_route_cmd_state_req(pb_msg_t * msg) {
 
 	// notify of new global state variable
 	pb_cmd_state_t * cmd = msg->cmd;
-	if (cmd->state != _main_state)
+	if (cmd->state != _main_state) {
+		// first STATE REQ = module init OK
+		if (_main_state == PB_GS_NOINIT) pb_hook_module_init();
 		pb_hook_main_state_update(cmd->state);
+	}
 	_main_state = cmd->state;
 }
 
