@@ -543,8 +543,11 @@ technical specifications of the puzzle box.
 | <<req:135>> | <<must>> |
 [[req:135,R-135]] Puzzle modules are initialized by the main controller module.
 
-| <<req:165>> | <<must>> |
+| <<req:165>> | <<wont>> |
 [[req:165,R-165]] Puzzle modules repeatedly send 'update' messages to the main controller while their global state is 'uninitialized'
+
+| <<req:curriculum-cov>> | <<should>> |
+[[req:curriculum-cov,R-169]] External software and libraries that are covered in the standard curriculum should be used where possible
 |===
 
 === Main controller

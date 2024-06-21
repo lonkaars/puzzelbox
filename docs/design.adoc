@@ -486,18 +486,20 @@ Detailed specifications on the TCP socket server are in
 
 ==== Operating system
 
-TODO
+Because the main controller needs to asynchronously handle state exchanges with
+puzzle modules while serving a TCP socket connection, the decision to use a
+task scheduler was made. Due to the requirement that most software should be
+covered by the standard curriculum (<<reqs.adoc#req:curriculum-cov>>), this
+choice was between FreeRTOS and Zephyr. FreeRTOS was chosen because it is the
+simplest solution, and because the features Zephyr offers over FreeRTOS are
+already present in the Raspberry Pi Pico SDK.
 
-- main controller does tcp and i2c at the same time
-- simple scheduler is needed
-- curriculum only has FreeRTOS and Zephyr
-- Zephyr is overkill
-- FreeRTOS it is
-
-- due to RP2040 limitations, delays are used
-- most SDKs I2C drivers directly call I2C message handlers from ISR
-- puzzle bus driver functions can no longer be called directly from ISR handlers due to the delay
-- FreeRTOS is also used in puzzle modules, though this can likely be removed in the future
+NOTE: Due to the issues with the RP2040 that were later discovered
+cite:[handover], delays are used within the puzzle bus driver's message
+handling logic. This means that due to the use of the RP2040, *all puzzle
+modules* are required to use a task scheduler or similar mechanism for
+deferring calls to the puzzle bus driver from the I^2^C interrupt service
+routine (ISR).
 
 === NeoTrellis puzzle
 
