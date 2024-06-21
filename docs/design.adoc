@@ -181,10 +181,11 @@ multi-master I^2^C bus, and all puzzle modules are specified to be I^2^C
 multi-master controllers that are slave-addressible. The multi-master part is
 required to prevent I^2^C transmissions from being corrupted in the event of a
 bus collision, and the slave-addressible part is required to both send and
-receive messages on the same controller.
+receive messages on the same controller. This is the only hardware-level
+specification made this year.
 
-Address definitions and protocol specifications are further detailed in
-<<sec:lv2-bus>>.
+More details on the messages sent over the puzzle bus are described in
+<<sec:lv3-pb-messages>>.
 
 === Power supply
 
@@ -260,6 +261,103 @@ designed to facilitate the following:
 * Provide abstracted interfaces to allow for easy integration of the puzzle box
   as part of a larger whole (<<reqs.adoc#req:main-interface>>).
 
+==== Guidelines
+
+The following assumptions are made about puzzle modules:
+
+* Puzzle modules do not take initiative to send REQ or SET commands. They only
+	respond to requests from the main controller.
+* Puzzle modules are I^2^C multi-master controllers that are slave-addressable
+	in master mode.
+* The main controller is a puzzle module, but with the following differences:
+** The main controller is allowed to initiate REQ and SET commands.
+** The main controller's global state is an aggregation of all other puzzle
+	 modules, and ignores STATE SET commands.
+
+These guidelines allow the following simplifications:
+
+* Puzzle modules may assume they are always being addressed by the main
+	controller (this simplifies the message architecture).
+* The puzzle bus may be shared with regular I^2^C peripherals without causing
+	issues.
+
+[[sec:lv3-pb-messages]]
+==== Messages
+
+Puzzle bus messages consist of a simple header and variable data. This format
+is shown in <<tab:pb-msg-fmt>>. The messages are (de)serialized using mpack.
+This choice was made after considering various alternative options for sending
+structured messages cite:[research]. Note that all messages are sent as I^2^C
+writes. Due to this, the I^2^C address of a message sender is included in the
+header.
+
+[[tab:pb-msg-fmt]]
+.Puzzle bus message format
+[%autowidth]
+|===
+| Field | Content
+
+| type | Command type (see <<tab:pb-msg-types>>)
+| action | Command action (see <<tab:pb-msg-actions>>)
+| sender | I^2^C address of sender
+| cmd | Command data (dependent on ``type``)
+|===
+
+<<tab:pb-msg-types>> lists the different command types.
+
+[[tab:pb-msg-types]]
+.Puzzle bus command types
+[cols="10,~"]
+|===
+| Type | Description
+
+| ``MAGIC``
+| The MAGIC command effectively serves as a 'secret handshake' (using a _magic_
+value) which is used to distinguish between puzzle modules and unrelated I^2^C
+devices.
+
+| ``STATE``
+| The STATE command is used by puzzle modules to inform the main controller about
+their global state (see <<sec:framework-state>>). The main controller
+aggregates the states of all connected puzzle modules and exchanges this
+aggregated state with the puzzle modules to indicate when the entire puzzle box
+is solved.
+
+| ``PROP``
+| The PROP command type is used for exchanging arbitrary data between puzzle
+modules and/or the puzzle box client (pbc) over the <<sec:main-bridge,TCP
+bridge>>. These properties are not used by the puzzle framework.
+|===
+
+<<tab:pb-msg-actions>> lists the different command actions.
+
+[[tab:pb-msg-actions]]
+.Puzzle bus command actions
+[cols="10,~"]
+|===
+| ``REQ``
+| Mark the command as a request. The receiver of this message is expected to
+return a message of the same type, but with a RES action.
+
+| ``RES``
+| Mark the command as a response to a REQ message. All REQ messages should be
+followed by a RES message.
+
+| ``SET``
+| Request a change / write. The SET command is never followed by a RES.
+|===
+
+Please note that not all commands define behavior for all actions (e.g. there
+is no MAGIC SET command).
+
+Only the MAGIC and STATE commands are required for the puzzle box to function.
+The PROP command was created to allow future expansion without modifying the
+main controller firmware (<<reqs.adoc#req:main-static>>).
+
+The specific format of the 'cmd' field from <<tab:pb-msg-fmt>> is different for
+each command type, and is for this reason only documented in-code using
+Doxygen.
+
 [[sec:framework-state]]
 ==== State
 
@@ -267,19 +365,20 @@ All puzzle modules implement the same state machine shown in
 <<fig:puzzle-module-common-state>>. Note that continuous arrows indicate state
 transitions that a puzzle module may take on its own, while dashed arrows
 indicate state transitions forced by the main controller. The main controller
-also allows the game operator to manually set a module''s global state to one of
+also allows the game operator to manually set a module's global state to one of
 these states, which can be used to skip a puzzle if a player is stuck
 (<<reqs.adoc#req:edge-skip-puzzle>>) or reset a game if it is malfunctioning
 (<<reqs.adoc#req:edge-manual-reset>>).
 
-Puzzle modules start in the 'uninitialized' state, where they wait until the
-main controller sends a SET STATE command. Receiving this command indicates to
-the puzzle module that it was successfully registered by the main controller,
-and that it may transition from the 'uninitialized' state to the 'idle' state.
-
 [[fig:puzzle-module-common-state]]
 .Global puzzle module state machine
 image::img/puzzle-module-common-state.svg[]
+
+Puzzle modules start in the 'uninitialized' state, where they wait until the
+main controller sends a REQ STATE command. Receiving this command indicates to
+the puzzle module that it was successfully registered by the main controller,
+and that it may transition from the 'uninitialized' state to the 'idle' state.
+This process is also shown in <<fig:sequence-puzzle-module-init>>.
 
 The state machine described in <<fig:puzzle-module-common-state>> is referred
 to as the global state. Puzzle modules may also declare and define custom
@@ -289,79 +388,23 @@ puzzle module, or the last passcode entered on the vault puzzle module.
 
 Separating properties from the global state allows the main controller to
 handle these property values as an arbitrary blob, which allows for future
-expansion without modification of the main controller software.
+expansion without modification of the main controller software
+(<<reqs.adoc#req:main-static>>).
 
-==== Commands
+==== I^2^C addresses
 
-// TODO: cleanup
+The RPI Pico SDK prohibits the use of I^2^C addresses reserved by the I^2^C
+specification. This means different addresses from previous years are used.
+These addresses are indexed in the code under a shared header (see
+``lib/pbdrv/pb.h``).
 
-All messages sent over the puzzle bus have a similar format. This format is
-shown in Table 2. Notable details include:
+The same I^2^C address may be used by two different puzzle modules, but this
+will make it impossible for them to be used simultaniously.
 
-The 'subject' field does not have to match the I^2^C address of the message
-sender or recipient
-
-Property 0x00 stores a module's global state
-
-.Puzzle bus message format
-[%autowidth]
-|===
-| Field | Content
-
-| Command | Enum: read, write, update
-| Subject | I^2^C address (7-bit)
-| Property | Address (8-bit)
-| Value | Byte string (variable length)
-|===
-
-The messages described in Table 2 are (de)serialized using Google's protocol
-buffer library. This choice was made after considering various alternative
-options for sending structured messages cite:[research].
-
-<<fig:sequence-puzzle-module-init>> shows an example of how messages are
-exchanged for the initialization of a puzzle module.
-
-<<fig:sequence-puzzle-finish>> shows an example exchange where the last puzzle
-module (A) is solved while (B) is already solved.
-
-. First, module A sets it's own state to 'solved' and subsequently informs the
-  main controller of this change.
-. As a result of this update notification, the main controller queries puzzle
-  module A for its new global state.
-. Once the main controller has received and confirmed that all puzzle module
-  global states are set to 'solved', the main controller sets its own state to
-  'solved', and broadcasts an update message to all puzzle modules.
-. As a result of the update message from the main controller, module B requests
-  the main controller's new global state, and is able to verify that all puzzle
-  modules have been solved.
-
-In this example, module B could be the vault puzzle module, which displays a
-code when the entire puzzle box is solved.
-
-[[fig:sequence-puzzle-finish]]
-.Puzzle box finish sequence diagram
-image::img/sequence-puzzle-finish.svg[]
-
-The puzzle module framework describes the following command _types_:
-
-* ``PROP``: property
-* ``MAGIC``: handshake
-* ``STATE``: global state
-
-Each command also has a specific _action_:
-
-* ``REQ``: request
-* ``RES``: response
-* ``SET``: (over)write
-
-- Not all commands define behavior for all actions (e.g. there is no MAGIC SET
-	command).
-- A REQ command is always answered by a RES command.
-- A SET command does not have a reply.
-- All commands are sent as I^2^C writes.
-
-The Doxygen-generated pages for these command types explain their usage, and
-will not be restated in this document.
+The I^2^C addresses are also used to determine the puzzle sequence (i.e. the
+order in which puzzle modules are set to the 'playing' state). The sequence is
+determined by the main controller on startup, and consists of the connected
+puzzle modules' addresses in descending order (i.e. highest address first).
 
 === Main Controller
 
@@ -370,11 +413,9 @@ This subsection defines the function and state of the main controller.
 ==== Initializing puzzle modules
 
 The main controller sends a MAGIC REQ command to every I^2^C address on
-startup. The MAGIC command effectively serves as a 'secret handshake' (using a
-_magic_ value) which is used to distinguish between puzzle modules and
-unrelated I^2^C devices. Puzzle modules start in the 'uninitialized' state (see
-<<fig:puzzle-module-common-state>>), in which they do nothing. Puzzle modules
-in this state are still able to reply to requests, including MAGIC REQ
+startup. Puzzle modules start in the 'uninitialized' state (see
+<<fig:puzzle-module-common-state>>), during which they do nothing. Puzzle
+modules in this state are still able to reply to requests, including MAGIC REQ
 commands. When the main controller receives a MAGIC RES command, the I^2^C
 address of the sender is added to an internal list for puzzle modules.
 
@@ -451,51 +492,6 @@ TODO
 - most SDKs I2C drivers directly call I2C message handlers from ISR
 - puzzle bus driver functions can no longer be called directly from ISR handlers due to the delay
 - FreeRTOS is also used in puzzle modules, though this can likely be removed in the future
-
-[[sec:lv2-bus]]
-=== Puzzle bus
-
-This section describes the addresses and communication protocol used on the
-puzzle bus. These specifications only apply to messages sent internally in the
-puzzle box, as messages forwarded by the bridge (see <<sec:main-bridge>>) are
-sent on behalf of the main controller.
-
-==== Guidelines
-
-The following assumptions are made about puzzle modules:
-
-* Puzzle modules do not take initiative to send REQ or SET commands. They only
-	respond to requests from the main controller.
-* Puzzle modules can be distinguished from unrelated I^2^C peripherals using
-	the MAGIC command.
-* Puzzle modules are I^2^C multi-master controllers that are slave-addressable
-	in master mode.
-* The main controller is a puzzle module, but with the following differences:
-** The main controller is allowed to initiate REQ and SET commands.
-** The main controller's global state is an aggregation of all other puzzle
-	 modules, and ignores STATE SET commands.
-
-These guidelines allow the following simplifications:
-
-* Puzzle modules may assume they are always being addressed by the main
-	controller (this simplifies the message architecture).
-* The puzzle bus may be shared with regular I^2^C peripherals without causing
-	issues.
-
-==== Addresses
-
-The RPI Pico SDK prohibits the use of I^2^C addresses reserved by the I^2^C
-specification. This means different addresses from previous years are used.
-These addresses are indexed in the code under a shared header (see
-``lib/pbdrv/pb.h``).
-
-The same I^2^C address may be used by two different puzzle modules, but this
-will make it impossible for them to be used simultaniously.
-
-The I^2^C addresses are also used to determine the puzzle sequence (i.e. the
-order in which puzzle modules are set to the 'playing' state). The sequence is
-determined by the main controller on startup, and consists of the connected
-puzzle modules' addresses in descending order (i.e. highest address first).
 
 === NeoTrellis puzzle
 
