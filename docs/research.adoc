@@ -400,6 +400,58 @@ testing. Including mocking tests, a large amount of assertions, multiple test
 with different input support, and lastly being supported in the newest
 non-experimental version of {cpp}. 
 
+== I^2^C (Thomas)
+
+=== Research question
+
+How can we use I^2^C for the puzzle module detection?
+
+=== Puzzle Module Detection
+
+Puzzle module detection is vital to the puzzelbox, as this allows changing the 
+puzzles without much software or hardware configuration needed. An option will 
+be given for the choice of main controller (RP2040); namely to scan the full 
+I^2^C bus for responsive slaves. The RPI Pico SDK has an API for I^2^C which 
+also supports functions create a bus scanning function. An example of this 
+bus scan function, according to the API examples, can be found in the pseudo 
+code below.
+
+[source, c]
+----
+#include <stdio.h>
+#include "pico/stdlib.h"
+#include "hardware/i2c.h"
+
+void bus_scan() {
+    int ret;
+    uint8_t rxdata;
+    
+    for (int addr = 0; addr < (1 << 7); ++addr) {
+        ret = i2c_read_blocking(i2c_default, addr, &rxdata, 1, false);
+        printf(ret < 0 ? "." : "@");
+        printf(addr % 16 == 15 ? "\n" : "  ");
+    }
+    printf("Done.\n");
+}
+----
+
+The bus scan function tries to read data from all possible I^2^C addresses, 
+and prints a table which shows what the addresses are from found I^2^C 
+slaves. This is possible due to the i2c_read_blocking function, which returns 
+the length of the read data if the slave address is in use (in this case 1) or 
+a number below 0 if the slave address is not in use. The puzzelbox, however, 
+has the 'Neotrellis' puzzle which also uses I^2^C to function. The bus scan 
+function would also see the 'Neotrellis' rgb matrix as a puzzle module (slave) 
+using this implementation. This can easily be fixed using a handshake between 
+puzzle modules and the main controller, as the 'Neotrellis' rgb matrix cannot 
+answer this handshake and is therefor not recognized as a puzzle module.
+
+// TODO: references (API) & code block naming?
+
+=== Welke microcontroller famillies zijn slave addresseerbaar while in master die ook multimaster vriendelijk zijn.
+
+=== multi master == standaard?
+
 == Original Puzzle Box Functionality Research (Thomas)
 
 === Research question
@@ -521,54 +573,6 @@ And the following puzzle will be used from project group 2021-2022:
 The way these puzzles are solved has been summarized in this research document,
 but the most complete versions of how to solve these puzzles are given in the
 group's respective design document.
-
-== I^2^C (Thomas)
-
-=== Research question
-
-How can we use I^2^C for the puzzle module detection?
-
-=== Puzzle Module Detection
-
-Puzzle module detection is vital to the puzzelbox, as this allows changing the 
-puzzles without much software or hardware configuration needed. An option will 
-be given for the choice of main controller (RP2040); namely to scan the full 
-I^2^C bus for responsive slaves. The RPI Pico SDK has an API for I^2^C which 
-also supports functions create a bus scanning function. An example of this 
-bus scan function, according to the API examples, can be found in the pseudo 
-code below.
-
-[source, c]
-----
-#include <stdio.h>
-#include "pico/stdlib.h"
-#include "hardware/i2c.h"
-
-void bus_scan() {
-    int ret;
-    uint8_t rxdata;
-    
-    for (int addr = 0; addr < (1 << 7); ++addr) {
-        ret = i2c_read_blocking(i2c_default, addr, &rxdata, 1, false);
-        printf(ret < 0 ? "." : "@");
-        printf(addr % 16 == 15 ? "\n" : "  ");
-    }
-    printf("Done.\n");
-}
-----
-
-The bus scan function tries to read data from all possible I^2^C addresses, 
-and prints a table which shows what the addresses are from found I^2^C 
-slaves. This is possible due to the i2c_read_blocking function, which returns 
-the length of the read data if the slave address is in use (in this case 1) or 
-a number below 0 if the slave address is not in use. The puzzelbox, however, 
-has the 'Neotrellis' puzzle which also uses I^2^C to function. The bus scan 
-function would also see the 'Neotrellis' rgb matrix as a puzzle module (slave) 
-using this implementation. This can easily be fixed using a handshake between 
-puzzle modules and the main controller, as the 'Neotrellis' rgb matrix cannot 
-answer this handshake and is therefor not recognized as a puzzle module.
-
-// TODO: references (API) & code block naming?
 
 == Research of hardware designs of previous groups (21-22 and 22-23)
 
