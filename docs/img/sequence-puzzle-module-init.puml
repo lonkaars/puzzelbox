@@ -1,0 +1,17 @@
+@startuml
+!include style.ipuml
+
+participant "main controller" as main
+participant "puzzle module" as mod
+
+activate main
+
+main -> mod : MAGIC REQ
+mod -> main : MAGIC RES
+
+|||
+
+main -> mod ++: STATE REQ
+mod -> main : STATE RES
+
+@enduml

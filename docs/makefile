@@ -24,4 +24,5 @@ ASCIIDOCTOR_ARGS += --backend pdf
 	plantuml -tsvg $<
 
 design.pdf: img/software-components.svg
+design.pdf: img/sequence-puzzle-module-init.svg
 

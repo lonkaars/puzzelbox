@@ -109,7 +109,8 @@ Our project documentation was originally written in Microsoft Word, but we
 later transferred all documentation to AsciiDoc because of issues where
 OneDrive would roll back changes. If possible, use a documentation system or
 format that allows using an external version control system like Git to avoid
-losing content.
+losing content. This is also the reason why our documents may contain
+formatting/style errors.
 
 === Misconceptions
 
