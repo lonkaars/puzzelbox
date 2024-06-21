@@ -64,9 +64,6 @@ __weak void pb_hook_module_init() {
 }
 __weak void pb_route_cmd_state_req(pb_msg_t * msg) {
 	pb_global_state_t own_state = pb_hook_mod_state_read();
-	pb_buf_t buf = pb_send_state_res(own_state);
-	pb_send_reply(msg, &buf);
-	pb_buf_free(&buf);
 
 	// notify of new global state variable
 	pb_cmd_state_t * cmd = msg->cmd;
@@ -76,6 +73,10 @@ __weak void pb_route_cmd_state_req(pb_msg_t * msg) {
 		pb_hook_main_state_update(cmd->state);
 	}
 	_main_state = cmd->state;
+
+	pb_buf_t buf = pb_send_state_res();
+	pb_send_reply(msg, &buf);
+	pb_buf_free(&buf);
 }
 
 __weak void pb_route_cmd_state_res(pb_msg_t * msg) {}

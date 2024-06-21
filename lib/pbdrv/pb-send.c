@@ -64,9 +64,9 @@ pb_buf_t pb_send_state_req() {
 	return pb_msg_write(&msg);
 }
 
-pb_buf_t pb_send_state_res(pb_global_state_t state) {
+pb_buf_t pb_send_state_res() {
 	pb_cmd_state_t cmd = {
-		.state = state,
+		.state = pb_hook_mod_state_read(),
 	};
 	pb_msg_t msg = {
 		.type = PB_CMD_STATE,
