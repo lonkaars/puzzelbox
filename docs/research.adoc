@@ -526,8 +526,7 @@ group's respective design document.
 
 === Research question
 
-How can we use I^2^C for the internal communication between puzzle modules 
-and the main controller, and how can we detect new puzzle modules using I^2^C?
+How can we use I^2^C for the puzzle module detection?
 
 === Puzzle Module Detection
 
@@ -535,9 +534,9 @@ Puzzle module detection is vital to the puzzelbox, as this allows changing the
 puzzles without much software or hardware configuration needed. An option will 
 be given for the choice of main controller (RP2040); namely to scan the full 
 I^2^C bus for responsive slaves. The RPI Pico SDK has an API for I^2^C which 
-also supports functions create a bus scanning function. An example of just the 
-bus scan function according to the API examples can be found in the code block 
-below.
+also supports functions create a bus scanning function. An example of this 
+bus scan function, according to the API examples, can be found in the pseudo 
+code below.
 
 [source, c]
 ----
@@ -556,14 +555,20 @@ void bus_scan() {
     }
     printf("Done.\n");
 }
-
 ----
 
+The bus scan function tries to read data from all possible I^2^C addresses, 
+and prints a table which shows what the addresses are from found I^2^C 
+slaves. This is possible due to the i2c_read_blocking function, which returns 
+the length of the read data if the slave address is in use (in this case 1) or 
+a number below 0 if the slave address is not in use. The puzzelbox, however, 
+has the 'Neotrellis' puzzle which also uses I^2^C to function. The bus scan 
+function would also see the 'Neotrellis' rgb matrix as a puzzle module (slave) 
+using this implementation. This can easily be fixed using a handshake between 
+puzzle modules and the main controller, as the 'Neotrellis' rgb matrix cannot 
+answer this handshake and is therefor not recognized as a puzzle module.
+
 // TODO: references (API) & code block naming?
-
-=== Arduino
-
-
 
 == Research of hardware designs of previous groups (21-22 and 22-23)
 
