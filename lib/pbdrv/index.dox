@@ -1,0 +1,39 @@
+// vim:ft=doxygen
+/**
+
+\defgroup pbdrv pbdrv
+\brief Standalone puzzle bus driver
+
+pbdrv is a standalone portable static library for handling (i.e.
+(de)serialization) of puzzle bus messages.
+
+\defgroup pbdrv-mod pbdrv-mod
+\brief Puzzle module driver (superset of \ref pbdrv)
+
+pbdrv-mod is a superset of pbdrv, and includes functions specific to puzzle bus
+modules. pbdrv-mod compiles to an object file instead of a static library
+because it may depend on functions that rely on external libraries. pbdrv-mod
+is still considered standalone, but requires either using an existing driver,
+or (partially) implementing the driver functions.
+
+\note Most \c pb_* functions have a weak implementation, which may be
+overwritten by a custom implementation. This allows you to use the default
+implementation where possible, and only implement extensions required for your
+puzzle module.
+
+TODO: where to find drivers
+TODO: what are extensions
+TODO: what to do if there is no driver / extension
+
+\{
+
+\defgroup hook
+\brief Functions for (partially) overriding default behavior
+
+Hooks are functions with a default (weak) implementation in pbdrv. These
+functions can be overwritten by the user to implement custom behavior, without
+needing to understand the internals of pbdrv.
+
+\}
+
+*/

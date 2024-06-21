@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * \ingroup pbdrv
+ * \ingroup pbdrv-mod
+ * \defgroup pb Bus
+ * \brief Constants for the puzzle bus hardware
+ * \{
+ */
+
 //! I2C bus speed in hertz (100 KHz)
 #define PB_CLOCK_SPEED_HZ 100000
 //! I2C bus timeout delay in milliseconds
@@ -32,3 +40,4 @@
 //! Dummy puzzle module I2C address
 #define PB_ADDR_MOD_DUMMY 0x69
 
+/// \}
