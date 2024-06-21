@@ -143,6 +143,13 @@ than the other options. It also happens to be less expensive than all other
 options. Due to these reasons, the RP2040 was chosen as main controller MCU.
 The Raspberry Pi Pico W board is utilized during development.
 
+NOTE: This was written while we did not know the puzzle bus specifically
+requires slave-addressible I^2^C multi-master controllers to function properly.
+While the research concludes the RP2040 is a suitable microcontroller for the
+main controller, it is not. The RP2040 was still used, but has required
+implementing workarounds. Please see the handover report for more details on
+how this impacted the project cite:[handover].
+
 [[tab:main-mcu]]
 .Main controller MCU candidates
 [%autowidth]
@@ -173,10 +180,10 @@ manufacturers: Atmel, STMicroelectronics, Raspberry Pi.
 
 All the MCUs listed in <<tab:pm-mcu>> support some version of a low-power mode.
 The RP2040 is again included and appears here because it supports clock speed
-configuration and has a clock gate for each peripheral [2], which may make it a
-feasible option with regards to power consumption. Choosing the RP2040 may also
-simplify the development process as only a single MCU toolchain needs to be
-maintained.
+configuration and has a clock gate for each peripheral cite:[rp2040ds], which
+may make it a feasible option with regards to power consumption. Choosing the
+RP2040 may also simplify the development process as only a single MCU toolchain
+needs to be maintained.
 
 The Microchip PIC16F15276 is the most power efficient on this list and is the
 recommended MCU for puzzle modules. It supports both extreme underclocking and
@@ -186,6 +193,10 @@ evaluation kit.
 Because this year's run of this project was carried out by a team consisting
 only of software students, this choice remains as a recommendation. The puzzle
 box hardware may still use the ESP32 development kits from the 21-22 group.
+
+NOTE: This was written while we did not know the puzzle bus specifically
+requires slave-addressible I^2^C multi-master controllers to function properly.
+We have not verified if the PIC16F15276 supports this feature.
 
 [[tab:pm-mcu]]
 .Puzzle module controller MCU candidates

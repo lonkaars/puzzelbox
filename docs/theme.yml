@@ -61,6 +61,7 @@ toc:
 caption:
   align: center
   end: bottom
+  margin_inside: 6pt
 
 image:
   align: center
@@ -97,4 +98,11 @@ footer:
   verso:
     center:
       content: '{page-number}'
+
+admonition:
+  column_rule_color: '#000000'
+  column_rule_width: 1pt
+  padding: [3pt, 6pt, 3pt, 6pt]
+  label:
+    font_style: bold
 

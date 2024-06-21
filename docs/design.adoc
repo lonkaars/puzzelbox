@@ -146,7 +146,13 @@ The criteria for the main controller are:
 The requirements document compares various microcontrollers that fit these
 criteria. After this comparison, the decision was made to utilize the Raspberry
 Pi Pico W as main controller during development.
-// TODO: this was a bad choice
+
+NOTE: This was written while we did not know the puzzle bus specifically
+requires slave-addressible I^2^C multi-master controllers to function properly.
+While the research concludes the RP2040 is a suitable microcontroller for the
+main controller, it is not. The RP2040 was still used, but has required
+implementing workarounds. Please see the handover report for more details on
+how this impacted the project cite:[handover].
 
 [[fig:main-controller-top]]
 .Main controller top-level block diagram

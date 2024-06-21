@@ -29,16 +29,17 @@ removal or transfer of these files.
 
 [[tab:proj-comp]]
 .Project group composition
+[cols="15,35,20",width=55%]
 |===
 | Year | Name | Study path
 
-.4+| 19-20
+.4+h| 19-20
 | Daniël Janssen | Software
 | Dion Legierse | Software
 | Jop van Laanen | Hardware
 | Max van den Heijkant | Software
 
-.4+| 20-21
+.4+h| 20-21
 | Joost van Wiechen | Hardware
 | Justin Maas | Software
 | [[pn:creemers,Merel Creemers]]Merel Creemers | Hardware{empty}footnote:[The
@@ -51,18 +52,18 @@ were a hardware student that worked on the PCBs or a CMD student working on the
 puzzle box chassis.]
 | Vincent Lengowski | Hardware
 
-.5+| 21-22
+.5+h| 21-22
 | Alex van Kuijk | Hardware
 | Jef Baars | Software
 | Julian de Bruin | Software
 | Lucas van Gastel | Software
 | Toon Rockx | Hardware
 
-.2+| 22-23
+.2+h| 22-23
 | Frank Bekema | Hardware
 | Jasper Gense | Hardware
 
-.4+| 23-24
+.4+h| 23-24
 | Elwin Hammer | Software
 | [[pn:faase,Lars Faase]]Lars Faase{empty}footnote:[<<pn:faase>> was removed
 from the project group on 2024-06-03 following complaints about the lack of
