@@ -522,6 +522,49 @@ The way these puzzles are solved has been summarized in this research document,
 but the most complete versions of how to solve these puzzles are given in the
 group's respective design document.
 
+== I^2^C (Thomas)
+
+=== Research question
+
+How can we use I^2^C for the internal communication between puzzle modules 
+and the main controller, and how can we detect new puzzle modules using I^2^C?
+
+=== Puzzle Module Detection
+
+Puzzle module detection is vital to the puzzelbox, as this allows changing the 
+puzzles without much software or hardware configuration needed. An option will 
+be given for the choice of main controller (RP2040); namely to scan the full 
+I^2^C bus for responsive slaves. The RPI Pico SDK has an API for I^2^C which 
+also supports functions create a bus scanning function. An example of just the 
+bus scan function according to the API examples can be found in the code block 
+below.
+
+[source, c]
+----
+#include <stdio.h>
+#include "pico/stdlib.h"
+#include "hardware/i2c.h"
+
+void bus_scan() {
+    int ret;
+    uint8_t rxdata;
+    
+    for (int addr = 0; addr < (1 << 7); ++addr) {
+        ret = i2c_read_blocking(i2c_default, addr, &rxdata, 1, false);
+        printf(ret < 0 ? "." : "@");
+        printf(addr % 16 == 15 ? "\n" : "  ");
+    }
+    printf("Done.\n");
+}
+
+----
+
+// TODO: references (API) & code block naming?
+
+=== Arduino
+
+
+
 == Research of hardware designs of previous groups (21-22 and 22-23)
 
 This part of the research looks at the hardware designs of the previous groups
