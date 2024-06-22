@@ -14,7 +14,9 @@
 #include <stdio.h>
 #include <timers.h>
 
-#define PB_I2C i2c0
+#define PB_I2C_S i2c0
+#define PB_I2C_M i2c1
+
 #define BUF_SIZE 256
 #define MSGS_MAX 4
 
@@ -32,6 +34,8 @@ static void async_pb_i2c_recv(void * _msg, uint32_t _) {
 }
 
 static void msg_complete(i2c_msg_buf_t * msg) {
+	return pb_i2c_recv(msg->data, msg->size);
+
 	// defer pb_i2c_recv call to FreeRTOS scheduler as pb_i2c_recv takes
 	// too long to return from an ISR
 	xTimerPendFunctionCallFromISR(async_pb_i2c_recv, msg, 0, NULL);
@@ -48,7 +52,7 @@ static void recv_event(i2c_inst_t *i2c, i2c_slave_event_t event) {
 	switch (event) {
 		case I2C_SLAVE_RECEIVE: {
 			if (msg->size == BUF_SIZE) return;
-			msg->data[msg->size++] = i2c_read_byte_raw(PB_I2C);
+			msg->data[msg->size++] = i2c_read_byte_raw(PB_I2C_S);
 			break;
 		}
 		case I2C_SLAVE_FINISH: {
@@ -60,33 +64,15 @@ static void recv_event(i2c_inst_t *i2c, i2c_slave_event_t event) {
 }
 
 void pb_setup() {
-	i2c_init(PB_I2C, PB_CLOCK_SPEED_HZ);
-	i2c_slave_init(PB_I2C, PB_MOD_ADDR, &recv_event);
+	i2c_init(PB_I2C_S, PB_CLOCK_SPEED_HZ);
+	i2c_init(PB_I2C_M, PB_CLOCK_SPEED_HZ);
+
+	i2c_slave_init(PB_I2C_S, PB_MOD_ADDR, &recv_event);
 }
 
 __weak void pb_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
-	i2c_set_slave_mode(PB_I2C, false, PB_MOD_ADDR);
-
 	// false to write stop condition to i2c bus
-	i2c_write_timeout_us(PB_I2C, addr, buf, sz, false, PB_TIMEOUT_US);
-
-	i2c_set_slave_mode(PB_I2C, true, PB_MOD_ADDR);
-}
-
-void bus_scan() {
-	i2c_set_slave_mode(PB_I2C, false, PB_MOD_ADDR);
-
-	pb_buf_t buf = pb_send_magic_req();
-
-	// check for all 7-bit addresses
-	uint16_t addr_max = 1 << 7;
-	for (uint16_t addr = 0x00; addr < addr_max; addr++) {
-		i2c_write_timeout_us(PB_I2C, addr, (uint8_t *) buf.data, buf.size, false, PB_TIMEOUT_US);
-	}
-
-	pb_buf_free(&buf);
-
-	i2c_set_slave_mode(PB_I2C, true, PB_MOD_ADDR);
+	i2c_write_timeout_us(PB_I2C_M, addr, buf, sz, false, PB_TIMEOUT_US);
 }
 
 void pb_mod_blocking_delay_ms(unsigned long ms) {

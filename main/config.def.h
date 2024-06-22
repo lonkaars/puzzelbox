@@ -72,13 +72,21 @@
  * \name I2C configuration
  * \{
  */
-#ifndef CFG_SDA_PIN
-//! I2C SDA pin
-#define CFG_SDA_PIN 16
+#ifndef CFG_SDA0_PIN
+//! I2C 0 SDA pin
+#define CFG_SDA0_PIN 16
 #endif
-#ifndef CFG_SCL_PIN
-//! I2C SCL pin
-#define CFG_SCL_PIN 17
+#ifndef CFG_SCL0_PIN
+//! I2C 0 SCL pin
+#define CFG_SCL0_PIN 17
+#endif
+#ifndef CFG_SDA1_PIN
+//! I2C 1 SDA pin
+#define CFG_SDA1_PIN 18
+#endif
+#ifndef CFG_SCL1_PIN
+//! I2C 1 SCL pin
+#define CFG_SCL1_PIN 19
 #endif
 /// \}
 

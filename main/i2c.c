@@ -16,6 +16,18 @@
 i2c_addr_t modules[CFG_PB_MOD_MAX];
 size_t modules_size = 0;
 
+static void bus_scan() {
+	pb_buf_t buf = pb_send_magic_req();
+
+	// check for all 7-bit addresses
+	uint16_t addr_max = 1 << 7;
+	for (uint16_t addr = 0x00; addr < addr_max; addr++) {
+		pb_i2c_send(addr, (uint8_t *) buf.data, buf.size);
+	}
+
+	pb_buf_free(&buf);
+}
+
 static void state_exchange() {
 	for (size_t i = 0; i < modules_size; i++) {
 		pb_buf_t buf = pb_send_state_req();
@@ -27,10 +39,6 @@ static void state_exchange() {
 void bus_task() {
 	// do a scan of the bus
 	bus_scan();
-
-	// FIXME: this should be removed (see handover: RP2040 I2C limitations)
-	// wait for 5 seconds until all handshake responses are received
-	pb_mod_blocking_delay_ms(5e3);
 
 	while(1) {
 		// send my state to all puzzle modules

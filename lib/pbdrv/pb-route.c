@@ -93,9 +93,6 @@ __weak void pb_route_cmd_magic_req(pb_msg_t * msg) {
 	// // return early if magic doesn't match
 	if (pb_memcmp(cmd->magic, pb_cmd_magic_req, sizeof(pb_cmd_magic_req)) != 0) return;
 
-	// FIXME: this should be removed (see handover: RP2040 I2C limitations)
-	pb_mod_blocking_delay_ms(2000);
-
 	pb_buf_t buf = pb_send_magic_res();
 	pb_send_reply(msg, &buf);
 	pb_buf_free(&buf);
