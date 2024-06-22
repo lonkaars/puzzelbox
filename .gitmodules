@@ -21,6 +21,6 @@
 [submodule "lib/Arduino-CMake-Toolchain"]
 	path = lib/Arduino-CMake-Toolchain
 	url = https://github.com/a9183756-gh/Arduino-CMake-Toolchain
-	branch = e745a9bed3c3fb83442d55bf05630f31574674f2
+	branch = release-1.1-dev
 	shallow = true
 
