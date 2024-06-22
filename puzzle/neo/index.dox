@@ -1,0 +1,6 @@
+// vim:ft=doxygen
+/**
+\ingroup puz
+\defgroup puz_neo Neo
+\brief NeoTrellis puzzle module
+*/

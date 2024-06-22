@@ -4,12 +4,12 @@ PROJECT_NAME = "puzzlebox"
 OUTPUT_DIRECTORY = doxygen
 
 INPUT += readme.md
-INPUT += client
 INPUT += lib/mpack
 INPUT += lib/i2ctcp
 INPUT += lib/pbdrv
+INPUT += client
 INPUT += main
-INPUT += puzzle/dummy
+INPUT += puzzle
 
 EXCLUDE = lib/mpack/src
 EXCLUDE_PATTERNS = **/build
@@ -24,6 +24,8 @@ ALIASES += I2C="I&sup2;C"
 INPUT_FILTER = "sed -e 's/\<I2C\>\|\<I<sup>2<\/sup>C\>/\\I2C/g'"
 
 USE_MDFILE_AS_MAINPAGE = readme.md
+HTML_INDEX_NUM_ENTRIES = 1 # collapse trees by default
+REPEAT_BRIEF = NO
 
 INTERNAL_DOCS = YES
 EXTRACT_STATIC = YES

@@ -91,6 +91,8 @@ void i2ctcp_read_reset(i2ctcp_msg_t * target);
  */
 bool i2ctcp_write(const i2ctcp_msg_t * target, char ** buf, size_t * buf_sz);
 
+/// \}
+
 #ifdef __cplusplus
 }
 #endif

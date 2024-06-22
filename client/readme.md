@@ -1,3 +1,6 @@
+\defgroup pbc pbc
+\brief Puzzle box client
+
 # puzzle box client
 
 This folder contains the source code for the puzzle box client (pbc). This is a
@@ -7,30 +10,21 @@ game operator to control and monitor the state of a puzzle box, but is also a
 useful debugging tool when developing puzzle modules, as it allows you to send
 arbitrary data over the puzzle bus.
 
-## WIP TODO
-
-- cleanup
-  - separate ../shared/pb/moddrv.c into a puzzle module specific and 'common' bit
-  - use the common bit in i2c.cpp instead
-  - cast to structs in ../shared/pb/moddrv.c
-- functionality
-  - print pretty tree of connected puzzle modules
-  - add enum to string functions in CLIENT ONLY
-
 ## Features
 
 - List detected puzzle modules
 - Reset puzzle modules (individually or all to reset the box)
 - Skip puzzle modules (individually or all)
 - Request puzzle box state
-
-Debug only:
-- Send arbitrary messages
+- Debug: send arbitrary messages
 
 ## Building
 
-PBC is a standard CMake project, but a [makefile](./makefile) is provided for
-convenience (still requires CMake and Ninja are installed).
+PBC is a standard CMake project.
+
+## Using
+
+See ./pbc.1 for usage.
 
 ## Send data
 
@@ -45,8 +39,10 @@ send 0x39     68:65:6c:6c:6f  44      0x20    'world'    33
 
 The data is concatenated, and may contain mixed types of literals
 
-## known bugs (TODO)
 
-- tab completion for `dump` seems to print garbage sometimes
-- the send command with an address but no data causes a segmentation fault
+## WIP TODO
+
+- add enum to string functions in CLIENT ONLY
+- bug: tab completion for `dump` seems to print garbage sometimes
+- bug: the send command with an address but no data causes a segmentation fault
 

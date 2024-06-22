@@ -1,0 +1,9 @@
+// vim:ft=doxygen
+/**
+\ingroup puz
+\defgroup puz_dummy Dummy
+\brief Demo puzzle module
+
+The dummy puzzle module consists of an empty Arduino sketch, and can be used as
+a starting point for developing new puzzle modules.
+*/
