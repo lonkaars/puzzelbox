@@ -2,43 +2,69 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/** \brief I2C over TCP message (v1) */
-struct i2ctcp_msg {
-	uint16_t addr; //!< I^2^C address
+/**
+ * \defgroup i2ctcp i2ctcp
+ * \brief I2C over TCP
+ *
+ * This library includes protocol (de)serialization functions for sending and
+ * receiving I2C messages over TCP. These functions are used by the \ref main
+ * "main controller" and the \ref pbc "puzzle box client (pbc)". This library
+ * does not include any puzzle bus specific code.
+ *
+ * mpack is used for the actual (de)serialization, and the functions in this
+ * library act as helpers for parsing from chunked data streams.
+ *
+ * To use these functions, include the following statement in your
+ * CMakeLists.txt:
+ *
+ * ```cmake
+ * # include pbdrv
+ * add_subdirectory(lib/i2ctcp)
+ * 
+ * # link with executable
+ * target_link_libraries(main i2ctcp)
+ * ```
+ * 
+ * \{
+ */
+
+//! I2C over TCP message (v1)
+typedef struct {
+	uint16_t addr; //!< I2C address
 	char * data;   //!< message content
 	size_t length; //!< message size
 	size_t _rdata; //!< \private remaining bytes to read until message is complete
-};
-typedef struct i2ctcp_msg i2ctcp_msg_t;
+} i2ctcp_msg_t;
 
 /**
  * \brief Read chunk of input stream, and store resulting message in \p target
  *
  * This function is called for each chunk of data from an input stream, and
  * will parse the next puzzle bus message into \p target. The input stream is
- * assumed to only contain messages encoded by \p i2ctcp_write()
+ * assumed to only contain messages encoded by \c i2ctcp_write()
  *
- * \param target  pointer to struct that will contain the finished message data
- * \param buf     pointer to input stream data chunk
- * \param buf_sz  size of \p buf
+ * \param target  Pointer to struct that will contain the finished message data
+ * \param buf     Pointer to input stream data chunk
+ * \param buf_sz  Size of \p buf
  *
  * \returns Integer representing amount of bytes required to finish message, or
  * -1 if the message header could not be read. If this function returns 0, the
  *  message in \p target is complete.
  *
- * \note target->data will automatically be allocated by this function, even if
- * the message is not fully parsed. This variable must be `free()`d by the
+ * \note \p target->data will automatically be allocated by this function, even
+ * if the message is not fully parsed. This variable must be free'd by the
  * caller after each complete message to prevent memory leaks.
  */
 int i2ctcp_read(i2ctcp_msg_t * target, const char * buf, size_t buf_sz);
 
 /**
- * \brief reset the remaining message data counter
+ * \brief Reset the remaining message data counter
  *
  * Calling this function has the effect of forcing \c i2ctcp_read() to parse
  * the next buffer chunk as the start of a new message. This function may be
@@ -52,18 +78,20 @@ void i2ctcp_read_reset(i2ctcp_msg_t * target);
  *
  * This function allocates a buffer large enough to fit the message specified
  * in \p target, and encodes the data in \p target in a format that can be
- * decoded later using \p i2ctcp_read()
+ * decoded later using \c i2ctcp_read().
  *
- * \param target  pointer to struct that contains the message data
- * \param buf     pointer to \c char* that will contain the formatted message
- * \param buf_sz  pointer to \c size_t that will represent the final size of \p buf
+ * \param target  Pointer to struct that contains the message data
+ * \param buf     Pointer to \c char* that will contain the formatted message
+ * \param buf_sz  Pointer to \c size_t that will represent the final size of \p buf
  *
- * \returns boolean true if a the message could be encoded successfully, false
- * if there was some kind of error
+ * \returns Boolean \c true if a the message could be encoded successfully, \c
+ * false if there was some kind of error
  *
- * \note the pointer stored in \p buf must be `free()`d by the caller afterwards
+ * \note The pointer stored in \p buf must be free'd by the caller afterwards
  */
 bool i2ctcp_write(const i2ctcp_msg_t * target, char ** buf, size_t * buf_sz);
+
+/// \}
 
 #ifdef __cplusplus
 }

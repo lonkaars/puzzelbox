@@ -1,7 +1,7 @@
 :document: Research
 include::share/meta.adoc[]
 
-== Microcontrollers used in the current state.
+== Microcontrollers used in the current state (Elwin)
 
 === Research
 
@@ -39,7 +39,7 @@ see <<fig:hardware-pcb>>. The other custom-made PCB's do not have any
 microcontroller installed but seem to be made to be used by a ESP32-PICO-KIT
 V4/V4.1.
 
-=== Summery
+=== Summary
 
 There seems to be four games implemented where of only one may work because of
 its integrated ESP32, the other three also may work if the missing ESP32's are
@@ -87,7 +87,7 @@ Issues
 . Button row 4, col 1 for the safe side needs to be replaced (missing a pin)
 . LED strips for the software and hardware sides only work for 50%.
 
-==== (Appendix Loek)
+==== Appendix (Loek)
 
 The puzzle bus connector (see <<fig:bus-connector>>) appears to have 10
 conductors in total. The hardware schematics from 21-22 reveal the pinout of
@@ -112,7 +112,7 @@ Source: cite:[2122_design] +
 (Connector key is next to pin 5)
 ====
 
-== Controllers
+== Controllers (Loek)
 
 To mitigate power consumption issues discovered by the 21-22 group, new
 controllers were chosen for this year's (23-24) run of the puzzle box project.
@@ -142,6 +142,13 @@ highest memory. Its lower clock speed means that it will likely draw less power
 than the other options. It also happens to be less expensive than all other
 options. Due to these reasons, the RP2040 was chosen as main controller MCU.
 The Raspberry Pi Pico W board is utilized during development.
+
+NOTE: This was written while we did not know the puzzle bus specifically
+requires slave-addressible I^2^C multi-master controllers to function properly.
+While the research concludes the RP2040 is a suitable microcontroller for the
+main controller, it is not. The RP2040 was still used, but has required
+implementing workarounds. Please see the handover report for more details on
+how this impacted the project cite:[handover].
 
 [[tab:main-mcu]]
 .Main controller MCU candidates
@@ -173,10 +180,10 @@ manufacturers: Atmel, STMicroelectronics, Raspberry Pi.
 
 All the MCUs listed in <<tab:pm-mcu>> support some version of a low-power mode.
 The RP2040 is again included and appears here because it supports clock speed
-configuration and has a clock gate for each peripheral [2], which may make it a
-feasible option with regards to power consumption. Choosing the RP2040 may also
-simplify the development process as only a single MCU toolchain needs to be
-maintained.
+configuration and has a clock gate for each peripheral cite:[rp2040ds], which
+may make it a feasible option with regards to power consumption. Choosing the
+RP2040 may also simplify the development process as only a single MCU toolchain
+needs to be maintained.
 
 The Microchip PIC16F15276 is the most power efficient on this list and is the
 recommended MCU for puzzle modules. It supports both extreme underclocking and
@@ -186,6 +193,10 @@ evaluation kit.
 Because this year's run of this project was carried out by a team consisting
 only of software students, this choice remains as a recommendation. The puzzle
 box hardware may still use the ESP32 development kits from the 21-22 group.
+
+NOTE: This was written while we did not know the puzzle bus specifically
+requires slave-addressible I^2^C multi-master controllers to function properly.
+We have not verified if the PIC16F15276 supports this feature.
 
 [[tab:pm-mcu]]
 .Puzzle module controller MCU candidates
@@ -205,7 +216,7 @@ the Raspberry Pi RP2040 on the Raspberry Pi Pico W. The recommended MCU for new
 puzzle modules is the Microchip PIC16F15276. The existing puzzle modules still
 utilize the ESP32 development kits chosen by the 21-22 group.
 
-== Main Controller OS
+== Main Controller OS (Loek)
 
 Because the hardware produced by the 21-22 group uses a Raspberry Pi 3B+ as
 main controller, the usage of this specific board was turned into a
@@ -522,7 +533,7 @@ The way these puzzles are solved has been summarized in this research document,
 but the most complete versions of how to solve these puzzles are given in the
 group's respective design document.
 
-== Research of hardware designs of previous groups (21-22 and 22-23)
+== Research of hardware designs of previous groups (21-22 and 22-23) (Lars)
 
 This part of the research looks at the hardware designs of the previous groups
 that did this project. These are compared with each other and finally the

@@ -2,7 +2,7 @@
 #include "pb-mod.h"
 #include "pb-msg.h"
 
-__weak void pb_send_reply(pb_msg_t * msg, pb_buf_t * reply) {
+__weak void pb_send_reply(const pb_msg_t * msg, const pb_buf_t * reply) {
 	return pb_i2c_send(msg->sender, (uint8_t *) reply->data, reply->size);
 }
 
@@ -21,10 +21,10 @@ pb_buf_t pb_send_read_req(uint8_t propid) {
 	return pb_msg_write(&msg);
 }
 
-pb_buf_t pb_send_read_res(uint8_t propid, uint8_t * value, size_t size) {
+pb_buf_t pb_send_read_res(uint8_t propid, const uint8_t * value, size_t size) {
 	pb_cmd_prop_t cmd = {
 		.propid = propid,
-		.value = value,
+		.value = (uint8_t *) value,
 		._value_size = size,
 	};
 	pb_msg_t msg = {
@@ -36,10 +36,10 @@ pb_buf_t pb_send_read_res(uint8_t propid, uint8_t * value, size_t size) {
 	return pb_msg_write(&msg);
 }
 
-pb_buf_t pb_send_write_req(uint8_t propid, uint8_t * value, size_t size) {
+pb_buf_t pb_send_write_req(uint8_t propid, const uint8_t * value, size_t size) {
 	pb_cmd_prop_t cmd = {
 		.propid = propid,
-		.value = value,
+		.value = (uint8_t *) value,
 		._value_size = size,
 	};
 	pb_msg_t msg = {
@@ -64,9 +64,9 @@ pb_buf_t pb_send_state_req() {
 	return pb_msg_write(&msg);
 }
 
-pb_buf_t pb_send_state_res(pb_global_state_t state) {
+pb_buf_t pb_send_state_res() {
 	pb_cmd_state_t cmd = {
-		.state = state,
+		.state = pb_hook_mod_state_read(),
 	};
 	pb_msg_t msg = {
 		.type = PB_CMD_STATE,

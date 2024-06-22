@@ -1,0 +1,6 @@
+// vim:ft=doxygen
+/**
+\ingroup puz
+\defgroup puz_vault Vault
+\brief Vault puzzle module
+*/

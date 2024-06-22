@@ -1,0 +1,37 @@
+@startuml
+!include style.ipuml
+
+component [arduino-sdk] as "Arduino SDK"
+
+component pbdrv-mod as "Puzzle bus module driver\n(pbdrv-mod)" {
+	component pbdrv as "Puzzle bus driver\n(pbdrv)"
+}
+
+[freertos] as "FreeRTOS"
+[mpack] as "mpack"
+
+[pico-sdk] as "RPI Pico SDK\n(pico-sdk)"
+[i2ctcp] as "i2c over tcp bridge\n(i2ctcp)"
+
+node pbc as "puzzle box client\n(pbc)"
+node main as "main controller software"
+node pm as "puzzle module"
+
+pm ---> [pbdrv-mod]
+pm ----> [freertos]
+pm ----> [arduino-sdk]
+
+main ---> [pbdrv-mod]
+main ----> [freertos]
+main ----> [pico-sdk]
+main ---> [i2ctcp]
+
+pbc ---> [pbdrv]
+pbc ---> [i2ctcp]
+
+[pbdrv] --> [mpack]
+
+[i2ctcp] --> [mpack]
+
+@enduml
+

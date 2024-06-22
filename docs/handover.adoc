@@ -1,13 +1,19 @@
 :document: Handover Report
 include::share/meta.adoc[]
 
-== A Note Before Reading
-The team of year 2023-2024 consisted of only software students, meaning no 
-hardware was developed in this year. We were tasked with simplifying the 
-software to the point where it would only have to be ported into the new hardware,
-which was designed in the year 2022-2023. The goal of this year is to create
-a software framework which can be used to implement new puzzles and to make the 
-development process of these puzzles easier. 
+== Introduction
+
+This is an (at times slightly informal) document that summarizes how the 23-24
+run of this project went. We found the previous handover documents to be
+unhelpful when determining the 'actual' state of the project in the first few
+weeks, and felt they did not address the pitfalls of this project.
+
+The team of year 2023-2024 consisted of only software students (see
+<<tab:proj-comp>>), meaning no hardware was developed in this year. The goal of
+this year is to create a software framework which can be used to implement new
+puzzles and to make the development process of these puzzles easier, and allow
+the entire software stack to be ported to the the hardware designed by the
+22-23 group.
 
 Previous years' groups have put their predecessor's documents inside their own
 project folder, which has resulted in what we called the 'Russian doll folder
@@ -19,35 +25,21 @@ require credentials to log in. Please note that this is very much unofficial,
 and is not managed or endorsed by Avans. <<pn:blansch>> is the contact for
 removal or transfer of these files.
 
-== Introduction
+== Group history
 
-This is an informal document that summarizes how the 23-24 run of this project
-went. We found the previous handover documents to be unhelpful when determining
-the 'actual' state of the project in the first few weeks, and felt they did not
-address the pitfalls of this project.
-
-== Group History
-
-=== 19-20
-
-.19-20 group composition
-[%autowidth]
+[[tab:proj-comp]]
+.Project group composition
+[cols="15,35,20",width=55%]
 |===
-| Name | Study path
+| Year | Name | Study path
 
+.4+h| 19-20
 | Daniël Janssen | Software
 | Dion Legierse | Software
 | Jop van Laanen | Hardware
 | Max van den Heijkant | Software
-|===
 
-=== 20-21
-
-.20-21 group composition
-[%autowidth]
-|===
-| Name | Study path
-
+.4+h| 20-21
 | Joost van Wiechen | Hardware
 | Justin Maas | Software
 | [[pn:creemers,Merel Creemers]]Merel Creemers | Hardware{empty}footnote:[The
@@ -59,40 +51,19 @@ may indicate that they were removed from the project group. I am unsure if they
 were a hardware student that worked on the PCBs or a CMD student working on the
 puzzle box chassis.]
 | Vincent Lengowski | Hardware
-|===
 
-=== 21-22
-
-.21-22 group composition
-[%autowidth]
-|===
-| Name | Study path
-
+.5+h| 21-22
 | Alex van Kuijk | Hardware
 | Jef Baars | Software
 | Julian de Bruin | Software
 | Lucas van Gastel | Software
 | Toon Rockx | Hardware
-|===
 
-=== 22-23
-
-.22-23 group composition
-[%autowidth]
-|===
-| Name | Study path
-
+.2+h| 22-23
 | Frank Bekema | Hardware
 | Jasper Gense | Hardware
-|===
 
-=== 23-24 (current)
-
-.23-24 group composition
-[%autowidth]
-|===
-| Name | Study path
-
+.4+h| 23-24
 | Elwin Hammer | Software
 | [[pn:faase,Lars Faase]]Lars Faase{empty}footnote:[<<pn:faase>> was removed
 from the project group on 2024-06-03 following complaints about the lack of
@@ -101,98 +72,157 @@ communication, and lack of motivation] | Software
 | Thomas in 't Anker | Software
 |===
 
-== Project State
-The current project state is as follows: No new hardware has been designed 
-or developed this year. The software was completely revised, now consisting of a 
-a puzzle bus driver, a main controller, a simple CLI application, and two puzzle 
-modules. Namely the puzzle modules 'Vault' and 'Neotrellis', both using an Arduino 
-as the controller. The main controller (a RPI Pico W) can interact with the 
-different puzzle modules using an I^2^C bus. The I^2^C bus has been configured to 
-be a multi-master I^2^C bus, allowing the puzzle modules and the main controller 
-to initiate a I^2^C transmission. The main controller is able to find 
-new puzzle modules on startup, and does not check for new modules afterwards. A 
-simple CLI application has been developed, which can communicate with the main 
-controller through a TCP connection and simple commands. 
+== Project state
 
-In short: A puzzle bus driver has been implemented to allow for communication 
-between the main controller and the puzzle modules. A CLI application was developed 
-which connects with the main controller to monitor/edit the game state. And the 
-software for the puzzle modules 'Vault' and 'Neotrellis' is in the prototype state.
+The current project state is as follows:
+
+* No new hardware has been designed or developed this year
+* The software was completely revised, now consisting of
+** a puzzle bus driver (``pbdrv``)
+** a main controller
+** a simple CLI application
+** two puzzle modules ('Vault' and 'NeoTrellis') integrated using the puzzle
+	 bus driver
+
+* The main controller (a RPI Pico W) can interact with the different puzzle
+	modules using a central shared I^2^C bus (referred to as the 'puzzle bus')
+* The main controller is able to find new puzzle modules on startup, and does
+	not check for new modules afterwards.
+* A simple CLI application has been developed, which can communicate with the
+	main controller through a TCP connection and allows control over various
+	aspects of the puzzle box using simple commands.
 
 == Incidents
-There were a multitude of different challenges we had to face before getting to a 
-working product. The majority of these have been documented here, and it is highly 
-recommended to have a look at this before development.
+
+During this year's run of the project, we encountered several difficuties we
+feel need to be addressed in order to be mitigated in future runs of the
+project. We recommend that these incidents are analyzed by future project
+groups and incorporated into the risk analysis section of future project plan
+documents.
+
+=== Documentation
+
+We spent too much time working on documentation at the start of the project.
+Make sure you set clear deadlines for documentation, and try not to spend too
+much time on review procedures, as these cost a lot of time.
+
+Our project documentation was originally written in Microsoft Word, but we
+later transferred all documentation to AsciiDoc because of issues where
+OneDrive would roll back changes. If possible, use a documentation system or
+format that allows using an external version control system like Git to avoid
+losing content. This is also the reason why our documents may contain
+formatting/style errors.
 
 === Misconceptions
-Make sure to know what you are developing and do some research beforehand, to make 
-sure you have the complete picture about what you are using. Sounds stupid, but it 
-happened for multiple project attempts, and caused time loss. This also includes 
-when you want to use documentation of previous years: go through the documentation 
-and verify it on the lowest possible level for the same reason as previously 
-mentioned.  
+
+Make sure to know what you are developing and do some research beforehand, to
+make sure you have a complete picture about what you are using. Sounds stupid,
+but it happened for multiple project attempts, and caused time loss. This also
+includes when you want to use documentation of previous years: go through the
+documentation and verify it on the lowest possible level for the same reason as
+previously mentioned.  
 
 === I^2^C
-I^2^C is easy to implement but also easy to underestimate, this project requires a 
-multi-master structure as communication is otherwise too complicated compared to 
-other means of communication.
 
-For I^2^C on hardware level: make sure to use pull-up resistors as it is otherwise 
-impossible to use I^2^C due to incorrect messages. This is also required for 
-controllers which are connected to the I^2^C bus. Make sure to use I^2^C devices 
-that support arbitration when using it as a multi-master. 
+I^2^C is used because it is widely available and easy to implement. We strongly
+recommend 3rd year software students to refresh their knowledge on I^2^C before
+making major design decisions that rely on their conception of how to I^2^C bus
+works.
 
-The RPI Pico W (RP2040) does supports multi-master to the point of being able to 
-receive messages from other multi-masters as a slave while being configured as master. 
-Everything else about the I^2^C bus works, but due to this limitation a workaround has 
-been implemented to be able to continue using the RPI Pico W. 
-To simplify; a controller is needed which supports multi-master 
-while being able to be addressed as a slave.
+Please note the following differences between I^2^C devices:
 
-=== Available Hardware/SDKs
-When choosing or using specific chips/SDKs make sure it is available for (at least) 
-a few years. This makes it easier for the next project team to use the same chips/SDKs
-instead of having to find new ones. This also includes having enough development boards 
-for multiple people to program using the same setup, e.g. the RPI Pico W requires 
-another RPI Pico W to be debugged. Effectively requiring the project team to have at 
-least 4 RPI Pico Ws to be able to develop in the same environment (if there are 2 
-software students).
+- Regular I^2^C slave peripherals are allowed on the puzzle bus, and can be
+	connected to the puzzle bus as long as they do not cause issues with
+	addressing.
+- I^2^C master controllers must have hardware support for a multi-master
+	hardware configuration (i.e. support bus arbitration on a hardware level).
+	Arbitration support is required to prevent message corruption or electrical
+	shorts in a multi-master setup. Multi-master controllers may also be
+	connected to the puzzle bus, but only as long as they only interact with
+	regular I^2^C slave devices.
+- I^2^C multi-master controllers that are slave-addressable in master mode are
+	the only kind of I^2^C controller suitable for use in puzzle modules.
 
-=== Arduino
-Allocating memory using 'realloc' on Arduino is not possible, which makes it impossible 
-to use the 'mpack_writer_init_growable'.
+The RP2040 supports multi-master, but is not addressable as a slave in master
+mode. Due to time constraints, this was mitigated using a workaround (see
+<<fixme:rp2040-i2c>>).
 
-=== Garbage workarounds
+=== Development hardware availability
 
-This section details unelegant workarounds that should be removed from the
-code. All workarounds are marked with ``FIXME:`` comments referring to one of
-the workarounds mentioned in this section.
+When choosing or using specific chips or development boards, make sure to
+include research on the product lifecycle. Choosing boards/chips that have
+planned long term support makes it easier for the next project team to order
+and use the same chips/boards instead of having to find new ones.
 
-RP2040 I^2^C limitations::
+Due to a lack of foresight, only 2 Picos were ordered this year, which caused
+unoptimal workload spread during the last weeks of the project. Because of
+this, we also strongly recommend making enough development boards available for
+multiple people to develop using the same setup. Note that the RPI Pico is a
+special case, as it requires another Pico for debugging, effectively requiring
+double the amount of hardware to support developers.
+
+=== Auxiliary workarounds and technical limitations
+
+This section details workarounds that were implemented instead of being fixed
+due to time constraints or project scope. Workarounds that should be removed
+are marked with ``FIXME:`` comments referring to one of the workarounds
+mentioned in this section.
+
+[[fixme:rp2040-i2c,RP2040 I^2^C limitations]]
+<<fixme:rp2040-i2c>>::
 - All puzzle module drivers have a hard-coded 2 second delay between receiving
 	the MAGIC handshake request and the MAGIC handshake response handler. This
 	was done to ensure responses are not ignored by the RP2040 (main controller)
 	while it is still in I^2^C master mode.
 
+Memory management on Arduino::
+The Arduino's built-in memory management functions do not seem to work
+properly. The FreeRTOS heap 4 memory management functions are used on the
+puzzle modules instead. FreeRTOS does not have an implementation of the
+``realloc()`` function.
+- mpack's writer API cannot be used with a writer initialized using the
+	``mpack_writer_init_growable`` function on Arduino-based puzzle modules. The
+	``mpack_writer_init`` function is used with a static size buffer instead.
+
 == Recommendations
 
-=== Imperatives
-* The 22-23 design document already mentions that the application of the I^2^C
-bus is in a multi-master configuration, but does not mention that this only
-works when pull-up resistors are used on the SCL and SDA lines. The pull-up
-resistors are required, as omitting them makes the bus arbitration process
-very inconsistent which causes frames to be dropped entirely.
-* Start creating prototypes as fast as possible; this benefits the project in the long run, 
-as you have already shown that certain parts of the project are already working and "only" 
-need to be integrated.
-* The Atmega328P chip is sufficient for the puzzle modules as it has enough I/O, mutli-master
-hardware support, and the ability to be addressed as a slave while being in master mode. 
-* The hardware design can be taken from the year 22-23, and the game rules are taken from 
-the year 20-21.
+This section details our recommendations on course of action for future project
+groups.
 
-// TODO: rename this bitch
-=== Loose imperatives 
-* The RPI Pico W has programmable IO modules, making it possible to create an I^2^C driver 
-that allows multi-master communication while still being addressable as a slave.
+=== Imperatives
+
+The following points must not be dismissed by future project groups, as they
+are critical for project success:
+
+- The 22-23 design document already mentions that the application of the I^2^C
+	bus is in a multi-master configuration, but does not mention that this only
+	works when pull-up resistors are used on the SCL and SDA lines. The pull-up
+	resistors are required, as omitting them makes the bus arbitration process
+	very inconsistent which causes frames to be dropped entirely.
+- Start creating prototypes as early as possible; this benefits the project in
+	the long run, as you have already shown that certain parts of the project are
+	already working and "only" need to be integrated.
+- The Atmega328P and ATmega2560 MCUs are both sufficient for the puzzle modules
+	as they have enough I/O, mutli-master hardware support, and the ability to be
+	addressed as a slave while being in master mode.
+- The RPI Pico (and Pico W)'s I^2^C peripheral supports multi-master, but does
+	not support being addressed as a slave while in master mode. This is required
+	for puzzle bus integration, and was mitigated using a workaround (see
+	<<fixme:rp2040-i2c>>). A replacement controller should be used instead.
+
+=== Other suggestions
+
+These points are suggestions for future project groups. While we do not think
+these are critical to project success, we still think they are important to
+mention.
+
+- Implement the hardware design from the year 22-23.
+- The original game rules are described in a separate document from the year
+	20-21.
+- The RPI Pico W has programmable I/O modules. Due to time constraints, we did
+	not research if these modules can be used to create a custom I^2^C peripheral
+	(and driver) that allows multi-master communication while still being
+	addressable as a slave. If this is possible, the RPI Pico W can still be used
+	as main controller without the use of workarounds.
 
 include::share/footer.adoc[]

@@ -1,0 +1,6 @@
+// vim:ft=doxygen
+/**
+\ingroup main
+\defgroup main_tasks tasks
+\brief Tasks
+*/

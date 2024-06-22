@@ -11,6 +11,20 @@ project. The software in this repository should be easily portable to various
 other microcontrollers, and a recommendation is made in the [design
 document](docs/design.adoc).
 
+## Documentation
+
+This project is documented using Doxygen. To generate HTML docs, run
+
+```
+$ make doxygen
+```
+
+and open <doxygen/html/index.html> in a browser.
+
+If you are viewing this page from Doxygen, please take a look at
+[topics](/topics.html) for a comprehensive list of components within this
+project.
+
 ## Tidyness
 
 Please keep this repository tidy by being aware of the following conventions!
@@ -36,8 +50,12 @@ An `.editorconfig` file is provided in this repository. Please install the
 [EditorConfig](https://editorconfig.org/) plugin for your text editor of choice
 to automatically use these.
 
-Currently, no linter/formatter is configured for maintaining consistent code
-style.
+There are also `.clang-tidy` and `.clang-format` files, which can be enforced
+by running
+
+```
+$ make format
+```
 
 ## Submodules
 
