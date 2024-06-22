@@ -16,8 +16,8 @@ extern "C" {
 
 //! binary buffer struct
 typedef struct {
-	char * data; //! pointer to data
-	size_t size; //! size of data
+	char * data; //!< pointer to data
+	size_t size; //!< size of data
 } pb_buf_t;
 
 /**

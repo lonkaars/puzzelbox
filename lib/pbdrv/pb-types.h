@@ -18,19 +18,19 @@ extern "C" {
  */
 
 #ifdef __GNUC__
-//! Mark function as weak (allow user to override implementation)
 #define __weak __attribute__((weak))
 #endif
 #ifndef __weak
 #error Could not determine weak attribute for current compiler
+//! Mark function as weak (allow user to override implementation)
 #define __weak
 #endif
 
 //! I2C address (10 or 7 bit)
 typedef uint16_t i2c_addr_t;
 
-//! puzzle bus command types
-enum pb_cmd_id {
+//! Puzzle bus command types
+typedef enum {
 	/**
 	 * \brief puzzle module property (\ref pb_route_cmd_prop_req "REQ", \ref
 	 * pb_route_cmd_prop_res "RES", \ref pb_route_cmd_prop_set "SET")
@@ -60,29 +60,34 @@ enum pb_cmd_id {
 	 * unrelated I2C devices.
 	 */
 	PB_CMD_MAGIC,
-};
-typedef enum pb_cmd_id pb_cmd_id_t;
+} pb_cmd_id_t;
 
-//! puzzle bus command action types
-enum pb_action {
+//! Puzzle bus command action types
+typedef enum {
 	PB_ACTION_REQ, //!< request
 	PB_ACTION_RES, //!< response
 	PB_ACTION_SET, //!< (over)write
-};
-typedef enum pb_action pb_action_t;
+} pb_action_t;
 
-//! puzzle bus global states
-enum pb_global_state {
+//! Puzzle module global states
+typedef enum {
 	PB_GS_NOINIT, //!< uninitialized (only used by puzzle modules)
 	PB_GS_IDLE, //!< puzzle not started yet
 	PB_GS_PLAYING, //!< puzzle actively being solved
 	PB_GS_SOLVED, //!< puzzle completed
-};
-typedef enum pb_global_state pb_global_state_t;
+} pb_global_state_t;
 
-//! magic sent from main controller to puzzle module
+/**
+ * \brief Magic sent from main controller to puzzle module (="puzbus")
+ *
+ * The size of this array can be obtained by \c sizeof(pb_cmd_magic_req).
+ */
 static const char pb_cmd_magic_req[] = { 0x70, 0x75, 0x7a, 0x62, 0x75, 0x73 };
-//! magic reply from puzzle module back to main controller
+/**
+ * \brief Magic reply from puzzle module back to main controller (="gaming")
+ *
+ * The size of this array can be obtained by \c sizeof(pb_cmd_magic_res).
+ */
 static const char pb_cmd_magic_res[] = { 0x67, 0x61, 0x6d, 0x69, 0x6e, 0x67 };
 
 //! puzzle bus message header / container (shared by all commands)

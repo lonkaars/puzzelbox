@@ -9,27 +9,26 @@ extern "C" {
 /**
  * \ingroup pbdrv-mod
  * \defgroup pb_mod Module
- * \brief Metadata and auxiliary utility functions
+ * \brief Puzzle module metadata and auxiliary utility functions
  * \{
  */
 
 /**
  * \brief Puzzle module name
- *
- * Optional to define, default value is "???"
+ * \note This constant is optional to define, its default value is "???"
  */
 extern const char * PB_MOD_NAME;
 /**
  * \brief Puzzle module bus address
- *
- * **Required** to define
+ * \warning This variable **must** be defined by the user
  */
 extern const i2c_addr_t PB_MOD_ADDR;
 
 /**
  * \brief Platform-specific blocking delay function
  *
- * FIXME: this should be removed (see handover: RP2040 I2C limitations)
+ * FIXME: this entire function should be removed (see handover: RP2040 I2C
+ * limitations)
  */
 void pb_mod_blocking_delay_ms(unsigned long ms);
 
