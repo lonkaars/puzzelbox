@@ -69,6 +69,12 @@ typedef struct {
 	pb_global_state_t state; //!< global state
 } pb_cmd_state_t;
 
+//! PB_MOD_STATE data
+typedef struct {
+	i2c_addr_t sender; //!< i2c address of sender
+	pb_global_state_t state; //!< global state
+} pb_puzzle_module_t;
+
 //! PB_CMD_MAGIC data
 typedef struct {
 	char * magic; //!< magic value
