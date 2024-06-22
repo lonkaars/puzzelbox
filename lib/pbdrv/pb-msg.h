@@ -46,6 +46,9 @@ pb_buf_t pb_msg_write(const pb_msg_t * msg);
 pb_msg_t * pb_msg_read(const pb_buf_t * buf);
 /**
  * \brief Recursively free fields of a \c pb_msg_t
+ *
+ * \note The \p msg pointer itself is also free'd by this function. You should
+ * set it to NULL afterwards to avoid confusion.
  */
 void pb_msg_free(pb_msg_t * msg);
 

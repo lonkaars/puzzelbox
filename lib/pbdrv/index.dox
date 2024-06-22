@@ -4,28 +4,62 @@
 \defgroup pbdrv pbdrv
 \brief Standalone puzzle bus driver
 
-pbdrv is a standalone portable static library for handling (i.e.
-(de)serialization) of puzzle bus messages.
+\ref pbdrv is a standalone portable static library for handling (i.e.
+(de)serialization) of puzzle bus messages. \ref pbdrv is meant for use within
+applications that handle puzzle bus messages, but are not puzzle modules
+themselves. For a complete puzzle module driver, please see \ref pbdrv-mod.
+
+If you order to use \ref pbdrv, you need to include this folder in your
+CMakeLists.txt file, include the \ref pb_ext "extension" for your target
+platform, and link the \c pbdrv library with your executable:
+
+```cmake
+# include pbdrv
+add_subdirectory(lib/pbdrv)
+
+# <use extension>
+
+# link with executable
+target_link_libraries(main pbdrv)
+```
+
+
+\defgroup pbdrv-mod pbdrv-mod
+\brief Puzzle module driver (superset of \ref pbdrv)
+
+pbdrv-mod is a superset of \ref pbdrv, and includes functions specific to
+puzzle bus modules. \ref pbdrv-mod compiles to an object file instead of a
+static library because it may depend on functions that rely on external
+libraries. \ref pbdrv-mod is still considered standalone, but requires either
+using an existing \ref pb_drv "driver", or (partially) implementing the driver
+functions.
+
+Like \ref pbdrv, \ref pbdrv-mod can be used by including this folder in your
+CMakeLists.txt file and linking the library with your executable. A notable
+difference with \ref pbdrv-mod is that you do not need to include an extension.
+\ref pb_ext "Extensions" are still used by \ref pbdrv-mod, but they are
+included automatically by the target platform's \ref pb_drv "driver". The
+appropriate \ref pb_drv "driver" to load is also automatically detected.
+
+Example:
+
+```cmake
+# include pbdrv
+add_subdirectory(lib/pbdrv)
+
+# link with executable
+target_link_libraries(main pbdrv-mod)
+```
+
+\note In most cases, the \ref pb_hook "hooks" should be sufficient to realize
+extensions or custom behavior not provided by \ref pbdrv-mod.
 
 \note Most \c pb_* functions have a weak implementation, which may be
 overwritten by a custom implementation. This allows you to use the default
 implementation where possible, and only implement extensions required for your
 puzzle module.
 
-TODO: where to find drivers
-TODO: what are extensions
-TODO: what to do if there is no driver / extension
-
-\defgroup pbdrv-mod pbdrv-mod
-\brief Puzzle module driver (superset of \ref pbdrv)
-
-pbdrv-mod is a superset of \ref pbdrv, and includes functions specific to
-puzzle bus modules. pbdrv-mod compiles to an object file instead of a static
-library because it may depend on functions that rely on external libraries.
-pbdrv-mod is still considered standalone, but requires either using an existing
-driver, or (partially) implementing the driver functions.
-
-\copydetails pbdrv
+\see pbdrv
 
 \{
 
@@ -35,7 +69,7 @@ driver, or (partially) implementing the driver functions.
 Hooks are functions that allow the user to implement custom behavior (i.e.
 extend or conditionally replace the default handlers), without needing to
 completely overwrite the built-in handlers or understand the internals of \ref
-pbdrv.
+pbdrv-mod.
 
 \}
 

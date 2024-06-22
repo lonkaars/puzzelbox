@@ -39,20 +39,11 @@ void pb_mod_blocking_delay_ms(unsigned long ms);
  * \defgroup pb_i2c I2C
  * \brief I2C send/receive handlers
  *
- * If there is no existing \ref pb_drv "driver" for the microcontroller on
- * which you want to use the puzzle bus driver, you may implement the following
- * in order to use pbdrv:
- *
- * - The \c pb_i2c_recv() function must be **called** for every received I2C
- *   message
- * - The \c pb_i2c_send() function must be **implemented** using the
- *   platform/device-specific I2C write function
- *
  * \{
  */
 
 /**
- * \brief handle a received message from the I2C bus (puzzle bus)
+ * \brief Handle a received message from the I2C bus (puzzle bus)
  *
  * This function attempts to parse an I2C message as a puzzle bus message, and
  * calls the appropriate handler for the message if it is considered valid.
@@ -67,7 +58,7 @@ void pb_mod_blocking_delay_ms(unsigned long ms);
  */
 void pb_i2c_recv(const uint8_t * buf, size_t sz);
 /**
- * \brief send a message in master-mode on the I2C bus (puzzle bus)
+ * \brief Send a message in master-mode on the I2C bus (puzzle bus)
  *
  * This function sends an I2C message to the address specified by \p i2c_addr.
  *

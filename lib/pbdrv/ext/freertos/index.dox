@@ -1,0 +1,6 @@
+// vim:ft=doxygen
+/**
+\ingroup pb_ext
+\defgroup pb_ext_freertos FreeRTOS
+\brief FreeRTOS memory management and scheduler-based delay
+*/
