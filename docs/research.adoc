@@ -404,7 +404,54 @@ non-experimental version of {cpp}.
 
 === Research question
 
-How can we use I^2^C for the puzzle module detection?
+How can we use I^2^C for the puzzle module detection and communication?
+
+=== Puzzle Module and Main Controller Communication
+
+Research from project group 21/22 shows that the I^2^C protocol is the best 
+option for communication between the puzzle modules and the main controller. 
+This research section extends the previous section about which MCU is suitable 
+for the puzzle bus, as we have found vital I^2^C limitations with the 
+controller we had chosen. See the handover document for the found limitations.
+
+// TODO: REFERENCES
+
+==== PIC16F15276
+
+The PIC16F15276 MCU shows possibilities to be addressable as a slave while 
+being in master mode. However, this can not be confirmed without physical 
+testing due to the datasheet not mentioning whether it can or can not support 
+this function. It is possible to use this MCU without the aforementioned 
+functionality by manually changing the RCEN register to manually set the 
+MCU to 'receiving' I^2^C instructions, however this also requires a degree of 
+testing.
+
+// TODO: Add the following reference:
+// PIC16F15276 - 25.2.4.3
+// https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC16F15256-74-75-76-Microcontroller-Data-Sheet-40002305.pdf
+
+==== ESP32
+
+The ESP32, like the PIC16F15276, shows possibilities to be addressable as a 
+slave while being in master mode, this also requires testing however. In the 
+case of the ESP32 it is possible to use the two I^2^C peripherals to achieve 
+roughly the same goal. This can be done by having one of the two peripherals 
+be initiated in master mode while the other peripheral is initiated in slave 
+mode. Allowing the MCU to send and recieve data to the I^2^C bus. This does 
+introduce increased code complexity but is a valid option if it goes through 
+testing.
+
+// TODO: Add the following reference:
+// https://docs.espressif.com/projects/esp-idf/en/v4.3/esp32/api-reference/peripherals/i2c.html
+// https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf#i2c
+// https://www.bitsandparts.nl/documentation/482/ESP32_Specifications_EN_v1.pdf
+
+==== RP2040
+
+As written in the handover document, the RP2040 does not support being 
+addressed as a slave while being in master mode. It does however, just like 
+the ESP32 have two I^2^C peripherals. Meaning the same theory can be applied 
+on this MCU.
 
 === Puzzle Module Detection
 
@@ -447,10 +494,6 @@ puzzle modules and the main controller, as the 'Neotrellis' rgb matrix cannot
 answer this handshake and is therefor not recognized as a puzzle module.
 
 // TODO: references (API) & code block naming?
-
-=== Welke microcontroller famillies zijn slave addresseerbaar while in master die ook multimaster vriendelijk zijn.
-
-=== multi master == standaard?
 
 == Original Puzzle Box Functionality Research (Thomas)
 
