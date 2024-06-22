@@ -10,7 +10,7 @@ extern "C" {
  * \ingroup pbdrv
  * \ingroup pbdrv-mod
  * \defgroup pb_buf Buffer
- * \brief Binary data buffer type used in pbdrv
+ * \brief Binary data buffer type used in \ref pbdrv
  * \{
  */
 

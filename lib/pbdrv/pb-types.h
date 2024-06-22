@@ -8,7 +8,17 @@
 extern "C" {
 #endif
 
+/**
+ * \ingroup pbdrv
+ * \ingroup pbdrv-mod
+ * \defgroup pb_types Types
+ * \brief Datatypes used within \ref pbdrv
+ *
+ * \{
+ */
+
 #ifdef __GNUC__
+//! Mark function as weak (allow user to override implementation)
 #define __weak __attribute__((weak))
 #endif
 #ifndef __weak
@@ -21,15 +31,33 @@ typedef uint16_t i2c_addr_t;
 
 //! puzzle bus command types
 enum pb_cmd_id {
-	/** \brief puzzle module property (REQ, RES, SET) */
+	/**
+	 * \brief puzzle module property (\ref pb_route_cmd_prop_req "REQ", \ref
+	 * pb_route_cmd_prop_res "RES", \ref pb_route_cmd_prop_set "SET")
+	 *
+	 * The \c PROP command type is used for exchanging arbitrary data between
+	 * puzzle modules and/or the puzzle box client (pbc) over the TCP bridge.
+	 * These properties are not used by the puzzle framework.
+	 */
 	PB_CMD_PROP,
-	/** \brief puzzle module global state variable (REQ, RES, SET) */
+	/**
+	 * \brief puzzle module global state variable (\ref pb_route_cmd_state_req
+	 * "REQ", \ref pb_route_cmd_state_res "RES", \ref pb_route_cmd_state_set
+	 * "SET")
+	 *
+	 * The \c STATE command is used by puzzle modules to inform the main
+	 * controller about their global state. The main controller aggregates the
+	 * states of all connected puzzle modules and exchanges this aggregated state
+	 * with the puzzle modules to indicate when the entire puzzle box is solved.
+	 */
 	PB_CMD_STATE,
 	/**
-	 * \brief magic (handshake) (REQ, RES)
+	 * \brief magic (handshake) (\ref pb_route_cmd_magic_req "REQ", \ref
+	 * pb_route_cmd_magic_res "RES")
 	 *
-	 * This message is used to distinguish between puzzle modules and regular I2C
-	 * slaves on the puzzle bus.
+	 * The \c MAGIC command effectively serves as a 'secret handshake' (using a
+	 * _magic_ value) which is used to distinguish between puzzle modules and
+	 * unrelated I2C devices.
 	 */
 	PB_CMD_MAGIC,
 };
@@ -57,16 +85,16 @@ static const char pb_cmd_magic_req[] = { 0x70, 0x75, 0x7a, 0x62, 0x75, 0x73 };
 //! magic reply from puzzle module back to main controller
 static const char pb_cmd_magic_res[] = { 0x67, 0x61, 0x6d, 0x69, 0x6e, 0x67 };
 
-//! puzzle bus message header (shared by all commands)
+//! puzzle bus message header / container (shared by all commands)
 typedef struct {
 	/**
-	 * \brief command type
+	 * \brief Command type (see \ref pb_cmd_id_t)
 	 *
 	 * This is used to identify what the message is about.
 	 */
 	pb_cmd_id_t type;
 	/**
-	 * \brief command action
+	 * \brief Command action (see \ref pb_action_t)
 	 *
 	 * This is used to specify what should happen as a result of this message.
 	 */
@@ -79,30 +107,32 @@ typedef struct {
 	 */
 	i2c_addr_t sender;
 	/**
-	 * \brief command data (type dependent)
+	 * \brief Command data (dependent on \p type)
 	 *
 	 * Struct containing command type-specific data.
 	 */
 	void * cmd;
 } pb_msg_t;
 
-//! PB_CMD_PROP data
+//! \ref PB_CMD_PROP data
 typedef struct {
 	uint8_t propid; //!< id of state property
 	uint8_t * value; //!< new or current value
-	size_t _value_size; //!< [META] size of \p value
+	size_t _value_size; //!< size of \p value
 } pb_cmd_prop_t;
 
-//! PB_CMD_STATE data
+//! \ref PB_CMD_STATE data
 typedef struct {
 	pb_global_state_t state; //!< global state
 } pb_cmd_state_t;
 
-//! PB_CMD_MAGIC data
+//! \ref PB_CMD_MAGIC data
 typedef struct {
 	char * magic; //!< magic value
-	size_t _magic_size; //!< [META] size of \p magic
+	size_t _magic_size; //!< size of \p magic
 } pb_cmd_magic_t;
+
+/// \}
 
 #ifdef __cplusplus
 }

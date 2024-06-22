@@ -7,15 +7,6 @@
 pbdrv is a standalone portable static library for handling (i.e.
 (de)serialization) of puzzle bus messages.
 
-\defgroup pbdrv-mod pbdrv-mod
-\brief Puzzle module driver (superset of \ref pbdrv)
-
-pbdrv-mod is a superset of pbdrv, and includes functions specific to puzzle bus
-modules. pbdrv-mod compiles to an object file instead of a static library
-because it may depend on functions that rely on external libraries. pbdrv-mod
-is still considered standalone, but requires either using an existing driver,
-or (partially) implementing the driver functions.
-
 \note Most \c pb_* functions have a weak implementation, which may be
 overwritten by a custom implementation. This allows you to use the default
 implementation where possible, and only implement extensions required for your
@@ -25,14 +16,26 @@ TODO: where to find drivers
 TODO: what are extensions
 TODO: what to do if there is no driver / extension
 
+\defgroup pbdrv-mod pbdrv-mod
+\brief Puzzle module driver (superset of \ref pbdrv)
+
+pbdrv-mod is a superset of \ref pbdrv, and includes functions specific to
+puzzle bus modules. pbdrv-mod compiles to an object file instead of a static
+library because it may depend on functions that rely on external libraries.
+pbdrv-mod is still considered standalone, but requires either using an existing
+driver, or (partially) implementing the driver functions.
+
+\copydetails pbdrv
+
 \{
 
-\defgroup hook
+\defgroup pb_hook Hook
 \brief Functions for (partially) overriding default behavior
 
-Hooks are functions with a default (weak) implementation in pbdrv. These
-functions can be overwritten by the user to implement custom behavior, without
-needing to understand the internals of pbdrv.
+Hooks are functions that allow the user to implement custom behavior (i.e.
+extend or conditionally replace the default handlers), without needing to
+completely overwrite the built-in handlers or understand the internals of \ref
+pbdrv.
 
 \}
 

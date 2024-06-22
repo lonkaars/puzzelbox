@@ -80,7 +80,7 @@ void pb_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz);
 
 /// \}
 
-/// \ingroup hook
+/// \ingroup pb_hook
 /// \{
 
 /**
@@ -89,8 +89,7 @@ void pb_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz);
  *
  * If your puzzle module defines its own global \c pb_global_state_t, you can
  * tell the driver to use it by implementing these functions. These functions
- * are also used internally by the driver when creating \c STATE \c REQ and \c
- * STATE \c RES commands.
+ * are also used internally by the driver.
  *
  * \{
  */
@@ -98,11 +97,17 @@ void pb_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz);
 /**
  * \brief global state read hook
  * \return current value of global state enum
+ *
+ * The default implementation of this function uses an internal global state
+ * variable in \ref pbdrv.
  */
 pb_global_state_t pb_hook_mod_state_read();
 /**
  * \brief global state write hook
  * \param state new value of global state enum
+ *
+ * The default implementation of this function uses an internal global state
+ * variable in \ref pbdrv.
  */
 void pb_hook_mod_state_write(pb_global_state_t state);
 

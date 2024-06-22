@@ -25,3 +25,5 @@ INPUT_FILTER = "sed -e 's/\<I2C\>\|\<I<sup>2<\/sup>C\>/\\I2C/g'"
 
 USE_MDFILE_AS_MAINPAGE = readme.md
 
+INTERNAL_DOCS = YES
+
