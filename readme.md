@@ -14,6 +14,10 @@ document](docs/handover.adoc) first for more details.
 > This project was mostly developed on Linux. All subfolders/modules/libraries
 > use CMake, and *should* build cross-platform when using CMake+Ninja. This has
 > not yet been verified.
+>
+> Please note that most subfolders use symbolic links to the [lib](lib/)
+> folder, which may not work correctly if you clone the repository under a
+> filesystem or operating system that does not support these.
 
 ## Documentation
 
