@@ -1,0 +1,289 @@
+:document: Factory Acceptance Test
+include::share/meta.adoc[]
+
+== Introduction
+// TODO: Make an intro
+
+=== Compatibility matrix
+[cols="1,9*^", options="header"]
+|===
+| Requirement \\ Test | T-01 | T-02 | T-03 | T-04 | T-05 | T-06 | T-07 | T-08 | T-09
+
+| xref:reqs.adoc#R-001[R-001] | xref:#Test-01[✓] |   |   |   |   |   |   |   |  
+| xref:reqs.adoc#R-002[R-002] | xref:#Test-01[✓] |   |   |   |   |   |   |   |  
+| xref:reqs.adoc#R-003[R-003] | xref:#Test-01[✓] |   |   |   |   |   |   |   |  
+| xref:reqs.adoc#R-004[R-004] | xref:#Test-01[✓] |   |   |   |   |   |   |   |  
+| xref:reqs.adoc#R-005[R-005] | xref:#Test-01[✓] |   |   |   |   |   |   |   |  
+| xref:reqs.adoc#R-034[R-034] | xref:#Test-01[✓] |   |   |   |   |   |   |   |  
+| xref:reqs.adoc#R-036[R-036] |   | xref:#Test-02[✓] |   |   |   |   |   |   |  
+| xref:reqs.adoc#R-037[R-037] |   | xref:#Test-02[✓] |   |   |   |   |   |   |  
+| xref:reqs.adoc#R-038[R-038] |   | xref:#Test-02[✓] |   |   |   |   |   |   |  
+| xref:reqs.adoc#R-166[R-166] |   | xref:#Test-02[✓] |   |   |   |   |   |   |  
+| xref:reqs.adoc#R-169[R-169] |   | xref:#Test-02[✓] |   |   |   |   |   |   |  
+| xref:reqs.adoc#R-075[R-075] |   |   | xref:#Test-03[✓] |   |   |   |   |   |  
+| xref:reqs.adoc#R-076[R-076] |   |   | xref:#Test-03[✓] |   |   |   |   |   |  
+| xref:reqs.adoc#R-081[R-081] |   |   | xref:#Test-03[✓] |   |   |   |   |   |  
+| xref:reqs.adoc#R-085[R-085] |   |   |   | xref:#Test-04[✓] |   |   |   |   |  
+| xref:reqs.adoc#R-087[R-087] |   |   |   | xref:#Test-04[✓] |   |   |   |   |  
+| xref:reqs.adoc#R-150[R-150] |   |   |   |   | xref:#Test-05[✓] |   |   |   |  
+| xref:reqs.adoc#R-082[R-082] |   |   |   |   | xref:#Test-05[✓] |   |   |   |  
+| xref:reqs.adoc#R-083[R-083] |   |   |   |   | xref:#Test-05[✓] |   |   |   |  
+| xref:reqs.adoc#R-084[R-084] |   |   |   |   | xref:#Test-05[✓] |   |   |   |  
+| xref:reqs.adoc#R-167[R-167] |   |   |   |   |   | xref:#Test-06[✓] |   |   |  
+| xref:reqs.adoc#R-168[R-168] |   |   |   |   |   | xref:#Test-06[✓] |   |   |  
+| xref:reqs.adoc#R-027[R-027] |   |   |   |   |   |   | xref:#Test-07[✓] |   |  
+| xref:reqs.adoc#R-048[R-048] |   |   |   |   |   |   |   | xref:#Test-08[✓] |  
+| xref:reqs.adoc#R-049[R-049] |   |   |   |   |   |   |   | xref:#Test-08[✓] |  
+| xref:reqs.adoc#R-050[R-050] |   |   |   |   |   |   |   | xref:#Test-08[✓] |  
+| xref:reqs.adoc#R-051[R-051] |   |   |   |   |   |   |   | xref:#Test-08[✓] |  
+| xref:reqs.adoc#R-052[R-052] |   |   |   |   |   |   |   | xref:#Test-08[✓] |  
+| xref:reqs.adoc#R-053[R-053] |   |   |   |   |   |   |   | xref:#Test-08[✓] |  
+| xref:reqs.adoc#R-089[R-089] |   |   |   |   |   |   |   |   | xref:#Test-09[✓] 
+| xref:reqs.adoc#R-090[R-090] |   |   |   |   |   |   |   |   | xref:#Test-09[✓] 
+| xref:reqs.adoc#R-091[R-091] |   |   |   |   |   |   |   |   | xref:#Test-09[✓] 
+| xref:reqs.adoc#R-127[R-127] |   |   |   |   |   |   |   |   | xref:#Test-09[✓] 
+| xref:reqs.adoc#R-128[R-128] |   |   |   |   |   |   |   |   | xref:#Test-09[✓] 
+| xref:reqs.adoc#R-129[R-129] |   |   |   |   |   |   |   |   | xref:#Test-09[✓] 
+| xref:reqs.adoc#R-134[R-134] |   |   |   |   |   |   |   |   | xref:#Test-09[✓] 
+| xref:reqs.adoc#R-135[R-135] |   |   |   |   |   |   |   |   | xref:#Test-09[✓] 
+| xref:reqs.adoc#R-165[R-165] |   |   |   |   |   |   |   |   | xref:#Test-09[✓] 
+|===
+
+=== Neotrellis-puzzle
+
+[#Test-01]
+==== Test 01
+
+===== Covered requirements
+* Technical requirements
+** xref:reqs.adoc#R-034[R-034] (neotrellis function & Arduino init.)
+* Functional requirements
+** *None*
+
+===== Additional setup
+*None*
+
+===== Test
+. Turn both the Arduino and the neotrellis modules on
+
+===== Result
+* [ ] Verify that the neotrellis modules emit light in different colors (init. state).
+
+[#Test-02]
+==== Test 02
+
+===== Covered requirements
+* Technical requirements
+** xref:reqs.adoc#R-166[R-166] (Arduino & RPI Pico I²C communication)
+** xref:reqs.adoc#R-169[R-169] (Arduino & neotrellis I²C communication)
+* Functional requirements
+** xref:reqs.adoc#R-036[R-036] (game logic)
+** xref:reqs.adoc#R-037[R-037] (neotrellis led color)
+** xref:reqs.adoc#R-038[R-038] (game d.o.d.)
+
+===== Additional setup
+* [ ] Connect the Arduino to the maincontroller (RPI Pico) using the I²C interface, pull-up resistors and a common ground.
+
+===== Test
+. Turn both the Arduino and the neotrellis modules on.
+. Wait for a few seconds.
+. Turn the RPI Pico on.
+. Wait for another few seconds.
+. Play the game until you have succeeded.
+
+===== Result
+* [ ] Verify that the puzzle module tries to communicate with the maincontroller.
+* [ ] Verify that a light should be blinking on one of the neotrellis modules.
+* [ ] Press one of the emitting buttons and check if the buttons surrounding it will light
+* [ ] Play the game until no buttons emit light anymore and check if the main controllers wants to load the next puzzle.
+
+=== Vault-puzzle
+
+[#Test-03]
+==== Test 03
+
+===== Covered requirements
+* Technical requirements
+** xref:reqs.adoc#R-151[R-151] (4x 7-seg. type & connection)
+* Functional requirements
+** xref:reqs.adoc#R-075[R-075] (4x 7-seg. availability)
+** xref:reqs.adoc#R-076[R-076] (ventilation)
+** xref:reqs.adoc#R-081[R-081] (4x 7-seg. operation)
+
+===== Additional setup
+* [ ] Connect the Arduino to the maincontroller (RPI Pico) using the I²C interface, pull-up resistors and a common ground.
+
+===== Test
+. Turn the Arduino on.
+. Wait for a few seconds.
+. Turn the RPI Pico on.
+. Wait until the Arduino is in its init. state.
+
+===== Result
+* [ ] Verify that there is a 4x 7-seg. display and working.
+* [ ] Verify that the puzzle module tries to communicate with the maincontroller
+* [ ] Check if after the unit. state (blinking zero's) there is a letter and number displayed on the 4x 7 seg. display.
+
+[#Test-04]
+==== Test 04
+
+===== Covered requirements
+* Technical requirements
+** *None*
+* Functional requirements
+** xref:reqs.adoc#R-085[R-085] (4x 7-seg. operation by passing the game)
+** xref:reqs.adoc#R-087[R-087] (4x 7-seg. operation by failing the game)
+
+===== Additional setup
+*None*
+
+===== Test
+. Turn the Arduino on.
+. Wait for a few seconds.
+. Turn the RPI Pico on.
+. Play the game correctly for 2 levels.
+. Play one level incorrectly.
+
+===== Result
+* [ ] Verify a new code is generated each time you level-up
+* [ ] Verify that an older code is presented each time you level-down
+
+[#Test-05]
+==== Test 05
+
+===== Covered requirements
+* Technical requirements
+** xref:reqs.adoc#R-150[R-150] (button matrix)
+* Functional requirements
+** xref:reqs.adoc#R-082[R-082] (game logic: leveling)
+** xref:reqs.adoc#R-083[R-083] (game logic: level)
+** xref:reqs.adoc#R-084[R-084] (game logic: succeeding level)
+
+===== Additional setup
+* Connect the vault solenoid valve to the Arduino using a MOSFET or other type of driver.
+
+===== Test
+. Turn the Arduino on.
+. Wait for a few seconds.
+. Turn the RPI Pico on.
+. Play the game correctly until you reach the end of the game.
+
+===== Result
+* [ ] Verify that at the last level a code should be displayed that can be used to disarm the "bomb".
+* [ ] Check if the vault itself will unlock and lock again after the game is reset.
+
+=== Puzzle Box Requirements
+
+[#Test-06]
+==== Puzzle Box Basic Setup and Verification
+
+===== Covered requirements
+* Functional requirements
+** xref:reqs.adoc#R-1[R-1] (Puzzle box dimensions)
+** xref:reqs.adoc#R-2[R-2] (Extension on the sides and top)
+** xref:reqs.adoc#R-3[R-3] (Flat bottom)
+** xref:reqs.adoc#R-4[R-4] (Key switch at the bottom of the NeoTrellis puzzle)
+** xref:reqs.adoc#R-5[R-5] (Indicator LED at the bottom of the NeoTrellis puzzle)
+
+===== Additional setup
+* [ ] Measure the dimensions of the puzzle box to ensure compliance with R-1.
+* [ ] Inspect the physical structure for extensions beyond specified limits.
+* [ ] Confirm flatness of the bottom surface.
+* [ ] Locate and identify the key switch and indicator LED as per design specifications.
+
+===== Test
+. Measure and record the dimensions of the puzzle box.
+. Examine the extensions, if any, on the sides and top of the box.
+. Test the flatness of the bottom of the box.
+. Verify the functionality of the key switch.
+. Check the initial state of the indicator LED when power is supplied to the puzzle box.
+
+===== Result
+* [ ] Puzzle box dimensions are within the specified range of 30x30x30 cm ± 5%.
+* [ ] No excess extension beyond 5 cm on any side or the top.
+* [ ] The bottom of the puzzle box is confirmed flat.
+* [ ] The key switch operates as intended.
+* [ ] The indicator LED functions correctly and is visible.
+
+=== Game Functional Requirements Testing
+
+[#Test-07]
+==== Puzzle Module Control Tests
+
+===== Covered requirements
+* Functional requirements
+** xref:reqs.adoc#R-167[R-167] (Manual reset capability of a puzzle module)
+** xref:reqs.adoc#R-168[R-168] (Manual solve capability of a puzzle module)
+
+===== Additional setup
+* [ ] Ensure access to the game operator controls for manual reset and solve.
+
+===== Test
+. Perform a manual reset of a puzzle module during gameplay to verify it resets correctly.
+. Manually set a puzzle module as solved and observe if the system acknowledges the solve appropriately.
+
+===== Result
+* [ ] Puzzle module resets correctly when manually triggered.
+* [ ] Puzzle module is recognized as solved when set manually.
+
+[#Test-08]
+==== Puzzle Difficulty Verification
+
+===== Covered requirements
+* Functional requirements
+** xref:reqs.adoc#R-27[R-27] (Puzzle solvability without prior knowledge)
+
+===== Test
+. Invite testers unfamiliar with the game to solve the puzzles.
+. Record the ease or difficulty encountered by the testers in solving the puzzles.
+
+===== Result
+* [ ] Testers without prior knowledge are able to solve the puzzles, indicating appropriate difficulty levels.
+
+=== Hardware Puzzle Module Testing
+
+[#Test-09]
+==== Initial Setup Verification
+
+===== Covered requirements
+* Functional requirements
+** xref:reqs.adoc#R-58[R-58] (Game operator initial switch position)
+** xref:reqs.adoc#R-59[R-59] (Game operator initial potentiometer position)
+
+===== Additional setup
+* [ ] Access to hardware puzzle board controls for switches and potentiometers.
+
+===== Test
+. Manually set all switches on the hardware puzzle board to the down position.
+. Turn all potentiometers fully to the left to their zero position.
+
+===== Result
+* [ ] All switches are confirmed to be in the down position at the start of the game.
+* [ ] All potentiometers are set to zero at the beginning of the game, indicating correct initial setup.
+
+[#Test-10]
+==== Hardware Component Functionality
+
+===== Covered requirements
+* Functional requirements
+** xref:reqs.adoc#R-48[R-48] (Presence of eight switches)
+** xref:reqs.adoc#R-49[R-49] (Combinatorial circuit functionality)
+** xref:reqs.adoc#R-50[R-50] (7-segment 4-digit display presence and functionality)
+** xref:reqs.adoc#R-51[R-51] (Four potentiometers)
+** xref:reqs.adoc#R-52[R-52] (Blue LED displaying Morse code)
+** xref:reqs.adoc#R-53[R-53] (Green LED indicating solved state)
+
+===== Additional setup
+* [ ] Ensure all hardware components are installed as per the design specifications.
+
+===== Test
+. Verify the presence and functionality of eight switches linked to the combinatorial circuit.
+. Confirm that the combinatorial circuit operates as depicted in the provided diagram.
+. Check the 7-segment display and potentiometers for correct operation.
+. Observe the blue LED for Morse code display and green LED for indicating the puzzle is solved.
+
+===== Result
+* [ ] Eight switches are operational and affect the combinatorial circuit as expected.
+* [ ] The combinatorial circuit correctly processes inputs to produce the expected output.
+* [ ] The 7-segment display and potentiometers function correctly, displaying values as manipulated.
+* [ ] Blue LED successfully displays Morse code, and green LED lights up when the puzzle is solved.
