@@ -44,7 +44,7 @@ void bus_task() {
 		state_exchange();
 
 		// wait 1 second
-		pb_mod_blocking_delay_ms(1e3);
+		vTaskDelay(1e3 / portTICK_PERIOD_MS);
 	}
 }
 

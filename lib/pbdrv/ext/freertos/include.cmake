@@ -5,5 +5,3 @@ target_link_libraries(pbdrv PUBLIC
 	freertos_config
 	)
 
-target_sources(pbdrv-mod PRIVATE "${CMAKE_CURRENT_LIST_DIR}/pb-mod.c")
-

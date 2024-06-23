@@ -24,14 +24,6 @@ extern const char * PB_MOD_NAME;
  */
 extern const i2c_addr_t PB_MOD_ADDR;
 
-/**
- * \brief Platform-specific blocking delay function
- *
- * FIXME: this entire function should be removed (see handover: RP2040 I2C
- * limitations)
- */
-void pb_mod_blocking_delay_ms(unsigned long ms);
-
 /// \}
 
 /**
