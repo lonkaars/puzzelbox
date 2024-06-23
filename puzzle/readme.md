@@ -19,6 +19,8 @@ of these subfolders, make sure you have done the following:
 - Install the official Arduino IDE
 - Open "Tools" > "Board" > "Board manager"
 - Install the "Arduino AVR Boards" package (1.8.6 works at the time of writing)
+- Install the Adafruit seesaw library and dependicies (for the neotrellis puzzle)
+- Install the TM1637 library from Avishay Orpaz
 
 [arduino-cmake]: https://github.com/a9183756-gh/Arduino-CMake-Toolchain
 
