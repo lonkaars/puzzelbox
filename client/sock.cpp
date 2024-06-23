@@ -101,7 +101,7 @@ void PBSocket::sock_task() {
 		if (ret > 0) continue;
 
 		// message read completely!
-		i2c_recv(input.addr, input.data, input.length);
+		i2c_recv(input.data, input.length);
 		free(input.data);
 	}
 

@@ -57,7 +57,7 @@ static char* rl_completion_entries(const char *text, int state) {
 	if (state == 0) i = 0;
 
 	while (i < cmds_length) {
-		struct cmd cmd = cmds[i];
+		cmd_t cmd = cmds[i];
 		i++;
 		if (strncmp(text, cmd.name, strlen(text)) == 0) {
 			return strdup(cmd.name);
