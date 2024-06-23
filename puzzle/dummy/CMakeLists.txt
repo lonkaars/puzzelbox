@@ -11,14 +11,13 @@ add_compile_definitions(DEBUG)
 
 # arduino
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/lib/Arduino-CMake-Toolchain/Arduino-toolchain.cmake)
-# set(ARDUINO_BOARD "Arduino Uno [avr.uno]")
-set(ARDUINO_BOARD "Arduino Mega or Mega 2560 [avr.mega]")
+set(ARDUINO_BOARD "Arduino Uno [avr.uno]")
+# set(ARDUINO_BOARD "Arduino Mega or Mega 2560 [avr.mega]")
 
 # freertos
 add_library(freertos_config INTERFACE)
 target_include_directories(freertos_config SYSTEM INTERFACE .)
-# set(FREERTOS_PORT GCC_ATMEGA) # Arduino Uno
-set(FREERTOS_PORT GCC_ATMEGA) # Arduino Uno
+set(FREERTOS_PORT GCC_ATMEGA)
 set(FREERTOS_HEAP 4)
 
 # used for testing
@@ -36,10 +35,10 @@ add_executable(main
 	mod.c
 	)
 
-target_link_libraries(main
+target_link_libraries(main PUBLIC
 	pbdrv-mod
 	)
-target_link_arduino_libraries(main
+	target_link_arduino_libraries(main PUBLIC
 	core
 	Wire
 	)
