@@ -17,8 +17,7 @@ set(ARDUINO_BOARD "Arduino Mega or Mega 2560 [avr.mega]")
 # freertos
 add_library(freertos_config INTERFACE)
 target_include_directories(freertos_config SYSTEM INTERFACE .)
-# set(FREERTOS_PORT GCC_ATMEGA) # Arduino Uno
-set(FREERTOS_PORT GCC_ATMEGA) # Arduino Uno
+set(FREERTOS_PORT GCC_ATMEGA)
 set(FREERTOS_HEAP 4)
 
 # used for testing
