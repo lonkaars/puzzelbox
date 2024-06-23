@@ -437,7 +437,7 @@ wire library on both the Arduino Mega and the Arduino Uno.
 
 ===== PIC16F15276 & ESP32
 
-Both the PIC16F15276 and the ESP32 MCUs show possibilities to be addressable as a slave while being in master mode. However, at the moment of writing this 
+Both the PIC16F15276 cite:[PICData] and the ESP32 MCUs show possibilities to be addressable as a slave while being in master mode. However, at the moment of writing this 
 has yet to be tested.
 
 // TODO: Add the following reference:
@@ -453,26 +453,23 @@ has yet to be tested.
 
 ===== PIC16F15276 Registers
 
-In the case of the PIC16F15276 not support master addressable as slave the 
+In the case of the PIC16F15276 cite:[PICData] not support master addressable as slave the 
 following approach would most likely work. As the PIC16F15276 uses specific 
 registers for its master receive functions, namely the RCEN register, it can 
 be manually set to receive data from the I^2^C bus. However, this also has 
-yet to be tested.
-
-// TODO: Add the following reference:
-// PIC16F15276 - 25.2.4.3
-// https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC16F15256-74-75-76-Microcontroller-Data-Sheet-40002305.pdf
+yet to be tested. 
 
 ===== Multiple I^2^C Peripherals
 
 ==== ESP32 & RP2040
 
-The ESP32 and the RP2040 both have multiple peripherals for I^2^C 
-communication, while also supporting simultaneous configuration. This allows 
-both two I^2^C peripherals to be active, one being configured as a master and 
-the other being configured as a slave. This enables the controller to send and 
-receive data to the I^2^C bus without much difficulty. This does introduce 
-increased code complexity but is a valid option if it is succesful in testing.
+The ESP32 cite:[I2CESPAPI] cite:[I2CESPTECH] cite:[ESPSPECS] and the RP2040 both 
+have multiple peripherals for I^2^C communication, while also supporting 
+simultaneous configuration. This allows both two I^2^C peripherals to be active, 
+one being configured as a master and the other being configured as a slave. This 
+enables the controller to send and receive data to the I^2^C bus without much 
+difficulty. This does introduce increased code complexity but is a valid option 
+if it is succesful in testing.
 
 // TODO: Add the following reference:
 // https://docs.espressif.com/projects/esp-idf/en/v4.3/esp32/api-reference/peripherals/i2c.html
