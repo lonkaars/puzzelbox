@@ -41,6 +41,17 @@ void bus_task() {
 	}
 }
 
+/**
+ * \ingroup main_pb_override
+ * \anchor main_route_cmd_magic_res
+ *
+ * This function registers the I2C address of the puzzle module that replied to
+ * the \c MAGIC \c REQ command into a list of "known puzzle modules", which are
+ * then periodically updated during gameplay.
+ *
+ * \note Up to \ref CFG_PB_MOD_MAX puzzle modules can be registered
+ * simultaniously.
+ */
 void pb_route_cmd_magic_res(pb_msg_t * msg) {
 	if (modules_size == CFG_PB_MOD_MAX) return;
 	modules[modules_size++] = msg->sender;

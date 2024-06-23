@@ -5,63 +5,56 @@ implemented during the 2023-2024 run of the Puzzlebox project. This year's run
 of the project consists of only software students, and was developed using the
 hardware from the 21-22 run of the project.
 
-Improved hardware was designed but not realised during the 22-23 run of the
-project. This hardware is recommended for future groups participating in the
-project. The software in this repository should be easily portable to various
-other microcontrollers, and a recommendation is made in the [design
-document](docs/design.adoc).
+The software in this repository should be easily portable to various other
+microcontrollers, and a recommendation is made in the [design
+document](docs/design.adoc). Please see the [handover
+document](docs/handover.adoc) first for more details.
+
+> [!NOTE]
+> This project was mostly developed on Linux. All subfolders/modules/libraries
+> use CMake, and *should* build cross-platform when using CMake+Ninja. This has
+> not yet been verified.
 
 ## Documentation
 
-This project is documented using Doxygen. To generate HTML docs, run
+If you are viewing this page from Doxygen, please take a look at the
+[components](topics.html) tab for a comprehensive list of components within
+this project.
+
+Project documentation is available in the [docs](docs/) folder, and all code is
+documented using Doxygen. To generate HTML docs, run
 
 ```
 $ make doxygen
 ```
 
-and open <doxygen/html/index.html> in a browser.
-
-If you are viewing this page from Doxygen, please take a look at
-[topics](/topics.html) for a comprehensive list of components within this
-project.
+and open [the generated HTML files](doxygen/html/index.html) in a browser. A
+rendered copy of this documentation is also hosted unofficially at
+[pipeframe](https://media.pipeframe.xyz/puzzlebox/23-24/doxygen).
 
 ## Tidyness
 
-Please keep this repository tidy by being aware of the following conventions!
+Please keep this repository tidy by being aware of the following conventions:
 
-### Folder structure
+- An `.editorconfig` file is provided in this repository. Please install the
+  [EditorConfig](https://editorconfig.org/) plugin for your text editor of
+  choice to automatically use these.
+- There are also `.clang-tidy` and `.clang-format` files, which can be enforced
+  by running
 
-```
-/client           desktop PC application for controlling the puzzle box
-/docs             project documentation in AsciiDoc(tor) format
-/lib              custom libraries and submodules
-├───/i2ctcp       I2C over TCP protocol functions (used by main and client)
-├───/mpack        MsgPack CMake configuration and extension
-└───/pbdrv        puzzle bus driver (module driver + (de)serializing functions)
-/main             main controller (RPi pico) software
-/puzzle/<name>    puzzle sources, each puzzle has its own subdirectory
-/shared           (unused) shared code
-/test             unit tests
-```
+  ```
+  $ make format
+  ```
 
-### Code style
+## Libraries
 
-An `.editorconfig` file is provided in this repository. Please install the
-[EditorConfig](https://editorconfig.org/) plugin for your text editor of choice
-to automatically use these.
+Libraries are stored in the [lib](lib/) folder, and this folder is symlinked to
+from each subfolder in the project for convenience (allows CMake to include
+out-of-tree modules). The lib folder contains a mix of direct Git submodules
+and custom libraries specific to this project. (Most) external dependencies are
+tracked as git submodules, exceptions are in the [puzzle](puzzle/) folder.
 
-There are also `.clang-tidy` and `.clang-format` files, which can be enforced
-by running
-
-```
-$ make format
-```
-
-## Submodules
-
-This repository tracks (most) dependencies via git submodules.
-
-If something is complaining about missing files
+TL;DR: If something is complaining about missing files
 
 ```
 git submodule update --init --recursive --depth 1

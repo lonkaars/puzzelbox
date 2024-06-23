@@ -84,6 +84,8 @@ The current project state is as follows:
 ** two puzzle modules ('Vault' and 'NeoTrellis') integrated using the puzzle
 	 bus driver
 
+Functionality:
+
 * The main controller (a RPI Pico W) can interact with the different puzzle
 	modules using a central shared I^2^C bus (referred to as the 'puzzle bus')
 * The main controller is able to find new puzzle modules on startup, and does
@@ -91,6 +93,11 @@ The current project state is as follows:
 * A simple CLI application has been developed, which can communicate with the
 	main controller through a TCP connection and allows control over various
 	aspects of the puzzle box using simple commands.
+
+Documentation:
+
+* These project documents
+* Detailed usage and API documentation for all software modules cite:[pbdox]
 
 == Incidents
 
@@ -142,10 +149,11 @@ Please note the following differences between I^2^C devices:
 	regular I^2^C slave devices.
 - I^2^C multi-master controllers that are slave-addressable in master mode are
 	the only kind of I^2^C controller suitable for use in puzzle modules.
+	Microcontrollers with 2 I^2^C peripherals on the same bus (one in master
+	mode, one in slave mode) can also be used to achieve the same effect.
 
 The RP2040 supports multi-master, but is not addressable as a slave in master
-mode. Due to time constraints, this was mitigated using a workaround (see
-<<fixme:rp2040-i2c>>).
+mode. This was mitigated using a workaround (see <<fixme:rp2040-i2c>>).
 
 === Development hardware availability
 
@@ -161,6 +169,12 @@ multiple people to develop using the same setup. Note that the RPI Pico is a
 special case, as it requires another Pico for debugging, effectively requiring
 double the amount of hardware to support developers.
 
+Due to a misunderstanding, we also thought our development boards went missing
+somewhere during week 13. Double-checking if project materials were actually
+stolen, or making clear where the materials are stored by sending an image of
+its location could have easily avoided this from happening; make sure to do
+either.
+
 === Auxiliary workarounds and technical limitations
 
 This section details workarounds that were implemented instead of being fixed
@@ -170,10 +184,9 @@ mentioned in this section.
 
 [[fixme:rp2040-i2c,RP2040 I^2^C limitations]]
 <<fixme:rp2040-i2c>>::
-- All puzzle module drivers have a hard-coded 2 second delay between receiving
-	the MAGIC handshake request and the MAGIC handshake response handler. This
-	was done to ensure responses are not ignored by the RP2040 (main controller)
-	while it is still in I^2^C master mode.
+- The RP2040 is not slave-addressable while in master mode. A workaround that
+	uses both I^2^C peripherals simultaniously was written to work around this
+	issue.
 
 Memory management on Arduino::
 The Arduino's built-in memory management functions do not seem to work
@@ -208,7 +221,7 @@ are critical for project success:
 - The RPI Pico (and Pico W)'s I^2^C peripheral supports multi-master, but does
 	not support being addressed as a slave while in master mode. This is required
 	for puzzle bus integration, and was mitigated using a workaround (see
-	<<fixme:rp2040-i2c>>). A replacement controller should be used instead.
+	<<fixme:rp2040-i2c>>).
 
 === Other suggestions
 
@@ -216,13 +229,13 @@ These points are suggestions for future project groups. While we do not think
 these are critical to project success, we still think they are important to
 mention.
 
-- Implement the hardware design from the year 22-23.
+- The hardware design from the year 22-23 should be implemented.
 - The original game rules are described in a separate document from the year
 	20-21.
 - The RPI Pico W has programmable I/O modules. Due to time constraints, we did
 	not research if these modules can be used to create a custom I^2^C peripheral
 	(and driver) that allows multi-master communication while still being
-	addressable as a slave. If this is possible, the RPI Pico W can still be used
-	as main controller without the use of workarounds.
+	addressable as a slave. If this is possible, the RPI Pico W could be used
+	without the use of workarounds.
 
 include::share/footer.adoc[]

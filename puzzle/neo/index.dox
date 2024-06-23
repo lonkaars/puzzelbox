@@ -3,4 +3,12 @@
 \ingroup puz
 \defgroup puz_neo Neo
 \brief NeoTrellis puzzle module
+
+\par Setup
+- Use the Arduino IDE library manager to install the "Adafruit seesaw Library"
+	library and its dependencies
+
+\warning There is another library named "Adafruit NeoTrellis M4 Library", this
+is not the right library.
+
 */
