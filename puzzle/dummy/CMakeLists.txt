@@ -14,7 +14,7 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/lib/Arduino-CMake-Toolchain/Arduino
 set(ARDUINO_BOARD "Arduino Uno [avr.uno]")
 # set(ARDUINO_BOARD "Arduino Mega or Mega 2560 [avr.mega]")
 
-# freertos
+# freertos (used for memory management only)
 add_library(freertos_config INTERFACE)
 target_include_directories(freertos_config SYSTEM INTERFACE .)
 set(FREERTOS_PORT GCC_ATMEGA)
@@ -28,6 +28,7 @@ set(FREERTOS_HEAP 4)
 project(pb_mod_dummy C CXX)
 
 add_subdirectory(lib/pbdrv)
+include(lib/pbdrv/ext/freertos/include.cmake)
 add_subdirectory(lib/FreeRTOS-Kernel)
 
 add_executable(main

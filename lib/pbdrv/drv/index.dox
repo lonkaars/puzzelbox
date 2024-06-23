@@ -7,19 +7,6 @@
 Like \ref pb_ext "extensions", drivers provide platform-specific
 implementations for various functions used in \ref pbdrv-mod.
 
-Drivers are automatically included based on your build configuration, and you
-only need to ensure \c pbdrv-mod is linked with your final executable in order
-to use one of the available drivers:
-
-```cmake
-# include pbdrv
-add_subdirectory(lib/pbdrv)
-
-# link pbdrv-mod
-target_link_libraries(main pbdrv-mod)
-
-```
-
 If there is no existing driver for your target, you may implement the following
 in order to use \ref pbdrv-mod:
 

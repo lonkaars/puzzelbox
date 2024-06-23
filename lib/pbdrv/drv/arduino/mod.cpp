@@ -6,32 +6,17 @@
 #include <Wire.h>
 #include <avr/delay.h>
 
-#include <FreeRTOS.h>
-#include <timers.h>
-#include <task.h>
-
 #include "../../pb.h"
 #include "../../pb-mod.h"
 #include "../../pb-types.h"
-#include "../../pb-buf.h"
-#include "../../pb-mem.h"
-
-static void async_pb_i2c_recv(void * _msg, uint32_t _) {
-	pb_buf_t * msg = (pb_buf_t *) _msg;
-	pb_i2c_recv((uint8_t *) msg->data, msg->size);
-	pb_buf_free(msg);
-	pb_free(msg);
-}
 
 static void recv_event(int bytes) {
-	pb_buf_t * msg = (pb_buf_t *) pb_malloc(sizeof(pb_buf_t));
-	msg->data = (char *) pb_malloc(bytes);
-	msg->size = 0;
+	uint8_t data[bytes];
+	size_t sz = 0;
 	while (Wire.available())
-		msg->data[msg->size++] = Wire.read();
+		data[sz++] = Wire.read();
 
-	// defer pb_i2c_recv call
-	xTimerPendFunctionCallFromISR(async_pb_i2c_recv, msg, 0, NULL);
+	pb_i2c_recv(data, sz);
 }
 
 static void pb_setup() {
@@ -42,7 +27,6 @@ static void pb_setup() {
 	Wire.onReceive(recv_event);
 }
 
-/// \ingroup pb_drv_arduino
 __weak void pb_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
 	Wire.beginTransmission((int) addr);
 	Wire.write(buf, sz);
@@ -57,17 +41,13 @@ extern void loop(void);
 //! Arduino internal initialization
 void init(void);
 
-//! FreeRTOS loop task
-void loop_task() {
-	for(;;) {
-		loop();
-		if (serialEventRun) serialEventRun();
-	}
-}
-
 /**
  * \ingroup pb_drv_arduino
  * \brief Application entrypoint
+ *
+ * This function overrides the default (weak) implementation of the \c main()
+ * function in the Arduino framework. No additional setup is required to use
+ * this driver.
  *
  * \note I should really be able to use Arduino's initVariant function for
  * this, but I can't seem to get it to link properly using the CMake setup in
@@ -79,8 +59,10 @@ int main(void) {
 	init(); // call arduino internal setup
 	setup(); // call regular arduino setup
 	pb_setup(); // call pbdrv-mod setup
-	xTaskCreate((TaskFunction_t) loop_task, "loop", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
-	vTaskStartScheduler(); // start freertos scheduler
+	for(;;) {
+		loop();
+		if (serialEventRun) serialEventRun();
+	}
 	return 0;
 }
 

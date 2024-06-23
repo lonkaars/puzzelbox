@@ -7,7 +7,7 @@
 #include "config.h"
 #include "init.h"
 #include "tasks.h"
-#include "pbdrv.h"
+#include "pb-mod.h"
 
 static void init_stdio() {
 	stdio_init_all();

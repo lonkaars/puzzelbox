@@ -8,7 +8,6 @@
 
 #include "i2c.h"
 #include "pb-mod.h"
-#include "pbdrv.h"
 #include "config.h"
 #include "pb-buf.h"
 #include "pb-send.h"

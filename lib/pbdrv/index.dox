@@ -11,8 +11,9 @@ themselves. For a complete puzzle module driver, please see \ref pbdrv-mod.
 
 If you order to use \ref pbdrv, you need to include this folder in your
 CMakeLists.txt file, include the \ref pb_ext "extension" for your target
-platform, and link the \c pbdrv library with your executable:
+platform, and link the \c pbdrv library with your executable.
 
+\par Example
 ```cmake
 # include pbdrv
 add_subdirectory(lib/pbdrv)
@@ -35,14 +36,10 @@ using an existing \ref pb_drv "driver", or (partially) implementing the driver
 functions.
 
 Like \ref pbdrv, \ref pbdrv-mod can be used by including this folder in your
-CMakeLists.txt file and linking the library with your executable. A notable
-difference with \ref pbdrv-mod is that you do not need to include an extension.
-\ref pb_ext "Extensions" are still used by \ref pbdrv-mod, but they are
-included automatically by the target platform's \ref pb_drv "driver". The
-appropriate \ref pb_drv "driver" to load is also automatically detected.
+CMakeLists.txt file and linking the library with your executable. Please see
+the \ref pb_drv "drivers" page for target-specific usage instructions.
 
-Example:
-
+\par Example
 ```cmake
 # include pbdrv
 add_subdirectory(lib/pbdrv)
