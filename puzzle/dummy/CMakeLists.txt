@@ -38,7 +38,7 @@ add_executable(main
 target_link_libraries(main PUBLIC
 	pbdrv-mod
 	)
-	target_link_arduino_libraries(main PUBLIC
+target_link_arduino_libraries(main PUBLIC
 	core
 	Wire
 	)
