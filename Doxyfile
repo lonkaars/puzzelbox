@@ -2,6 +2,7 @@
 DOXYFILE_ENCODING = UTF-8
 PROJECT_NAME = "puzzlebox"
 OUTPUT_DIRECTORY = doxygen
+LAYOUT_FILE = docs/doxygen-layout.xml
 
 INPUT += readme.md
 INPUT += lib/mpack

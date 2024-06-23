@@ -1,0 +1,62 @@
+<!--
+  This file is largely based off /templates/general/layout_default.xml from
+	<https://github.com/doxygen/doxygen>. The official documentation for this
+	XML file is at <https://www.doxygen.nl/manual/customize.html>.
+-->
+<doxygenlayout version="1.0">
+	<navindex>
+		<tab type="mainpage" visible="yes" title="Index"/>
+		<tab type="topics" visible="yes" title="Components"/>
+	</navindex>
+	<group>
+		<briefdescription visible="yes"/>
+		<detaileddescription visible="yes"/>
+		<groupgraph visible="yes"/>
+		<memberdecl>
+			<nestedgroups visible="yes" title="Components"/>
+			<modules visible="yes"/>
+			<dirs visible="yes"/>
+			<files visible="yes"/>
+			<namespaces visible="yes"/>
+			<concepts visible="yes"/>
+			<classes visible="yes"/>
+			<defines/>
+			<typedefs/>
+			<sequences/>
+			<dictionaries/>
+			<enums/>
+			<enumvalues/>
+			<functions/>
+			<variables/>
+			<signals/>
+			<publicslots/>
+			<protectedslots/>
+			<privateslots/>
+			<events/>
+			<properties/>
+			<friends/>
+			<membergroups visible="yes"/>
+		</memberdecl>
+		<memberdef>
+			<pagedocs/>
+			<inlineclasses/>
+			<defines/>
+			<typedefs/>
+			<sequences/>
+			<dictionaries/>
+			<enums/>
+			<enumvalues/>
+			<functions/>
+			<variables/>
+			<signals/>
+			<publicslots/>
+			<protectedslots/>
+			<privateslots/>
+			<events/>
+			<properties/>
+			<friends/>
+		</memberdef>
+		<authorsection visible="yes"/>
+	</group>
+</doxygenlayout>
+

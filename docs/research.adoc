@@ -411,6 +411,117 @@ testing. Including mocking tests, a large amount of assertions, multiple test
 with different input support, and lastly being supported in the newest
 non-experimental version of {cpp}. 
 
+== I^2^C (Thomas)
+
+=== Research question
+
+How can we use I^2^C for the puzzle module detection and communication?
+
+=== Puzzle Module and Main Controller Communication
+
+Research from project group 21/22 shows that the I^2^C protocol is the best 
+option for communication between the puzzle modules and the main controller. 
+This research section extends the previous section about which MCU is suitable 
+for the puzzle bus, as we have found vital I^2^C limitations with the 
+controller we had chosen. See the handover document for the found limitations.
+
+// TODO: REFERENCES
+// TODO: Find synonym for 'vital'
+
+==== MCUs Supporting Master Addressable as Slave
+
+===== Atmega328p
+
+The Atmega328p has multi-master support, where the MCU is addressable as a 
+slave while being in master mode. This has been confirmed using the Arduino 
+wire library on both the Arduino Mega and the Arduino Uno.
+
+===== PIC16F15276 & ESP32
+
+Both the PIC16F15276 and the ESP32 MCUs show possibilities to be addressable as a slave while being in master mode. However, at the moment of writing this 
+has yet to be tested.
+
+// TODO: Add the following reference:
+// PIC16F15276 - 25.2.4.3
+// https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC16F15256-74-75-76-Microcontroller-Data-Sheet-40002305.pdf
+
+// TODO: Add the following reference:
+// https://docs.espressif.com/projects/esp-idf/en/v4.3/esp32/api-reference/peripherals/i2c.html
+// https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf#i2c
+// https://www.bitsandparts.nl/documentation/482/ESP32_Specifications_EN_v1.pdf
+
+==== Alternatives
+
+===== PIC16F15276 Registers
+
+In the case of the PIC16F15276 not support master addressable as slave the 
+following approach would most likely work. As the PIC16F15276 uses specific 
+registers for its master receive functions, namely the RCEN register, it can 
+be manually set to receive data from the I^2^C bus. However, this also has 
+yet to be tested.
+
+// TODO: Add the following reference:
+// PIC16F15276 - 25.2.4.3
+// https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC16F15256-74-75-76-Microcontroller-Data-Sheet-40002305.pdf
+
+===== Multiple I^2^C Peripherals
+
+==== ESP32 & RP2040
+
+The ESP32 and the RP2040 both have multiple peripherals for I^2^C 
+communication, while also supporting simultaneous configuration. This allows 
+both two I^2^C peripherals to be active, one being configured as a master and 
+the other being configured as a slave. This enables the controller to send and 
+receive data to the I^2^C bus without much difficulty. This does introduce 
+increased code complexity but is a valid option if it is succesful in testing.
+
+// TODO: Add the following reference:
+// https://docs.espressif.com/projects/esp-idf/en/v4.3/esp32/api-reference/peripherals/i2c.html
+// https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf#i2c
+// https://www.bitsandparts.nl/documentation/482/ESP32_Specifications_EN_v1.pdf
+
+=== Puzzle Module Detection
+
+Puzzle module detection is vital to the puzzelbox, as this allows changing the 
+puzzles without much software or hardware configuration needed. An option will 
+be given for the choice of main controller (RP2040); namely to scan the full 
+I^2^C bus for responsive slaves. The RPI Pico SDK has an API for I^2^C which 
+also supports functions create a bus scanning function. An example of this 
+bus scan function, according to the API examples, can be found in the pseudo 
+code below.
+
+[source, c]
+----
+#include <stdio.h>
+#include "pico/stdlib.h"
+#include "hardware/i2c.h"
+
+void bus_scan() {
+    int ret;
+    uint8_t rxdata;
+    
+    for (int addr = 0; addr < (1 << 7); ++addr) {
+        ret = i2c_read_blocking(i2c_default, addr, &rxdata, 1, false);
+        printf(ret < 0 ? "." : "@");
+        printf(addr % 16 == 15 ? "\n" : "  ");
+    }
+    printf("Done.\n");
+}
+----
+
+The bus scan function tries to read data from all possible I^2^C addresses, 
+and prints a table which shows what the addresses are from found I^2^C 
+slaves. This is possible due to the i2c_read_blocking function, which returns 
+the length of the read data if the slave address is in use (in this case 1) or 
+a number below 0 if the slave address is not in use. The puzzelbox, however, 
+has the 'Neotrellis' puzzle which also uses I^2^C to function. The bus scan 
+function would also see the 'Neotrellis' rgb matrix as a puzzle module (slave) 
+using this implementation. This can easily be fixed using a handshake between 
+puzzle modules and the main controller, as the 'Neotrellis' rgb matrix cannot 
+answer this handshake and is therefor not recognized as a puzzle module.
+
+// TODO: references (API) & code block naming?
+
 == Original Puzzle Box Functionality Research (Thomas)
 
 === Research question
