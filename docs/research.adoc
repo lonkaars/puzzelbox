@@ -415,43 +415,59 @@ for the puzzle bus, as we have found vital I^2^C limitations with the
 controller we had chosen. See the handover document for the found limitations.
 
 // TODO: REFERENCES
+// TODO: Find synonym for 'vital'
 
-==== PIC16F15276
+==== MCUs Supporting Master Addressable as Slave
 
-The PIC16F15276 MCU shows possibilities to be addressable as a slave while 
-being in master mode. However, this can not be confirmed without physical 
-testing due to the datasheet not mentioning whether it can or can not support 
-this function. It is possible to use this MCU without the aforementioned 
-functionality by manually changing the RCEN register to manually set the 
-MCU to 'receiving' I^2^C instructions, however this also requires a degree of 
-testing.
+===== Atmega328p
+
+The Atmega328p has multi-master support, where the MCU is addressable as a 
+slave while being in master mode. This has been confirmed using the Arduino 
+wire library on both the Arduino Mega and the Arduino Uno.
+
+===== PIC16F15276 & ESP32
+
+Both the PIC16F15276 and the ESP32 MCUs show possibilities to be addressable as a slave while being in master mode. However, at the moment of writing this 
+has yet to be tested.
 
 // TODO: Add the following reference:
 // PIC16F15276 - 25.2.4.3
 // https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC16F15256-74-75-76-Microcontroller-Data-Sheet-40002305.pdf
-
-==== ESP32
-
-The ESP32, like the PIC16F15276, shows possibilities to be addressable as a 
-slave while being in master mode, this also requires testing however. In the 
-case of the ESP32 it is possible to use the two I^2^C peripherals to achieve 
-roughly the same goal. This can be done by having one of the two peripherals 
-be initiated in master mode while the other peripheral is initiated in slave 
-mode. Allowing the MCU to send and recieve data to the I^2^C bus. This does 
-introduce increased code complexity but is a valid option if it goes through 
-testing.
 
 // TODO: Add the following reference:
 // https://docs.espressif.com/projects/esp-idf/en/v4.3/esp32/api-reference/peripherals/i2c.html
 // https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf#i2c
 // https://www.bitsandparts.nl/documentation/482/ESP32_Specifications_EN_v1.pdf
 
-==== RP2040
+==== Alternatives
 
-As written in the handover document, the RP2040 does not support being 
-addressed as a slave while being in master mode. It does however, just like 
-the ESP32 have two I^2^C peripherals. Meaning the same theory can be applied 
-on this MCU.
+===== PIC16F15276 Registers
+
+In the case of the PIC16F15276 not support master addressable as slave the 
+following approach would most likely work. As the PIC16F15276 uses specific 
+registers for its master receive functions, namely the RCEN register, it can 
+be manually set to receive data from the I^2^C bus. However, this also has 
+yet to be tested.
+
+// TODO: Add the following reference:
+// PIC16F15276 - 25.2.4.3
+// https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC16F15256-74-75-76-Microcontroller-Data-Sheet-40002305.pdf
+
+===== Multiple I^2^C Peripherals
+
+==== ESP32 & RP2040
+
+The ESP32 and the RP2040 both have multiple peripherals for I^2^C 
+communication, while also supporting simultaneous configuration. This allows 
+both two I^2^C peripherals to be active, one being configured as a master and 
+the other being configured as a slave. This enables the controller to send and 
+receive data to the I^2^C bus without much difficulty. This does introduce 
+increased code complexity but is a valid option if it is succesful in testing.
+
+// TODO: Add the following reference:
+// https://docs.espressif.com/projects/esp-idf/en/v4.3/esp32/api-reference/peripherals/i2c.html
+// https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf#i2c
+// https://www.bitsandparts.nl/documentation/482/ESP32_Specifications_EN_v1.pdf
 
 === Puzzle Module Detection
 
