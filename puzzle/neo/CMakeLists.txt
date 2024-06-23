@@ -18,7 +18,7 @@ target_include_directories(freertos_config SYSTEM INTERFACE .)
 set(FREERTOS_PORT GCC_ATMEGA)
 set(FREERTOS_HEAP 4)
 
-project(pb_mod_vault C CXX)
+project(pb_mod_neo C CXX)
 
 add_subdirectory(lib/pbdrv)
 add_subdirectory(lib/FreeRTOS-Kernel)
@@ -34,8 +34,11 @@ target_link_libraries(main PUBLIC
 target_link_arduino_libraries(main PUBLIC
 	core
 	Wire
-	TM1637
+	Adafruit_seesaw
 	)
+
+# fugly workaround
+target_link_arduino_libraries(_arduino_lib_Adafruit_seesaw_Library PUBLIC "Adafruit BusIO")
 
 target_enable_arduino_upload(main)
 

@@ -145,10 +145,9 @@ The Raspberry Pi Pico W board is utilized during development.
 
 NOTE: This was written while we did not know the puzzle bus specifically
 requires slave-addressible I^2^C multi-master controllers to function properly.
-While the research concludes the RP2040 is a suitable microcontroller for the
-main controller, it is not. The RP2040 was still used, but has required
-implementing workarounds. Please see the handover report for more details on
-how this impacted the project cite:[handover].
+The RP2040 was still used, but has required implementing workarounds. Please
+see the handover report for more details on how this impacted the project
+cite:[handover].
 
 [[tab:main-mcu]]
 .Main controller MCU candidates

@@ -98,6 +98,7 @@ void pb_route_cmd_state_req(pb_msg_t * msg);
  * controller handles this type of command.
  */
 void pb_route_cmd_state_res(pb_msg_t * msg);
+// TODO: add link to pb_route_cmd_state_res handler in main/i2c.c
 /**
  * \brief Handle a \ref PB_CMD_STATE "STATE" message with action \ref
  * PB_ACTION_SET "SET"
@@ -122,7 +123,8 @@ void pb_route_cmd_magic_req(pb_msg_t * msg);
  * PB_ACTION_RES "RES"
  *
  * The default implementation of this function is empty, as only the main
- * controller handles this type of command.
+ * controller handles this type of command. (\ref main_route_cmd_magic_res
+ * "link")
  */
 void pb_route_cmd_magic_res(pb_msg_t * msg);
 

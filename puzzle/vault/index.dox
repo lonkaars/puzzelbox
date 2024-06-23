@@ -3,4 +3,9 @@
 \ingroup puz
 \defgroup puz_vault Vault
 \brief Vault puzzle module
+
+\par Setup
+- Use the Arduino IDE library manager to install the "TM1637" library (by
+	Avishay Orpaz) and its dependencies
+
 */

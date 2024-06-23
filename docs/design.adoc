@@ -13,7 +13,7 @@ structure, and has three levels of design 'depth':
 
 Only design details deemed relevant by the document authors are documented
 here. Low-level implementation details such as API interfaces, code paths and
-workarounds are documented inside the source code repository.
+workarounds are documented with Doxygen cite:[pbdox].
 
 [[sec:lv1]]
 == Top-Level
@@ -34,8 +34,9 @@ main controller and multiple puzzle modules. Other notable details include:
   time of writing (2024-03-11), and this project only describes the interface
   between the puzzle box and the bomb.
 * The puzzle box is capable of bidirectional communication over Wi-Fi. This
-  connection is used to configure the puzzle box before gameplay or modify its
-  state during gameplay.
+	connection is used to configure the puzzle box before gameplay or modify its
+	state during gameplay (<<reqs.adoc#req:edge-manual-reset>>,
+	<<reqs.adoc#req:edge-skip-puzzle>>).
 
 [[fig:system-top]]
 .Context block diagram
@@ -92,8 +93,11 @@ The criteria for a puzzle module controller are:
 The research document cite:[research] compares various microcontrollers
 matching these criteria. As a result of this research, the Microchip
 PIC16F15276 was selected as the recommended microcontroller for future puzzle
-modules. The current development hardware utilizes an ESP32-PICO-D4 module, so
-the puzzle module software is written with portability in mind.
+modules.
+
+NOTE: The current development hardware still utilizes an ESP32-PICO-D4 module,
+but due to a misunderstanding cite:[handover], Arduino boards were used to
+implement the puzzle modules.
 
 [[fig:puzzle-module-top]]
 .Generic puzzle module top-level block diagram
@@ -149,10 +153,9 @@ Pi Pico W as main controller during development.
 
 NOTE: This was written while we did not know the puzzle bus specifically
 requires slave-addressible I^2^C multi-master controllers to function properly.
-While the research concludes the RP2040 is a suitable microcontroller for the
-main controller, it is not. The RP2040 was still used, but has required
-implementing workarounds. Please see the handover report for more details on
-how this impacted the project cite:[handover].
+The RP2040 was still used, but has required implementing workarounds. Please
+see the handover report for more details on how this impacted the project
+cite:[handover].
 
 [[fig:main-controller-top]]
 .Main controller top-level block diagram
@@ -187,8 +190,10 @@ multi-master I^2^C bus, and all puzzle modules are specified to be I^2^C
 multi-master controllers that are slave-addressible. The multi-master part is
 required to prevent I^2^C transmissions from being corrupted in the event of a
 bus collision, and the slave-addressible part is required to both send and
-receive messages on the same controller. This is the only hardware-level
-specification made this year.
+receive messages on the same controller. This can also be achieved by using 2
+I^2^C peripherals on the same bus simultaniously, which is what the RP2040
+currently uses. This has required changes to the wiring, and is the only
+hardware-level specification made this year.
 
 More details on the messages sent over the puzzle bus are described in
 <<sec:lv3-pb-messages>>.
@@ -253,7 +258,7 @@ development of future puzzle modules (<<reqs.adoc#req:main-static>>).
 === Puzzle module framework
 
 This subsection defines aspects of the 'puzzle framework': the interface that
-allows puzzle modules to integrate with the puzzle bus main controller. All
+allows puzzle modules to integrate with the puzzle bus and main controller. All
 communication described within this subsection refers to 'internal'
 communication between the main controller and puzzle modules on the puzzle bus.
 
@@ -295,7 +300,7 @@ is shown in <<tab:pb-msg-fmt>>. The messages are (de)serialized using mpack.
 This choice was made after considering various alternative options for sending
 structured messages cite:[research]. Note that all messages are sent as I^2^C
 writes. Due to this, the I^2^C address of a message sender is included in the
-header.
+header to facilitate network-like features over I^2^C.
 
 [[tab:pb-msg-fmt]]
 .Puzzle bus message format
@@ -332,7 +337,8 @@ is solved.
 | ``PROP``
 | The PROP command type is used for exchanging arbitrary data between puzzle
 modules and/or the puzzle box client (pbc) over the <<sec:main-bridge,TCP
-bridge>>. These properties are not used by the puzzle framework.
+bridge>>. These properties are not used by the puzzle framework, and serve as
+an extensible interface for puzzle module developers to use.
 |===
 
 <<tab:pb-msg-actions>> lists the different command actions.
@@ -362,7 +368,7 @@ main controller firmware (<<reqs.adoc#req:main-static>>).
 
 The specific format of the 'cmd' field from <<tab:pb-msg-fmt>> is different for
 each command type, and is for this reason only documented in-code using
-Doxygen.
+Doxygen cite:[pbdox].
 
 [[sec:framework-state]]
 ==== State
@@ -401,16 +407,15 @@ expansion without modification of the main controller software
 
 The RPI Pico SDK prohibits the use of I^2^C addresses reserved by the I^2^C
 specification. This means different addresses from previous years are used.
-These addresses are indexed in the code under a shared header (see
-``lib/pbdrv/pb.h``).
-
-The same I^2^C address may be used by two different puzzle modules, but this
-will make it impossible for them to be used simultaniously.
+These addresses are indexed in the code in a header exposed by the puzzle bus
+driver cite:[pbdox].
 
 The I^2^C addresses are also used to determine the puzzle sequence (i.e. the
 order in which puzzle modules are set to the 'playing' state). The sequence is
 determined by the main controller on startup, and consists of the connected
 puzzle modules' addresses in descending order (i.e. highest address first).
+Note that the same I^2^C address may be used by two different puzzle modules,
+but this will make it impossible for them to be used simultaniously.
 
 === Main Controller
 
@@ -423,14 +428,15 @@ startup. Puzzle modules start in the 'uninitialized' state (see
 <<fig:puzzle-module-common-state>>), during which they do nothing. Puzzle
 modules in this state are still able to reply to requests, including MAGIC REQ
 commands. When the main controller receives a MAGIC RES command, the I^2^C
-address of the sender is added to an internal list for puzzle modules.
+address of the sender is added to an internal list of I^2^C devices that are
+considered puzzle modules.
 
 After the initial handshake request 'wave' (bus scan), all puzzle modules are
 repeatedly asked for their global state using a STATE REQ command. This request
 also includes the global state of the requesting puzzle module, which is always
 the main controller (under normal circumstances). Upon receiving the first
 STATE REQ command, a puzzle module knows it has been registered successfully by
-the main controller, and may transition into the 'idle' state.
+the main controller, and transitions into the 'idle' state.
 
 [[fig:sequence-puzzle-module-init]]
 .Puzzle module initialization sequence diagram
@@ -479,10 +485,7 @@ Due to the separation of the puzzle bus driver code into a standalone library
 for reading/writing puzzle bus commands, and a puzzle module-specific code, the
 puzzle box client is able to read/write raw I^2^C commands directly. A separate
 library was made for serializing I^2^C messages so they can be sent over the
-TCP connection.
-
-Detailed specifications on the TCP socket server are in
-<<sec:lv3-remote-control>>.
+TCP connection. This library is documented in detail using Doxygen cite:[pbdox].
 
 ==== Operating system
 
@@ -493,13 +496,6 @@ covered by the standard curriculum (<<reqs.adoc#req:curriculum-cov>>), this
 choice was between FreeRTOS and Zephyr. FreeRTOS was chosen because it is the
 simplest solution, and because the features Zephyr offers over FreeRTOS are
 already present in the Raspberry Pi Pico SDK.
-
-NOTE: Due to the issues with the RP2040 that were later discovered
-cite:[handover], delays are used within the puzzle bus driver's message
-handling logic. This means that due to the use of the RP2040, *all puzzle
-modules* are required to use a task scheduler or similar mechanism for
-deferring calls to the puzzle bus driver from the I^2^C interrupt service
-routine (ISR).
 
 === NeoTrellis puzzle
 
@@ -515,8 +511,8 @@ button. The way to solve this puzzle is by dimming every Neopixel in the 8x8
 matrix. This is done by clicking on a button, which switches the state of the
 Neopixel underneath the pixel and the Neopixels in each cardinal direction from
 the pressed button. This means that if a Neopixel was on and the button was
-pressed it will turn off and vice-versa. A visual example can be found in
-Appendix B.
+pressed it will turn off and vice-versa.
+// A visual example can be found in Appendix B.
 
 ==== Puzzle inputs & outputs
 
@@ -544,7 +540,8 @@ have their own logical circuit engraved in the box, and the 6 input ports on
 the right side of the puzzle have a letter (A through F) engraved in the box.
 The way to solve the puzzle is by connecting the banana plug cable from an
 input port on the left side of the puzzle to the corresponding input port on
-the right side of the puzzle. An example of this can be found in Appendix C.
+the right side of the puzzle.
+// An example of this can be found in Appendix C.
 
 When the puzzle starts, the participants of the game will have 6 code-fragments
 written on paper, corresponding to the logical circuits on the puzzle box. The
@@ -604,15 +601,5 @@ clicked the vault resets and they need to start over from the beginning.
 [[fig:vault-io]]
 .Vault puzzle in-out
 image::img/vault-io.png[]
-
-== Components
-[[sec:lv3-remote-control]]
-=== Remote control
-
-[appendix]
-== NeoTrellis puzzle example
-
-[appendix]
-== Software puzzle example
 
 include::share/footer.adoc[]

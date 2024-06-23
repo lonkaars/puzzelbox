@@ -4,3 +4,10 @@
 \defgroup main_tasks tasks
 \brief Tasks
 */
+
+/**
+\ingroup main
+\defgroup main_pb_override overrides
+\brief Override functions from \ref pbdrv-mod
+*/
+
