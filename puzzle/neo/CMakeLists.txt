@@ -42,7 +42,11 @@ target_link_libraries(main PUBLIC
 target_link_arduino_libraries(main PUBLIC
 	core
 	Wire
+	Adafruit_seesaw
 	)
+
+#Adafruit workarround
+target_link_arduino_libraries(_arduino_lib_Adafruit_seesaw_Library PUBLIC "Adafruit BusIO")
 
 target_enable_arduino_upload(main)
 
