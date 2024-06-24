@@ -34,45 +34,35 @@ static void bus_scan() {
 }
 
 static void update_state() {
-	// TODO: Add calculation(?) to get global state
-	// all states idle == idle -> set first address as playingz
-	// all states solved == solved
-	// any state plater == playing
+	int idle = 0, playing = 0, solved = 0;
 
-	pb_global_state_t module_state;
-	bool playing = false; 	// default false -> loop through modules to see if one is playing -> set to true
-	bool solved = true;		// default true	 -> loop through modules to see if any is not solved -> set to false
-
+	// count # of modules in each state
 	for (size_t i = 0; i < modules_size; i++) {
-		module_state = modules[i].state;
-		if (module_state != PB_GS_SOLVED)
-			solved = false;
-
-		if (module_state == PB_GS_PLAYING)
-			playing = true;
+		pb_global_state_t state = modules[i].state;
+		if (state == PB_GS_IDLE) idle++;
+		else if (state == PB_GS_PLAYING) playing++;
+		else if (state == PB_GS_SOLVED) solved++;
 	}
 
-	// set state if no further processing is needed
-	if (solved == true) {
+	if (idle == modules_size) { // if all modules are in PB_GS_IDLE
+		pb_hook_mod_state_write(PB_GS_IDLE);
+	} else if (solved == modules_size) { // if all modules are in PB_GS_SOLVED
 		pb_hook_mod_state_write(PB_GS_SOLVED);
-		return;
-	} else if (playing == true) {
+	} else {
 		pb_hook_mod_state_write(PB_GS_PLAYING);
-		return;
 	}
 
-	// IF no module playing, get/set next module THAT IS NOT SOLVED to playing
-	// and set mc state to playing
-	// pb_i2c_send(addr, buff.msg, buff.size)
+	// if a module is still playing, don't promote a next one to playing module
+	if (playing > 0) return;
 
 	for (size_t i = 0; i < modules_size; i++) {
-		module_state = modules[i].state;
-		if (module_state == PB_GS_IDLE) {
-			pb_buf_t buff = pb_send_state_set(PB_GS_PLAYING);
-			pb_i2c_send(modules[i].sender, (uint8_t*)buff.data, buff.size);
-			pb_hook_mod_state_write(PB_GS_PLAYING);
-			return;
-		}
+		// find first module that is idle
+		pb_global_state_t	module_state = modules[i].state;
+		if (module_state != PB_GS_IDLE) continue;
+
+		pb_buf_t buff = pb_send_state_set(PB_GS_PLAYING);
+		pb_i2c_send(modules[i].sender, (uint8_t*)buff.data, buff.size);
+		pb_buf_free(&buff);
 	}
 }
 
@@ -119,12 +109,9 @@ void pb_route_cmd_state_res(pb_msg_t * msg) {
 	pb_cmd_state_t * cmd = msg->cmd;
 	i2c_addr_t sender = msg->sender;
 
-	// update sender state
-	for( size_t i = 0; i < modules_size; i++ ) {
-		if (modules[i].sender == sender) {
-			modules[i].state = (pb_global_state_t)cmd;
-			break;
-		}
+	for (size_t i = 0; i < modules_size; i++) {
+		if (modules[i].sender != sender) continue;
+		modules[i].state = cmd->state;
 	}
 }
 
