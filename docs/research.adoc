@@ -215,71 +215,6 @@ the Raspberry Pi RP2040 on the Raspberry Pi Pico W. The recommended MCU for new
 puzzle modules is the Microchip PIC16F15276. The existing puzzle modules still
 utilize the ESP32 development kits chosen by the 21-22 group.
 
-== Main Controller OS (Loek)
-
-Because the hardware produced by the 21-22 group uses a Raspberry Pi 3B+ as
-main controller, the usage of this specific board was turned into a
-prerequisite for this project (??). The Raspberry Pi 3B+ uses the Broadcom
-BCM2837 chipset, which supports the aarch64 instruction set cite:[rpicpu].
-Because the puzzle box should be able to run on battery power (??), the CPU
-should be under as little load as possible to preserve power. Choosing the
-right operating system is crucial to ensure maximum control over which
-processes consume CPU resources. This section indexes the available operating
-systems that support the aarch64 instruction set to support the decision for
-main controller OS in the design document [??].
-
-Each operating system is evaluated on the following criteria:
-
-* Number of 'base' software packages (pre-installed software)
-* Size of base installation (base disk utilization)
-* Time required to get set-up
-* Software iteration time (amount of work required to complete a
-  compile-upload-run cycle)
-* Whether it is covered by the standard curriculum at Avans University of
-  Applied Sciences
-
-All of these factors (except for curriculum coverage) should be low. This means
-that operating systems that are minimalistic by default are preferred.
-
-=== Raspberry Pi OS Lite (Debian)
-
-The manufacturer of the Raspberry Pi boards publishes a modified version of the
-Debian Linux distribution which is aimed at general-purpose users [??]. It
-comes with an easy-to-use installer, and is the only OS officially supported by
-the manufacturer of this board. All the required drivers come pre-installed,
-which means this OS has very little setup time.
-
-Raspberry Pi OS comes in 3 different varieties [??], the 'Light' variant of
-which is the most minimalistic. This variant comes with the least number of
-pre-installed software packages and has a base image size of 2.6 GiB after
-extracting the archive from the official download page [??].
-
-This exact OS is not covered in the normal curriculum, but other derivative
-distributions of Debian are, so this OS is be considered familiar.
-
-=== Void Linux
-
-=== Linux From Scratch
-
-=== Bare-metal Firmware
-
-=== Conclusions
-
-<<tab:main-os>> summarizes the considered operating systems based on the
-criteria outlined at the start of this section.
-
-[[tab:main-os]]
-.Main controller OS comparison
-[%autowidth]
-|===
-| | Packages | Size | Set-up time | Iteration time | Covered
-
-| Raspberry Pi OS Lite | 592 | 2.6 GiB | Medium | Short | Yes
-| Void Linux | 126 | 334 MiB | Short | Short | No
-| Linux from scratch | n/a | 25+ MiB | Long | Long | Yes
-| Bare-metal firmware | n/a | n/a | Long | Long | No
-|===
-
 == Unit Testing Framework Research (Thomas)
 
 === Research question
@@ -437,7 +372,7 @@ wire library on both the Arduino Mega and the Arduino Uno.
 
 ===== PIC16F15276 & ESP32
 
-Both the PIC16F15276 and the ESP32 MCUs show possibilities to be addressable as a slave while being in master mode. However, at the moment of writing this 
+Both the PIC16F15276 cite:[PICData] and the ESP32 MCUs show possibilities to be addressable as a slave while being in master mode. However, at the moment of writing this 
 has yet to be tested.
 
 // TODO: Add the following reference:
@@ -453,26 +388,23 @@ has yet to be tested.
 
 ===== PIC16F15276 Registers
 
-In the case of the PIC16F15276 not support master addressable as slave the 
+In the case of the PIC16F15276 cite:[PICData] not support master addressable as slave the 
 following approach would most likely work. As the PIC16F15276 uses specific 
 registers for its master receive functions, namely the RCEN register, it can 
 be manually set to receive data from the I^2^C bus. However, this also has 
-yet to be tested.
-
-// TODO: Add the following reference:
-// PIC16F15276 - 25.2.4.3
-// https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC16F15256-74-75-76-Microcontroller-Data-Sheet-40002305.pdf
+yet to be tested. 
 
 ===== Multiple I^2^C Peripherals
 
 ==== ESP32 & RP2040
 
-The ESP32 and the RP2040 both have multiple peripherals for I^2^C 
-communication, while also supporting simultaneous configuration. This allows 
-both two I^2^C peripherals to be active, one being configured as a master and 
-the other being configured as a slave. This enables the controller to send and 
-receive data to the I^2^C bus without much difficulty. This does introduce 
-increased code complexity but is a valid option if it is succesful in testing.
+The ESP32 cite:[I2CESPAPI] cite:[I2CESPTECH] cite:[ESPSPECS] and the RP2040 both 
+have multiple peripherals for I^2^C communication, while also supporting 
+simultaneous configuration. This allows both two I^2^C peripherals to be active, 
+one being configured as a master and the other being configured as a slave. This 
+enables the controller to send and receive data to the I^2^C bus without much 
+difficulty. This does introduce increased code complexity but is a valid option 
+if it is succesful in testing.
 
 // TODO: Add the following reference:
 // https://docs.espressif.com/projects/esp-idf/en/v4.3/esp32/api-reference/peripherals/i2c.html
