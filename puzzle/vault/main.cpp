@@ -155,6 +155,10 @@ void pb_hook_mod_state_write(pb_global_state_t state) {
 	puzzleState = state;
 }
 
+void pb_hook_ev_main_state_update(pb_global_state_t state){
+	Serial.println("WE IN BOISS");
+}
+
 void setup() {
     Serial.begin(115200);
     pinMode(SOLVED_PIN, OUTPUT);
