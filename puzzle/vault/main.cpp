@@ -88,12 +88,10 @@ void check_button_press() {
                     if (strcmp(keyPress, validButtons[currentLevel]) == 0) {
                         currentLevel++;
                         if (currentLevel >= TOTAL_LEVELS) {
-                            puzzleState = PB_GS_SOLVED;
+                            pb_hook_mod_state_write(PB_GS_SOLVED);
                             Serial.println("Puzzle solved!");
                             display.showNumberDec(currentLevel + 1, true);
                             digitalWrite(SOLVED_PIN, HIGH);
-                        } else {
-                            puzzleState = PB_GS_PLAYING;
                         }
                     } else {
                         currentLevel = 0;
@@ -149,14 +147,19 @@ void display_code_for_level(int level) {
 }
 
 
+pb_global_state_t pb_hook_mod_state_read() {
+	return puzzleState;
+}
+
+void pb_hook_mod_state_write(pb_global_state_t state) {
+	puzzleState = state;
+}
+
 void setup() {
     Serial.begin(115200);
     pinMode(SOLVED_PIN, OUTPUT);
     digitalWrite(SOLVED_PIN, LOW);
-    display.setBrightness(0x0f);
-
-    puzzleState = pb_hook_mod_state_read();
-    
+    display.setBrightness(0x0f);  
     initialize_system();
 }
 
@@ -181,5 +184,4 @@ void loop() {
             blink_display(1);
             break;
     }
-    puzzleState = pb_hook_mod_state_read();
 }
