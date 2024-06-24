@@ -18,18 +18,55 @@ pb_puzzle_module_t modules[CFG_PB_MOD_MAX];
 size_t modules_size = 0;
 
 static void state_exchange() {
-	pb_global_state_t new_state;
-	// TODO: Add calculation(?) to get global state
-	// noinit -> not possible, idle -> all idle, solved -> all solved, playing -> one playing
-	for (size_t i = 0; i < modules_size; i++) {
-		
-	}
-	pb_hook_mod_state_write(new_state);
+	
 
 	for (size_t i = 0; i < modules_size; i++) {
 		pb_buf_t buf = pb_send_state_req();
 		
 		pb_buf_free(&buf);
+	}
+}
+
+void update_state() {
+	// TODO: Add calculation(?) to get global state
+	// all states idle == idle -> set first address as playingz
+	// all states solved == solved
+	// any state plater == playing
+
+	pb_global_state_t module_state;
+	bool playing = false; 	// default false -> loop through modules to see if one is playing -> set to true
+	bool solved = true;		// default true	 -> loop through modules to see if any is not solved -> set to false
+
+	for (size_t i = 0; i < modules_size; i++) {
+		module_state = modules[i].state;
+		if (module_state != PB_GS_SOLVED)
+			solved == false;	
+		
+		if (module_state == PB_GS_PLAYING)
+			playing == true;
+	}
+
+	// set state if no further processing is needed
+	if (solved == true) {
+		pb_hook_mod_state_write(PB_GS_SOLVED);
+		return;
+	} else if (playing == true) {
+		pb_hook_mod_state_write(PB_GS_PLAYING);
+		return;
+	}
+
+	// IF no module playing, get/set next module THAT IS NOT SOLVED to playing
+	// and set mc state to playing
+	// pb_i2c_send(addr, buff.msg, buff.size)
+	
+	for (size_t i = 0; i < modules_size; i++) {
+		module_state = modules[i].state;
+		if (module_state == PB_GS_IDLE) {
+			pb_buf_t buff = pb_send_state_set(PB_GS_PLAYING);
+			pb_i2c_send(modules[i].sender, (uint8_t*)buff.data, buff.size);
+			pb_hook_mod_state_write(PB_GS_PLAYING);
+			return;
+		}
 	}
 }
 
