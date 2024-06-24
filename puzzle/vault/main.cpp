@@ -1,6 +1,7 @@
 #include <Arduino.h>
-#include <Wire.h>
 #include <TM1637Display.h>
+#include "lib/pbdrv/pb-types.h"
+#include "lib/pbdrv/pb-mod.h"
 
 #define TOTAL_LEVELS 5
 #define ROWS 4
@@ -18,29 +19,16 @@ const int COL_PINS[COLS] = {10, 9, 8};
 const char* validButtons[TOTAL_LEVELS] = {"A2", "B1", "D3", "C2", "C3"};
 const char bombCode[] = "1234";
 
+
+// Puzzle state
+pb_global_state_t puzzleState = PB_GS_NOINIT;
+
 TM1637Display display(CLK, DIO);
 
-typedef enum {
-    STATE_UNINITIALIZED = 0x00,
-    STATE_RESET = 0x01,
-    STATE_PLAYING = 0x02,
-    STATE_SOLVED = 0x03,
-    STATE_ERROR = 0x04
-} PuzzleState;
-
-PuzzleState puzzleState = STATE_UNINITIALIZED;
 int currentLevel = 0;
 
-void requestEvent() {
-    if (puzzleState == STATE_PLAYING) {
-        uint8_t responseData[] = HANDSHAKE_SEND;
-        Wire.write(responseData, sizeof(responseData));
-        Serial.println("Handshake response sent.");
-    }
-}
-
 void blink_display(char num) {
-    while(puzzleState == STATE_UNINITIALIZED || puzzleState == STATE_ERROR) {
+    while(puzzleState == PB_GS_NOINIT) {
         display.showNumberDecEx(0, 0b11111111, true); // Display "0000" with all digits on
         delay(500);
         display.clear();
@@ -73,12 +61,12 @@ void check_button_press() {
                     if (strcmp(keyPress, validButtons[currentLevel]) == 0) {
                         currentLevel++;
                         if (currentLevel >= TOTAL_LEVELS) {
-                            puzzleState = STATE_SOLVED;
+                            puzzleState = PB_GS_SOLVED;
                             Serial.println("Puzzle solved!");
                             display.showNumberDec(currentLevel + 1, true);
                             digitalWrite(SOLVED_PIN, HIGH);
                         } else {
-                            puzzleState = STATE_PLAYING;
+                            puzzleState = PB_GS_PLAYING;
                         }
                     } else {
                         currentLevel = 0;
@@ -102,35 +90,6 @@ void initialize_system() {
     Serial.println("GPIO and display initialized.");
 }
 
-void receiveEvent(int howMany) {
-    if (howMany == 6) {
-        uint8_t expectedBytes[] = HANDSHAKE_RECEIVED;
-        uint8_t receivedBytes[6];
-        bool match = true;
-
-        for (int i = 0; i < 6; i++) {
-            receivedBytes[i] = Wire.read();
-            if (receivedBytes[i] != expectedBytes[i]) {
-                match = false;
-                break;
-            }
-        }
-
-        if (match) {
-            Serial.println("Correct handshake data received.");
-            puzzleState = STATE_PLAYING;
-            initialize_system();
-        } else {
-            Serial.println("Incorrect handshake data received.");
-            puzzleState = STATE_ERROR;
-        }
-    } else {
-        Serial.print("Received wrong number of bytes: ");
-        Serial.println(howMany);
-        puzzleState = STATE_ERROR;
-    }
-}
-
 
 void setup() {
     Serial.begin(115200);
@@ -138,9 +97,12 @@ void setup() {
     digitalWrite(SOLVED_PIN, LOW);
     display.setBrightness(0x0f);
 
-    Wire.begin(I2C_MODULE_ADDRESS);
-    Wire.onRequest(requestEvent);
-    Wire.onReceive(receiveEvent);
+    //puzzelState = pb_hook_mod_state_read();
+    
+
+    ///// TEST
+    puzzleState = PB_GS_IDLE;
+    initialize_system();
 
     // Initialize display with blinking zeros to indicate no connection or initialization state
     blink_display('0');
@@ -148,18 +110,21 @@ void setup() {
 
 void loop() {
     switch(puzzleState) {
-        case STATE_PLAYING:
+        case PB_GS_PLAYING:
             check_button_press();
             delay(100);
             break;
-        case STATE_SOLVED:
+        case PB_GS_SOLVED:
             display_final_code(bombCode);
             digitalWrite(SOLVED_PIN, HIGH);
             Serial.println("Final display shown. Puzzle complete.");
             break;
-        case STATE_ERROR:
-        case STATE_UNINITIALIZED:
+        case PB_GS_NOINIT:
             blink_display('0');
             break;
+        case PB_GS_IDLE:
+            blink_display('1');
+            break;
     }
+    //puzzelState = pb_hook_mod_state_read();
 }
