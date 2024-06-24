@@ -3,7 +3,7 @@ if(NOT DEFINED ARDUINO)
 endif()
 
 target_sources(pbdrv-mod PRIVATE "${CMAKE_CURRENT_LIST_DIR}/mod.cpp")
-target_link_arduino_libraries(pbdrv-mod core Wire)
+target_link_arduino_libraries(pbdrv-mod PRIVATE core Wire)
 
 # freertos is used to defer the handling of i2c messages outside the receive
 # interrupt service routine

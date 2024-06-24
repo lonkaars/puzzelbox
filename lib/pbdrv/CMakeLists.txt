@@ -23,7 +23,7 @@ add_library(pbdrv STATIC
 	pb-buf.c
 	)
 target_include_directories(pbdrv SYSTEM INTERFACE .)
-target_link_libraries(pbdrv mpack)
+target_link_libraries(pbdrv PRIVATE mpack)
 
 # puzzle bus *module* specific code
 add_library(pbdrv-mod OBJECT
@@ -32,9 +32,9 @@ add_library(pbdrv-mod OBJECT
 	pb-route.c
 	)
 target_include_directories(pbdrv-mod SYSTEM INTERFACE .)
-target_link_libraries(pbdrv-mod pbdrv)
+target_link_libraries(pbdrv-mod PUBLIC pbdrv)
 
 # puzzle bus drivers
 include(drv/arduino/include.cmake)
-# include(drv/rp2040/include.cmake) # please see /main/pbdrv.h
+include(drv/rp2040/include.cmake)
 

@@ -1,5 +1,6 @@
 *.pdf
 res
+.$*.bkp
 
 # i know this is bad
 Gemfile.lock

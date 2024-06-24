@@ -1,0 +1,31 @@
+// vim:ft=doxygen
+/**
+\ingroup pb_drv
+\defgroup pb_drv_rp2040 RP2040
+\brief Raspberry Pi Pico and Pico W driver
+
+This driver is known to work with the following MCUs:
+- Raspberry Pi Pico W
+
+\note While the RP2040's datasheet claims it supports multi-master
+configurations by implementing bus arbitration, it does not natively support
+a mode where it is configured as a (multi-)master with a slave address, such
+that it can be addressed by other multi-masters.
+
+\note This driver includes a workaround that uses both I2C peripherals on the
+RP2040. To use this driver, make sure you initialize both I2C peripherals, and
+connect their respective SDA and SCL pins to the same I2C bus.
+
+\par Usage
+- Link the \c pbdrv-mod library with your main executable
+- Call the \c pb_setup() function (from \c <pb-mod.h>) during setup
+
+\note This driver is automatically enabled if the variable \c PICO_PLATFORM is
+equal to \c "rp2040" in your CMakeLists.txt (it is by default when using the
+pico-sdk CMake library).
+
+\note This driver automatically includes the \ref pb_ext_stdlib
+"stdlib extension" as the pico-sdk implements the C standard library.
+
+*/
+

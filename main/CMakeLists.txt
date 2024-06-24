@@ -10,7 +10,6 @@ include(lib/FreeRTOS-Kernel/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_impor
 add_subdirectory(lib/mpack)
 add_subdirectory(lib/i2ctcp)
 add_subdirectory(lib/pbdrv)
-include(lib/pbdrv/ext/stdlib/include.cmake) # pico-stdlib is compatible with C stdlib
 
 project(puzzlebox_main C CXX ASM)
 
@@ -24,7 +23,6 @@ add_executable(main
 	mod.c
 	tasks.c
 	blink.c
-	pbdrv.c
 	)
 
 pico_enable_stdio_usb(main 1)
@@ -34,7 +32,7 @@ pico_add_extra_outputs(main)
 # include_directories(lib/pico-sdk/lib/lwip/contrib/ports/freertos/include)
 
 target_include_directories(main PRIVATE .)
-target_link_libraries(main
+target_link_libraries(main PUBLIC
 	pico_cyw43_arch_lwip_sys_freertos
 	pico_stdlib
 	pico_i2c_slave

@@ -1,0 +1,13 @@
+// vim:ft=doxygen
+/**
+\ingroup main
+\defgroup main_tasks Tasks
+\brief FreeRTOS tasks
+*/
+
+/**
+\ingroup main
+\defgroup main_pb_override Overrides
+\brief Override functions from \ref pbdrv-mod
+*/
+

@@ -1,7 +1,7 @@
 :document: Research
 include::share/meta.adoc[]
 
-== Microcontrollers used in the current state.
+== Microcontrollers used in the current state (Elwin)
 
 === Research
 
@@ -39,7 +39,7 @@ see <<fig:hardware-pcb>>. The other custom-made PCB's do not have any
 microcontroller installed but seem to be made to be used by a ESP32-PICO-KIT
 V4/V4.1.
 
-=== Summery
+=== Summary
 
 There seems to be four games implemented where of only one may work because of
 its integrated ESP32, the other three also may work if the missing ESP32's are
@@ -87,7 +87,7 @@ Issues
 . Button row 4, col 1 for the safe side needs to be replaced (missing a pin)
 . LED strips for the software and hardware sides only work for 50%.
 
-==== (Appendix Loek)
+==== Appendix (Loek)
 
 The puzzle bus connector (see <<fig:bus-connector>>) appears to have 10
 conductors in total. The hardware schematics from 21-22 reveal the pinout of
@@ -112,7 +112,7 @@ Source: cite:[2122_design] +
 (Connector key is next to pin 5)
 ====
 
-== Controllers
+== Controllers (Loek)
 
 To mitigate power consumption issues discovered by the 21-22 group, new
 controllers were chosen for this year's (23-24) run of the puzzle box project.
@@ -142,6 +142,12 @@ highest memory. Its lower clock speed means that it will likely draw less power
 than the other options. It also happens to be less expensive than all other
 options. Due to these reasons, the RP2040 was chosen as main controller MCU.
 The Raspberry Pi Pico W board is utilized during development.
+
+NOTE: This was written while we did not know the puzzle bus specifically
+requires slave-addressible I^2^C multi-master controllers to function properly.
+The RP2040 was still used, but has required implementing workarounds. Please
+see the handover report for more details on how this impacted the project
+cite:[handover].
 
 [[tab:main-mcu]]
 .Main controller MCU candidates
@@ -173,10 +179,10 @@ manufacturers: Atmel, STMicroelectronics, Raspberry Pi.
 
 All the MCUs listed in <<tab:pm-mcu>> support some version of a low-power mode.
 The RP2040 is again included and appears here because it supports clock speed
-configuration and has a clock gate for each peripheral [2], which may make it a
-feasible option with regards to power consumption. Choosing the RP2040 may also
-simplify the development process as only a single MCU toolchain needs to be
-maintained.
+configuration and has a clock gate for each peripheral cite:[rp2040ds], which
+may make it a feasible option with regards to power consumption. Choosing the
+RP2040 may also simplify the development process as only a single MCU toolchain
+needs to be maintained.
 
 The Microchip PIC16F15276 is the most power efficient on this list and is the
 recommended MCU for puzzle modules. It supports both extreme underclocking and
@@ -186,6 +192,10 @@ evaluation kit.
 Because this year's run of this project was carried out by a team consisting
 only of software students, this choice remains as a recommendation. The puzzle
 box hardware may still use the ESP32 development kits from the 21-22 group.
+
+NOTE: This was written while we did not know the puzzle bus specifically
+requires slave-addressible I^2^C multi-master controllers to function properly.
+We have not verified if the PIC16F15276 supports this feature.
 
 [[tab:pm-mcu]]
 .Puzzle module controller MCU candidates
@@ -204,71 +214,6 @@ The main MCU that is utilized for this year's (23-24) run of this project is
 the Raspberry Pi RP2040 on the Raspberry Pi Pico W. The recommended MCU for new
 puzzle modules is the Microchip PIC16F15276. The existing puzzle modules still
 utilize the ESP32 development kits chosen by the 21-22 group.
-
-== Main Controller OS
-
-Because the hardware produced by the 21-22 group uses a Raspberry Pi 3B+ as
-main controller, the usage of this specific board was turned into a
-prerequisite for this project (??). The Raspberry Pi 3B+ uses the Broadcom
-BCM2837 chipset, which supports the aarch64 instruction set cite:[rpicpu].
-Because the puzzle box should be able to run on battery power (??), the CPU
-should be under as little load as possible to preserve power. Choosing the
-right operating system is crucial to ensure maximum control over which
-processes consume CPU resources. This section indexes the available operating
-systems that support the aarch64 instruction set to support the decision for
-main controller OS in the design document [??].
-
-Each operating system is evaluated on the following criteria:
-
-* Number of 'base' software packages (pre-installed software)
-* Size of base installation (base disk utilization)
-* Time required to get set-up
-* Software iteration time (amount of work required to complete a
-  compile-upload-run cycle)
-* Whether it is covered by the standard curriculum at Avans University of
-  Applied Sciences
-
-All of these factors (except for curriculum coverage) should be low. This means
-that operating systems that are minimalistic by default are preferred.
-
-=== Raspberry Pi OS Lite (Debian)
-
-The manufacturer of the Raspberry Pi boards publishes a modified version of the
-Debian Linux distribution which is aimed at general-purpose users [??]. It
-comes with an easy-to-use installer, and is the only OS officially supported by
-the manufacturer of this board. All the required drivers come pre-installed,
-which means this OS has very little setup time.
-
-Raspberry Pi OS comes in 3 different varieties [??], the 'Light' variant of
-which is the most minimalistic. This variant comes with the least number of
-pre-installed software packages and has a base image size of 2.6 GiB after
-extracting the archive from the official download page [??].
-
-This exact OS is not covered in the normal curriculum, but other derivative
-distributions of Debian are, so this OS is be considered familiar.
-
-=== Void Linux
-
-=== Linux From Scratch
-
-=== Bare-metal Firmware
-
-=== Conclusions
-
-<<tab:main-os>> summarizes the considered operating systems based on the
-criteria outlined at the start of this section.
-
-[[tab:main-os]]
-.Main controller OS comparison
-[%autowidth]
-|===
-| | Packages | Size | Set-up time | Iteration time | Covered
-
-| Raspberry Pi OS Lite | 592 | 2.6 GiB | Medium | Short | Yes
-| Void Linux | 126 | 334 MiB | Short | Short | No
-| Linux from scratch | n/a | 25+ MiB | Long | Long | Yes
-| Bare-metal firmware | n/a | n/a | Long | Long | No
-|===
 
 == Unit Testing Framework Research (Thomas)
 
@@ -400,6 +345,114 @@ testing. Including mocking tests, a large amount of assertions, multiple test
 with different input support, and lastly being supported in the newest
 non-experimental version of {cpp}. 
 
+== I^2^C (Thomas)
+
+=== Research question
+
+How can we use I^2^C for the puzzle module detection and communication?
+
+=== Puzzle Module and Main Controller Communication
+
+Research from project group 21/22 shows that the I^2^C protocol is the best 
+option for communication between the puzzle modules and the main controller. 
+This research section extends the previous section about which MCU is suitable 
+for the puzzle bus, as we have found vital I^2^C limitations with the 
+controller we had chosen. See the handover document for the found limitations.
+
+// TODO: REFERENCES
+// TODO: Find synonym for 'vital'
+
+==== MCUs Supporting Master Addressable as Slave
+
+===== Atmega328p
+
+The Atmega328p has multi-master support, where the MCU is addressable as a 
+slave while being in master mode. This has been confirmed using the Arduino 
+wire library on both the Arduino Mega and the Arduino Uno.
+
+===== PIC16F15276 & ESP32
+
+Both the PIC16F15276 cite:[PICData] and the ESP32 MCUs show possibilities to be addressable as a slave while being in master mode. However, at the moment of writing this 
+has yet to be tested.
+
+// TODO: Add the following reference:
+// PIC16F15276 - 25.2.4.3
+// https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/PIC16F15256-74-75-76-Microcontroller-Data-Sheet-40002305.pdf
+
+// TODO: Add the following reference:
+// https://docs.espressif.com/projects/esp-idf/en/v4.3/esp32/api-reference/peripherals/i2c.html
+// https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf#i2c
+// https://www.bitsandparts.nl/documentation/482/ESP32_Specifications_EN_v1.pdf
+
+==== Alternatives
+
+===== PIC16F15276 Registers
+
+In the case of the PIC16F15276 cite:[PICData] not support master addressable as slave the 
+following approach would most likely work. As the PIC16F15276 uses specific 
+registers for its master receive functions, namely the RCEN register, it can 
+be manually set to receive data from the I^2^C bus. However, this also has 
+yet to be tested. 
+
+===== Multiple I^2^C Peripherals
+
+==== ESP32 & RP2040
+
+The ESP32 cite:[I2CESPAPI] cite:[I2CESPTECH] cite:[ESPSPECS] and the RP2040 both 
+have multiple peripherals for I^2^C communication, while also supporting 
+simultaneous configuration. This allows both two I^2^C peripherals to be active, 
+one being configured as a master and the other being configured as a slave. This 
+enables the controller to send and receive data to the I^2^C bus without much 
+difficulty. This does introduce increased code complexity but is a valid option 
+if it is succesful in testing.
+
+// TODO: Add the following reference:
+// https://docs.espressif.com/projects/esp-idf/en/v4.3/esp32/api-reference/peripherals/i2c.html
+// https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf#i2c
+// https://www.bitsandparts.nl/documentation/482/ESP32_Specifications_EN_v1.pdf
+
+=== Puzzle Module Detection
+
+Puzzle module detection is vital to the puzzelbox, as this allows changing the 
+puzzles without much software or hardware configuration needed. An option will 
+be given for the choice of main controller (RP2040); namely to scan the full 
+I^2^C bus for responsive slaves. The RPI Pico SDK has an API for I^2^C which 
+also supports functions create a bus scanning function. An example of this 
+bus scan function, according to the API examples, can be found in the pseudo 
+code below.
+
+[source, c]
+----
+#include <stdio.h>
+#include "pico/stdlib.h"
+#include "hardware/i2c.h"
+
+void bus_scan() {
+    int ret;
+    uint8_t rxdata;
+    
+    for (int addr = 0; addr < (1 << 7); ++addr) {
+        ret = i2c_read_blocking(i2c_default, addr, &rxdata, 1, false);
+        printf(ret < 0 ? "." : "@");
+        printf(addr % 16 == 15 ? "\n" : "  ");
+    }
+    printf("Done.\n");
+}
+----
+
+The bus scan function tries to read data from all possible I^2^C addresses, 
+and prints a table which shows what the addresses are from found I^2^C 
+slaves. This is possible due to the i2c_read_blocking function, which returns 
+the length of the read data if the slave address is in use (in this case 1) or 
+a number below 0 if the slave address is not in use. The puzzelbox, however, 
+has the 'Neotrellis' puzzle which also uses I^2^C to function. The bus scan 
+function would also see the 'Neotrellis' rgb matrix as a puzzle module (slave) 
+using this implementation. This can easily be fixed using a handshake between 
+puzzle modules and the main controller, as the 'Neotrellis' rgb matrix cannot 
+answer this handshake and is therefor not recognized as a puzzle module.
+
+// TODO: references (API) & code block naming?
+
 == Original Puzzle Box Functionality Research (Thomas)
 
 === Research question
@@ -522,7 +575,7 @@ The way these puzzles are solved has been summarized in this research document,
 but the most complete versions of how to solve these puzzles are given in the
 group's respective design document.
 
-== Research of hardware designs of previous groups (21-22 and 22-23)
+== Research of hardware designs of previous groups (21-22 and 22-23) (Lars)
 
 This part of the research looks at the hardware designs of the previous groups
 that did this project. These are compared with each other and finally the

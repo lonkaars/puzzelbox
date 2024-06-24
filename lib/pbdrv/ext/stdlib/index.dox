@@ -1,0 +1,6 @@
+// vim:ft=doxygen
+/**
+\ingroup pb_ext
+\defgroup pb_ext_stdlib stdlib
+\brief C stdlib memory management
+*/

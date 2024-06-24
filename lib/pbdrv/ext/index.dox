@@ -1,0 +1,24 @@
+// vim:ft=doxygen
+/**
+\ingroup pbdrv
+\ingroup pbdrv-mod
+\defgroup pb_ext Extensions
+\brief Platform-specific \ref pbdrv implementations
+
+Extensions provide platform-specific implementations for various functions used
+in \ref pbdrv, and allows \ref pbdrv to remain completely portable. Extensions
+are used in both \ref pbdrv and \ref pbdrv-mod.
+
+In order to use an extension, include the appropriate CMake lists file for your
+target platform after the \ref pbdrv include:
+
+```cmake
+# include pbdrv
+add_subdirectory(lib/pbdrv)
+
+# use stdlib extension (for use with C standard library)
+include(lib/pbdrv/ext/stdlib/include.cmake)
+
+```
+
+*/

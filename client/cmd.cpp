@@ -28,7 +28,7 @@ void cmd_test(char*) {
 void cmd_help(char*) {
 	printf("List of available commands:\n");
 	for (size_t i = 0; i < cmds_length; i++) {
-		struct cmd cmd = cmds[i];
+		cmd_t cmd = cmds[i];
 		printf("  %-*s", 10, cmd.name);
 		if (cmd.info != NULL)
 			printf("  %s", cmd.info);

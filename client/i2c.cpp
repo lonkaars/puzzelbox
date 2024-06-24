@@ -35,9 +35,9 @@ void i2c_send(uint16_t addr, const char * data, size_t data_size) {
 
 static void i2c_handle_cmd_read(uint16_t, const char *, size_t);
 
-void i2c_recv(uint16_t addr, const char * data, size_t data_size) {
+void i2c_recv(const char * data, size_t data_size) {
 	if (i2c_dump_recv) {
-		printf("[%s] addr(0x%02x) data(0x%02lx):\n", __FUNCTION__, addr, data_size);
+		printf("[%s] data(0x%02lx):\n", __FUNCTION__, data_size);
 		xxd(data, data_size);
 	}
 }

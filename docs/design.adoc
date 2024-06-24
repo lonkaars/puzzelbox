@@ -13,7 +13,7 @@ structure, and has three levels of design 'depth':
 
 Only design details deemed relevant by the document authors are documented
 here. Low-level implementation details such as API interfaces, code paths and
-workarounds are documented inside the source code repository.
+workarounds are documented with Doxygen cite:[pbdox].
 
 [[sec:lv1]]
 == Top-Level
@@ -34,8 +34,9 @@ main controller and multiple puzzle modules. Other notable details include:
   time of writing (2024-03-11), and this project only describes the interface
   between the puzzle box and the bomb.
 * The puzzle box is capable of bidirectional communication over Wi-Fi. This
-  connection is used to configure the puzzle box before gameplay or modify its
-  state during gameplay.
+	connection is used to configure the puzzle box before gameplay or modify its
+	state during gameplay (<<reqs.adoc#req:edge-manual-reset>>,
+	<<reqs.adoc#req:edge-skip-puzzle>>).
 
 [[fig:system-top]]
 .Context block diagram
@@ -92,8 +93,11 @@ The criteria for a puzzle module controller are:
 The research document cite:[research] compares various microcontrollers
 matching these criteria. As a result of this research, the Microchip
 PIC16F15276 was selected as the recommended microcontroller for future puzzle
-modules. The current development hardware utilizes an ESP32-PICO-D4 module, so
-the puzzle module software is written with portability in mind.
+modules.
+
+NOTE: The current development hardware still utilizes an ESP32-PICO-D4 module,
+but due to a misunderstanding cite:[handover], Arduino boards were used to
+implement the puzzle modules.
 
 [[fig:puzzle-module-top]]
 .Generic puzzle module top-level block diagram
@@ -117,7 +121,7 @@ the following:
 ** Aggregating game state for all installed puzzle modules.
 ** Reading and writing game state for all installed puzzle modules.
 ** Broadcasting updates internally.
-* Serve TCP socket connections for—
+* Serve a TCP socket for—
 ** Sending state updates
 ** Manually updating game state
 ** Integration with the bomb
@@ -147,6 +151,12 @@ The requirements document compares various microcontrollers that fit these
 criteria. After this comparison, the decision was made to utilize the Raspberry
 Pi Pico W as main controller during development.
 
+NOTE: This was written while we did not know the puzzle bus specifically
+requires slave-addressible I^2^C multi-master controllers to function properly.
+The RP2040 was still used, but has required implementing workarounds. Please
+see the handover report for more details on how this impacted the project
+cite:[handover].
+
 [[fig:main-controller-top]]
 .Main controller top-level block diagram
 image::img/main-controller-top.svg[]
@@ -165,12 +175,28 @@ peripherals is handled through a central I^2^C bus referred to as the 'puzzle
 bus'. This design was again carried over from the hardware design from the
 21-22 group cite:[2122_design].
 
-The only notable difference made this year was the removal of the
-"HarwareInterrupt" line1{empty}footnote:[This is not a typo], which was
-connected but not utilized cite:[research].
+The previously specified "HarwareInterrupt" line1{empty}footnote:[This is not a
+typo] has been removed this year, as it was connected but not utilized
+cite:[research].
 
-Address definitions and protocol specifications are further detailed in
-<<sec:lv2-bus>>.
+To optimize for flexibility and extensibility, the puzzle bus should ideally
+function as a network (similar to the CAN bus), to allow puzzle modules to send
+responses asynchronously. I^2^C was initially chosen for the puzzle bus due to
+its widespread availability on microcontrollers and in peripherals, but does
+not provide any network-like capabilities.
+
+To archive network-like capabilities, the puzzle bus is specified to be a
+multi-master I^2^C bus, and all puzzle modules are specified to be I^2^C
+multi-master controllers that are slave-addressible. The multi-master part is
+required to prevent I^2^C transmissions from being corrupted in the event of a
+bus collision, and the slave-addressible part is required to both send and
+receive messages on the same controller. This can also be achieved by using 2
+I^2^C peripherals on the same bus simultaniously, which is what the RP2040
+currently uses. This has required changes to the wiring, and is the only
+hardware-level specification made this year.
+
+More details on the messages sent over the puzzle bus are described in
+<<sec:lv3-pb-messages>>.
 
 === Power supply
 
@@ -202,15 +228,39 @@ image::img/system-bus.svg[]
 [[sec:lv2]]
 == Modules
 
-This section elaborates on the top-level specifications from <<sec:lv1>> with
-additional hardware specifications and software design decisions.
+This section elaborates on the top-level (hardware) specifications from
+<<sec:lv1>> with software design decisions.
 
-=== Puzzle Module Framework
+=== Software module separation
 
-This subsection defines aspects of the 'puzzle framework' and the interface
-that allows puzzle modules to integrate with this framework. All communication
-described within this subsection refers to 'internal' communication between the
-main controller and puzzle module.
+[[fig:software-component]]
+.Software library components
+image::img/software-components.svg[]
+
+<<fig:software-component>> shows a software component diagram with an example
+Arduino-based puzzle module, the main controller and the puzzle box client.
+Notable properties of this architecture include:
+
+* The Arduino SDK, FreeRTOS, mpack, and RPI Pico SDK are external libraries,
+	and with the exception of mpack, these have not been modified.
+* The puzzle bus driver is split into a (portable) standalone library and a
+	module-specific driver.
+* There is a separate library for (de)serializing I^2^C commands for
+	transmission over TCP.
+
+The specific decision to split the puzzle bus driver and create a separate
+I^2^C over TCP library was made to avoid writing a command set separate from
+internal puzzle bus commands (i.e. one specific to TCP connections). This
+architecture allows the puzzle box client to not only control the main
+controller, but also directly inspect puzzle bus messages for debugging and
+development of future puzzle modules (<<reqs.adoc#req:main-static>>).
+
+=== Puzzle module framework
+
+This subsection defines aspects of the 'puzzle framework': the interface that
+allows puzzle modules to integrate with the puzzle bus and main controller. All
+communication described within this subsection refers to 'internal'
+communication between the main controller and puzzle modules on the puzzle bus.
 
 The puzzle framework is the foundation of the puzzle box software, and is
 designed to facilitate the following:
@@ -222,107 +272,198 @@ designed to facilitate the following:
 * Provide abstracted interfaces to allow for easy integration of the puzzle box
   as part of a larger whole (<<reqs.adoc#req:main-interface>>).
 
+==== Guidelines
+
+The following assumptions are made about puzzle modules:
+
+* Puzzle modules do not take initiative to send REQ or SET commands. They only
+	respond to requests from the main controller.
+* Puzzle modules are I^2^C multi-master controllers that are slave-addressable
+	in master mode.
+* The main controller is a puzzle module, but with the following differences:
+** The main controller is allowed to initiate REQ and SET commands.
+** The main controller's global state is an aggregation of all other puzzle
+	 modules, and ignores STATE SET commands.
+
+These guidelines allow the following simplifications:
+
+* Puzzle modules may assume they are always being addressed by the main
+	controller (this simplifies the message architecture).
+* The puzzle bus may be shared with regular I^2^C peripherals without causing
+	issues.
+
+[[sec:lv3-pb-messages]]
+==== Messages
+
+Puzzle bus messages consist of a simple header and variable data. This format
+is shown in <<tab:pb-msg-fmt>>. The messages are (de)serialized using mpack.
+This choice was made after considering various alternative options for sending
+structured messages cite:[research]. Note that all messages are sent as I^2^C
+writes. Due to this, the I^2^C address of a message sender is included in the
+header to facilitate network-like features over I^2^C.
+
+[[tab:pb-msg-fmt]]
+.Puzzle bus message format
+[%autowidth]
+|===
+| Field | Content
+
+| type | Command type (see <<tab:pb-msg-types>>)
+| action | Command action (see <<tab:pb-msg-actions>>)
+| sender | I^2^C address of sender
+| cmd | Command data (dependent on ``type``)
+|===
+
+<<tab:pb-msg-types>> lists the different command types.
+
+[[tab:pb-msg-types]]
+.Puzzle bus command types
+[cols="10,~"]
+|===
+| Type | Description
+
+| ``MAGIC``
+| The MAGIC command effectively serves as a 'secret handshake' (using a _magic_
+value) which is used to distinguish between puzzle modules and unrelated I^2^C
+devices.
+
+| ``STATE``
+| The STATE command is used by puzzle modules to inform the main controller about
+their global state (see <<sec:framework-state>>). The main controller
+aggregates the states of all connected puzzle modules and exchanges this
+aggregated state with the puzzle modules to indicate when the entire puzzle box
+is solved.
+
+| ``PROP``
+| The PROP command type is used for exchanging arbitrary data between puzzle
+modules and/or the puzzle box client (pbc) over the <<sec:main-bridge,TCP
+bridge>>. These properties are not used by the puzzle framework, and serve as
+an extensible interface for puzzle module developers to use.
+|===
+
+<<tab:pb-msg-actions>> lists the different command actions.
+
+[[tab:pb-msg-actions]]
+.Puzzle bus command actions
+[cols="10,~"]
+|===
+| ``REQ``
+| Mark the command as a request. The receiver of this message is expected to
+return a message of the same type, but with a RES action.
+
+| ``RES``
+| Mark the command as a response to a REQ message. All REQ messages should be
+followed by a RES message.
+
+| ``SET``
+| Request a change / write. The SET command is never followed by a RES.
+|===
+
+Please note that not all commands define behavior for all actions (e.g. there
+is no MAGIC SET command).
+
+Only the MAGIC and STATE commands are required for the puzzle box to function.
+The PROP command was created to allow future expansion without modifying the
+main controller firmware (<<reqs.adoc#req:main-static>>).
+
+The specific format of the 'cmd' field from <<tab:pb-msg-fmt>> is different for
+each command type, and is for this reason only documented in-code using
+Doxygen cite:[pbdox].
+
 [[sec:framework-state]]
 ==== State
 
 All puzzle modules implement the same state machine shown in
-<<fig:puzzle-module-common-state>>. Note that the arrows indicate state
-transitions that a puzzle module may take on its own. The main controller also
-allows the game operator to manually set the current state as one of the states
-on the right half of <<fig:puzzle-module-common-state>>, which can be used to
-skip a puzzle if a player is stuck (<<reqs.adoc#req:edge-skip-puzzle>>) or
-reset a game if it is malfunctioning (<<reqs.adoc#req:edge-manual-reset>>).
-
-Puzzle modules start in the 'uninitialized' state, where they repeatedly send
-messages to the main controller (see <<sec:main-bridge>>). The state transition
-from 'uninitialized' to 'reset' is forced by the main controller upon
-initialization. States on the right half of <<fig:puzzle-module-common-state>>
-are used during gameplay.
+<<fig:puzzle-module-common-state>>. Note that continuous arrows indicate state
+transitions that a puzzle module may take on its own, while dashed arrows
+indicate state transitions forced by the main controller. The main controller
+also allows the game operator to manually set a module's global state to one of
+these states, which can be used to skip a puzzle if a player is stuck
+(<<reqs.adoc#req:edge-skip-puzzle>>) or reset a game if it is malfunctioning
+(<<reqs.adoc#req:edge-manual-reset>>).
 
 [[fig:puzzle-module-common-state]]
 .Global puzzle module state machine
 image::img/puzzle-module-common-state.svg[]
 
+Puzzle modules start in the 'uninitialized' state, where they wait until the
+main controller sends a REQ STATE command. Receiving this command indicates to
+the puzzle module that it was successfully registered by the main controller,
+and that it may transition from the 'uninitialized' state to the 'idle' state.
+This process is also shown in <<fig:sequence-puzzle-module-init>>.
+
 The state machine described in <<fig:puzzle-module-common-state>> is referred
-to as the global state. Puzzle modules may also declare and define custom state
-variables, which is referred to as auxiliary state. These auxiliary state
-variables contain game-specific variables; e.g. the binary state of each button
-on the Neotrellis puzzle module, or the last passcode entered on the vault
-puzzle module.
+to as the global state. Puzzle modules may also declare and define custom
+variables, which are referred to as properties. These properties may contain
+game-specific variables; e.g. the binary state of each button on the Neotrellis
+puzzle module, or the last passcode entered on the vault puzzle module.
 
-Separating the auxiliary state from the generic state allows the main
-controller to handle the auxiliary state as an arbitrary blob, which allows for
-future expansion without modification of the main controller software.
+Separating properties from the global state allows the main controller to
+handle these property values as an arbitrary blob, which allows for future
+expansion without modification of the main controller software
+(<<reqs.adoc#req:main-static>>).
 
-==== Commands
+==== I^2^C addresses
 
-The puzzle module framework describes the following commands:
+The RPI Pico SDK prohibits the use of I^2^C addresses reserved by the I^2^C
+specification. This means different addresses from previous years are used.
+These addresses are indexed in the code in a header exposed by the puzzle bus
+driver cite:[pbdox].
 
-* Read state
-* Write state
-* Update
-
-The 'read' and 'write' commands are used to communicate both types of state
-defined in <<sec:framework-state>>.
-
-To avoid issues caused by state synchronization memory consumption on the main
-controller and puzzle modules, auxiliary state is only stored on each
-respective puzzle module's controller. Only global state is cached on the main
-controller to reduce the number of back-and-forth messages required for state
-updates.
-
-These commands are sufficient to realize the puzzle box, but this means that
-the puzzle box would rely heavily on polling-based updates internally. To solve
-this, the 'update' command was created. This command is utilized for various
-kinds of updates, including registering new puzzle modules and updating global
-state.
+The I^2^C addresses are also used to determine the puzzle sequence (i.e. the
+order in which puzzle modules are set to the 'playing' state). The sequence is
+determined by the main controller on startup, and consists of the connected
+puzzle modules' addresses in descending order (i.e. highest address first).
+Note that the same I^2^C address may be used by two different puzzle modules,
+but this will make it impossible for them to be used simultaniously.
 
 === Main Controller
 
 This subsection defines the function and state of the main controller.
 
-==== State
+==== Initializing puzzle modules
 
-The global state of the main controller is an aggregated version of all
-installed puzzle modules and is defined by the state machine shown in
-<<fig:main-controller-state>>.
+The main controller sends a MAGIC REQ command to every I^2^C address on
+startup. Puzzle modules start in the 'uninitialized' state (see
+<<fig:puzzle-module-common-state>>), during which they do nothing. Puzzle
+modules in this state are still able to reply to requests, including MAGIC REQ
+commands. When the main controller receives a MAGIC RES command, the I^2^C
+address of the sender is added to an internal list of I^2^C devices that are
+considered puzzle modules.
 
-[[fig:main-controller-state]]
-.Main controller global state machine
-image::img/main-controller-state.svg[]
-
-The following list describes when each state is active:
-
-* If all puzzle modules are in the 'reset' state, the main controller is also
-  in the 'reset' state.
-* If all puzzle modules are in the 'solved' state, the main controller is also
-  in the 'solved' state.
-* Else, the main controller is in the 'playing' state.
-
-Because the main controller's state is only dependent on the installed puzzle
-modules' state, it is only updated when a puzzle module sends an update
-notification. When the global state of the main module changes, an update
-broadcast is sent to all puzzle modules.
-
-To simplify the commands used to control the puzzle box, the list of installed
-puzzle modules is stored as an auxiliary state variable of the main controller.
-
-==== Initializing Puzzle Modules
-
-Puzzle modules start in the 'uninitialized' state (see
-<<fig:puzzle-module-common-state>>). In this state, the puzzle module
-repeatedly sends an update command to the main controller. The main controller
-responds to this message by sending a 'set state' command with the target state
-as 'reset' as reply. Before this response is sent, the main controller
-internally adds the bus address of the puzzle module requesting to be
-initialized to the list of installed puzzle modules. From the main controller's
-point of view, this reply marks the moment the initialization is complete.
+After the initial handshake request 'wave' (bus scan), all puzzle modules are
+repeatedly asked for their global state using a STATE REQ command. This request
+also includes the global state of the requesting puzzle module, which is always
+the main controller (under normal circumstances). Upon receiving the first
+STATE REQ command, a puzzle module knows it has been registered successfully by
+the main controller, and transitions into the 'idle' state.
 
 [[fig:sequence-puzzle-module-init]]
 .Puzzle module initialization sequence diagram
 image::img/sequence-puzzle-module-init.svg[]
 
 (Activated lifeline indicates the module is no longer in 'uninitialized' state)
+
+==== State
+
+The global state of the main controller is an aggregation of all installed
+puzzle modules and is defined by the state machine shown in
+<<fig:main-controller-state>>.
+
+[[fig:main-controller-state]]
+.Main controller global state machine
+image::img/main-controller-state.svg[]
+
+The main controller global state is determined using the following rules:
+
+* If all puzzle modules are in the 'idle' state, the main controller is also in
+	the 'idle' state.
+* If all puzzle modules are in the 'solved' state, the main controller is also
+	in the 'solved' state.
+* Else, the main controller is in the 'playing' state.
+
+Due to the repeated STATE REQ commands, this effectively informs the puzzle
+modules when the puzzle box is completely solved.
 
 [[sec:main-bridge]]
 ==== Bridge
@@ -333,99 +474,30 @@ The Raspberry Pi 3B+ used as main controller during the 21-22 run of the
 project set up a Wi-Fi Mesh network cite:[2122_design] to communicate with the
 puzzle box. This year's main controller (Raspberry Pi Pico W cite:[research])
 uses a standard 802.11b/g/n access point instead
-(<<reqs.adoc#req:main-802-11-ap>>).
+(<<reqs.adoc#req:main-802-11-ap>>) as it is a simpler solution.
 
-On this network, the main controller hosts a server that serves TCP socket
-connections. These sockets directly forward all internal messages sent to the
-main controller bidirectionally (i.e. on behalf of the main controller).
-Detailed specifications on the TCP socket server are in
-<<sec:lv3-remote-control>>.
+On this network, the main controller hosts a server that serves a TCP socket
+connection. This socket is used to directly forward all internal messages sent
+on the puzzle bus to the puzzle box client bidirectionally (on behalf of the
+main controller).
 
-==== Operating System
+Due to the separation of the puzzle bus driver code into a standalone library
+for reading/writing puzzle bus commands, and a puzzle module-specific code, the
+puzzle box client is able to read/write raw I^2^C commands directly. A separate
+library was made for serializing I^2^C messages so they can be sent over the
+TCP connection. This library is documented in detail using Doxygen cite:[pbdox].
 
-The research document cite:[research] contains a detailed comparison of various
-operating systems that are suitable to realize the functionality described in
-this section. After this comparison, the decision was made to utilize FreeRTOS
-as the operating system on the Rasberry Pi Pico W.
+==== Operating system
 
-[[sec:lv2-bus]]
-=== Puzzle Bus
+Because the main controller needs to asynchronously handle state exchanges with
+puzzle modules while serving a TCP socket connection, the decision to use a
+task scheduler was made. Due to the requirement that most software should be
+covered by the standard curriculum (<<reqs.adoc#req:curriculum-cov>>), this
+choice was between FreeRTOS and Zephyr. FreeRTOS was chosen because it is the
+simplest solution, and because the features Zephyr offers over FreeRTOS are
+already present in the Raspberry Pi Pico SDK.
 
-This section describes the addresses and communication protocol used on the
-puzzle bus. These specifications only apply to messages sent internally in the
-puzzle box, as messages forwarded by the bridge (see <<sec:main-bridge>>) are
-sent on behalf of the main controller.
-
-==== Addresses
-
-The I^2^C addresses remain mostly unchanged from the 20-21 group's
-implementation cite:[2021_design]. Addresses that were modified since the 20-21
-implementation are marked with an asterisk. Table 1 lists these addresses for
-reference. These addresses are also used to identify specific puzzle modules.
-
-.I^2^C address reference
-[%autowidth]
-|===
-| Peripheral | Address
-
-| Main controller | 0x10*
-| Neotrellis puzzle controller | 0x11*
-| Neotrellis button matrix | 0x12*
-| Software puzzle controller | 0x03
-| Hardware puzzle controller | 0x04
-| Vault puzzle controller | 0x06
-|===
-
-==== Messages
-
-All messages sent over the puzzle bus have a similar format. This format is
-shown in Table 2. Notable details include:
-
-The 'subject' field does not have to match the I^2^C address of the message
-sender or recipient
-
-Property 0x00 stores a module's global state
-
-.Puzzle bus message format
-[%autowidth]
-|===
-| Field | Content
-
-| Command | Enum: read, write, update
-| Subject | I^2^C address (7-bit)
-| Property | Address (8-bit)
-| Value | Byte string (variable length)
-|===
-
-The messages described in Table 2 are (de)serialized using Google's protocol
-buffer library. This choice was made after considering various alternative
-options for sending structured messages cite:[research].
-
-<<fig:sequence-puzzle-module-init>> shows an example of how messages are
-exchanged for the initialization of a puzzle module.
-
-<<fig:sequence-puzzle-finish>> shows an example exchange where the last puzzle
-module (A) is solved while (B) is already solved.
-
-. First, module A sets it's own state to 'solved' and subsequently informs the
-  main controller of this change.
-. As a result of this update notification, the main controller queries puzzle
-  module A for its new global state.
-. Once the main controller has received and confirmed that all puzzle module
-  global states are set to 'solved', the main controller sets its own state to
-  'solved', and broadcasts an update message to all puzzle modules.
-. As a result of the update message from the main controller, module B requests
-  the main controller's new global state, and is able to verify that all puzzle
-  modules have been solved.
-
-In this example, module B could be the vault puzzle module, which displays a
-code when the entire puzzle box is solved.
-
-[[fig:sequence-puzzle-finish]]
-.Puzzle box finish sequence diagram
-image::img/sequence-puzzle-finish.svg[]
-
-=== NeoTrellis Puzzle
+=== NeoTrellis puzzle
 
 This subsection defines aspects of the 'NeoTrellis puzzle' module and gives a
 summary of how the puzzle is meant to be solved. This module will be created to
@@ -439,8 +511,8 @@ button. The way to solve this puzzle is by dimming every Neopixel in the 8x8
 matrix. This is done by clicking on a button, which switches the state of the
 Neopixel underneath the pixel and the Neopixels in each cardinal direction from
 the pressed button. This means that if a Neopixel was on and the button was
-pressed it will turn off and vice-versa. A visual example can be found in
-Appendix B.
+pressed it will turn off and vice-versa.
+// A visual example can be found in Appendix B.
 
 ==== Puzzle inputs & outputs
 
@@ -452,7 +524,7 @@ diagram has been shown in <<fig:neotrellis-io>>.
 .NeoTrellis puzzle in-out
 image::img/neotrellis-io.png[]
 
-=== Software Puzzle
+=== Software puzzle
 
 This subsection defines aspects of the 'software puzzle' module and gives a
 summary of how the puzzle is meant to be solved. This module will be created to
@@ -468,7 +540,8 @@ have their own logical circuit engraved in the box, and the 6 input ports on
 the right side of the puzzle have a letter (A through F) engraved in the box.
 The way to solve the puzzle is by connecting the banana plug cable from an
 input port on the left side of the puzzle to the corresponding input port on
-the right side of the puzzle. An example of this can be found in Appendix C.
+the right side of the puzzle.
+// An example of this can be found in Appendix C.
 
 When the puzzle starts, the participants of the game will have 6 code-fragments
 written on paper, corresponding to the logical circuits on the puzzle box. The
@@ -492,9 +565,9 @@ code. This is shown in <<fig:software-io>>.
 .Software puzzle in-out
 image::img/software-io.png[]
 
-=== Hardware Puzzle
+=== Hardware puzzle
 
-==== Hardware Puzzle gameplay
+==== Hardware puzzle gameplay
 
 The hardware puzzle has a logic gate puzzle engraved on the front plate of the
 puzzle box. To solve the puzzle, the user must set the toggle switches to the
@@ -512,7 +585,7 @@ The inputs and outputs of this puzzle have been taken from the design document
 of the previous group which worked on this project (21-22). This input and
 output diagram has been shown in Figure ??.
 
-=== Vault Puzzle
+=== Vault puzzle
 
 ==== Vault puzzle gameplay
 
@@ -528,41 +601,5 @@ clicked the vault resets and they need to start over from the beginning.
 [[fig:vault-io]]
 .Vault puzzle in-out
 image::img/vault-io.png[]
-
-=== Bomb device
-
-==== Bomb device connection
-
-The bomb connects to a WiFi-network using the 802.11x standard. The hub hosts
-an interface that can be used to identify all the devices including the bomb
-and also pair it to a puzzlebox. After that the game can be set-up and a given
-countdown time and start time will be communicated to the bomb over a TCP
-socket connection. The hub generates a code that will be send to both the
-puzzlebox and bomb so that both devices know what would be or can be expected.
-
-The bomb can also use the WiFi connection to sync. the time.
-
-==== Device inputs & outputs
-
-[[fig:bomb-io]]
-.Bomb device in-out
-image::img/bomb-io.png[]
-
-== Components
-[[sec:lv3-remote-control]]
-=== Remote Control
-==== Socket Server
-==== Socket Commands
-=== Neotrellis Puzzle
-=== Game state diagrams, activity diagrams (if applicable)
-=== Software Puzzle
-=== Hardware Puzzle
-=== Vault Puzzle
-
-[appendix]
-== NeoTrellis puzzle example
-
-[appendix]
-== Software puzzle example
 
 include::share/footer.adoc[]

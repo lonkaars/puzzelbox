@@ -7,7 +7,7 @@
 #include "config.h"
 #include "init.h"
 #include "tasks.h"
-#include "pbdrv.h"
+#include "pb-mod.h"
 
 static void init_stdio() {
 	stdio_init_all();
@@ -29,11 +29,15 @@ static void init_wifi() {
 }
 
 static void init_i2c() {
-	gpio_set_function(CFG_SDA_PIN, GPIO_FUNC_I2C);
-	gpio_set_function(CFG_SCL_PIN, GPIO_FUNC_I2C);
+	gpio_set_function(CFG_SDA0_PIN, GPIO_FUNC_I2C);
+	gpio_set_function(CFG_SCL0_PIN, GPIO_FUNC_I2C);
+	gpio_set_function(CFG_SDA1_PIN, GPIO_FUNC_I2C);
+	gpio_set_function(CFG_SCL1_PIN, GPIO_FUNC_I2C);
 
-	gpio_pull_up(CFG_SDA_PIN);
-	gpio_pull_up(CFG_SCL_PIN);
+	gpio_pull_up(CFG_SDA0_PIN);
+	gpio_pull_up(CFG_SCL0_PIN);
+	gpio_pull_up(CFG_SDA1_PIN);
+	gpio_pull_up(CFG_SCL1_PIN);
 
 	pb_setup();
 }

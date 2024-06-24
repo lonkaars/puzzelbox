@@ -108,7 +108,7 @@ describes all functional requirements of the puzzle box.
 === The puzzle box
 
 .Puzzle box specifications
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -165,7 +165,7 @@ describes all functional requirements of the puzzle box.
 === The bomb
 
 .Bomb specifications
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -198,7 +198,7 @@ describes all functional requirements of the puzzle box.
 === The game
 
 .General game specifications
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -239,7 +239,7 @@ describes all functional requirements of the puzzle box.
 ==== NeoTrellis puzzle
 
 .NeoTrellis puzzle requirements
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -262,7 +262,7 @@ describes all functional requirements of the puzzle box.
 ==== Software puzzle
 
 .Software puzzle requirements
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -297,7 +297,7 @@ The specific details for this puzzle are not present in the previous
 documentation. Due to time constraints, the section will be left empty.
 
 .Automation puzzle requirements
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -308,7 +308,7 @@ documentation. Due to time constraints, the section will be left empty.
 ==== Hardware puzzle
 
 .Hardware puzzle requirements
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -397,7 +397,7 @@ documentation. Due to time constraints, the section will be left empty.
 ==== Vault puzzle
 
 .Vault puzzle requirements
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -447,7 +447,7 @@ documentation. Due to time constraints, the section will be left empty.
 === Battery
 
 .Battery requirements
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -464,7 +464,7 @@ documentation. Due to time constraints, the section will be left empty.
 === Network Communication
 
 .Communication requirements
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -477,7 +477,7 @@ documentation. Due to time constraints, the section will be left empty.
 
 === Framework
 
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -497,7 +497,7 @@ documentation. Due to time constraints, the section will be left empty.
 === Puzzle box hub
 
 .Puzzle box hub general requirements
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -516,7 +516,7 @@ technical specifications of the puzzle box.
 === Wireless communication
 
 .Wireless communication requirements
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -527,7 +527,7 @@ technical specifications of the puzzle box.
 === Framework
 
 .Development framework requirements
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -543,14 +543,17 @@ technical specifications of the puzzle box.
 | <<req:135>> | <<must>> |
 [[req:135,R-135]] Puzzle modules are initialized by the main controller module.
 
-| <<req:165>> | <<must>> |
+| <<req:165>> | <<wont>> |
 [[req:165,R-165]] Puzzle modules repeatedly send 'update' messages to the main controller while their global state is 'uninitialized'
+
+| <<req:curriculum-cov>> | <<should>> |
+[[req:curriculum-cov,R-169]] External software and libraries that are covered in the standard curriculum should be used where possible
 |===
 
 === Main controller
 
 .Main controller requirements
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -575,7 +578,7 @@ technical specifications of the puzzle box.
 
 === Puzzle module controller
 
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -601,7 +604,7 @@ technical specifications of the puzzle box.
 === Vault puzzle
 
 .Vault puzzle requirements
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -627,7 +630,7 @@ technical specifications of the puzzle box.
 === Bomb
 
 .Bomb requirements
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 
@@ -650,7 +653,7 @@ This section describes the aspects of the project which have been set as
 preconditions and cannot be changed.
 
 .Preconditions
-[cols="8h,~"]
+[cols="9h,~"]
 |===
 | ID | Precondition
 
@@ -666,7 +669,7 @@ preconditions and cannot be changed.
 This section lists requirements that apply to documentation produced during
 this project.
 
-[cols="8h,5h,~"]
+[cols="9h,6h,~"]
 |===
 | ID | <<tab:moscow,Pri.>> | Specification
 

@@ -1,0 +1,25 @@
+// vim:ft=doxygen
+/**
+\ingroup pb_drv
+\defgroup pb_drv_arduino Arduino
+\brief Arduino ATmega (w/ Arduino-CMake-Toolchain) driver
+
+This driver is known to work with the following MCUs:
+- ATmega328P (Arduino Uno)
+- ATmega2560 (Arduino Mega)
+
+\par Usage
+- Link the \c pbdrv-mod library with your main executable
+
+\note This driver is automatically enabled if the variable \c ARDUINO is
+defined in your CMakeLists.txt (it is by default when using
+Arduino-CMake-Toolchain).
+
+\note This driver automatically includes the \ref pb_ext_freertos
+"FreeRTOS extension" for deferring calls to \c pb_i2c_recv() from the I2C ISR.
+
+A complete example for this driver is available in the \ref puzzle/dummy
+folder.
+
+*/
+

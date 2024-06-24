@@ -2,11 +2,23 @@
 
 #include <stddef.h>
 
+/**
+ * \ingroup pbc
+ * \defgroup pbc_parse Parse
+ * \brief Debug \c send command parser utilities
+ * \{
+ */
+
+//! Internal field separator (i.e. whitespace delimiter)
 #define IFS " \t\n"
 
+//! Octal digit character set
 #define SET_OCT "01234567"
+//! Decimal digit character set
 #define SET_DEC "0123456789"
+//! Hexadecimal digit character set
 #define SET_HEX SET_DEC"abcdefABCDEF"
+//! (Hexadecimal) byte string character set
 #define SET_HEX_STR SET_HEX":"
 
 /**
@@ -39,4 +51,6 @@ char* consume_token(char * token, const char * ifs);
  * function if parsing fails
  */
 int strtodata(const char * str, char ** data, size_t * size);
+
+/// \}
 

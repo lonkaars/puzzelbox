@@ -1,7 +1,3 @@
-#ifndef ARDUINO
-#error This driver only works on the Arduino platform!
-#endif
-
 #include <Arduino.h>
 #include <Wire.h>
 #include <avr/delay.h>
@@ -42,7 +38,17 @@ static void pb_setup() {
 	Wire.onReceive(recv_event);
 }
 
+/**
+ * \ingroup pb_drv_arduino
+ * \warning This function includes a hard-coded 10ms delay before sending. This
+ * is to work around a weird issue where the Arduino pulls both SDA and SCL low
+ * while attempting to initiate an I2C transmission. We were able to verify
+ * that the Arduino correctly handles bus arbitration under a test scenario
+ * with 2 Uno's, but ran into issues while integrating the Arduino's with the
+ * RP2040.
+ */
 __weak void pb_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
+	vTaskDelay(10 / portTICK_PERIOD_MS); // prevent bus collisions
 	Wire.beginTransmission((int) addr);
 	Wire.write(buf, sz);
 	Wire.endTransmission(true);
@@ -64,7 +70,20 @@ void loop_task() {
 	}
 }
 
-//! Application entrypoint
+/**
+ * \ingroup pb_drv_arduino
+ * \brief Application entrypoint
+ *
+ * This function overrides the default (weak) implementation of the \c main()
+ * function in the Arduino framework. No additional setup is required to use
+ * this driver.
+ *
+ * \note I should really be able to use Arduino's initVariant function for
+ * this, but I can't seem to get it to link properly using the CMake setup in
+ * this repository. Overriding the main() function seems to work, and the
+ * USBCON thing in the default Arduino main() function isn't needed because
+ * puzzle modules are likely not using USB.
+ */
 int main(void) {
 	init(); // call arduino internal setup
 	setup(); // call regular arduino setup
@@ -73,12 +92,4 @@ int main(void) {
 	vTaskStartScheduler(); // start freertos scheduler
 	return 0;
 }
-
-/**
- * \note I should really be able to use Arduino's initVariant function for
- * this, but I can't seem to get it to link properly using the CMake setup in
- * this repository. Overriding the main() function seems to work, and the
- * USBCON thing in the default Arduino main() function isn't needed because
- * puzzle modules are likely not using USB.
- */
 

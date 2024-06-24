@@ -57,7 +57,7 @@ static char* rl_completion_entries(const char *text, int state) {
 	if (state == 0) i = 0;
 
 	while (i < cmds_length) {
-		struct cmd cmd = cmds[i];
+		cmd_t cmd = cmds[i];
 		i++;
 		if (strncmp(text, cmd.name, strlen(text)) == 0) {
 			return strdup(cmd.name);
@@ -119,24 +119,25 @@ int rl_word(const char * line, int cursor) {
 	return word;
 }
 
+/// \internal
 typedef struct {
 	const char * word;
-	const char ** suggestions;
+	const char ** options;
 } __rl_complete_list_data_t;
-char** rl_complete_list(const char * word, const char ** suggestions) {
+char** rl_complete_list(const char * word, const char ** options) {
 	__rl_complete_list_data_t data = {
 		.word = word,
-		.suggestions = suggestions,
+		.options = options,
 	};
 	return rl_completion_matches((char *) &data, [](const char * text, int state) -> char * {
 		__rl_complete_list_data_t data = *(__rl_complete_list_data_t *) text;
 		static size_t i = 0;
 		if (state == 0) i = 0;
 
-		while (data.suggestions[i] != NULL) {
-			const char * suggestion = data.suggestions[i++];
-			if (strncmp(data.word, suggestion, strlen(data.word)) == 0)
-				return strdup(suggestion);
+		while (data.options[i] != NULL) {
+			const char * option = data.options[i++];
+			if (strncmp(data.word, option, strlen(data.word)) == 0)
+				return strdup(option);
 		}
 		return NULL;
 	});

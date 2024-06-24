@@ -1,17 +1,49 @@
 #pragma once
 
+/**
+ * \ingroup pbc
+ * \defgroup pbc_cmd Commands
+ * \brief Commands within \ref pbc
+ *
+ * \note A manpage is available containing end-user usage instructions inside
+ * the \ref client folder in the source code repository. This page contains the
+ * internal code documentation for the commands defined in \c pbc.
+ *
+ * \{
+ */
+
 #include <stddef.h>
 
-typedef void cmd_handle_t(char *);
-typedef char** cmd_complete_t(const char*, int, int);
+/**
+ * \internal
+ * \brief Command handler function
+ *
+ * \param line Remaining text after command name on command line
+ */
+typedef void cmd_handle_t(char * line);
+/**
+ * \internal
+ * \brief Command completion function
+ *
+ * \param text Current word to complete
+ * \param start Index in \c rl_line_buffer of cursor position
+ * \param end End index of \p text in \c rl_line_buffer
+ *
+ * \return Array of \c char* with suggestions. The array is terminated by a
+ * NULL pointer.
+ */
+typedef char** cmd_complete_t(const char* text, int start, int end);
 
-struct cmd {
-	cmd_handle_t * handle;
-	const char* name;
-	const char* info;
-	cmd_complete_t * complete;
-};
-typedef struct cmd cmd_t;
+/**
+ * \internal
+ * \brief Command definition struct
+ */
+typedef struct {
+	cmd_handle_t * handle; //!< Handler function (required)
+	const char* name; //!< Command name (required)
+	const char* info; //!< Command info (shown in help command) (optional = NULL)
+	cmd_complete_t * complete; //!< Completion function (optional = NULL)
+} cmd_t;
 
 cmd_handle_t cmd_exit;
 cmd_handle_t cmd_test;
@@ -23,6 +55,7 @@ cmd_handle_t cmd_skip;
 cmd_handle_t cmd_dump;
 cmd_complete_t cmd_dump_complete;
 
+//! Commands
 static const cmd_t cmds[] = {
 	{
 		.handle = cmd_exit,
@@ -68,5 +101,9 @@ static const cmd_t cmds[] = {
 	},
 #endif
 };
+
+//! Number of commands defined in \c cmds
 static const size_t cmds_length = sizeof(cmds) / sizeof(cmds[0]);
+
+/// \}
 
