@@ -5,7 +5,7 @@
 
 /**
  * \ingroup pbc
- * \defgroup pbc_sock sock
+ * \defgroup pbc_sock Socket
  * \brief TCP socket handling
  * \{
  */

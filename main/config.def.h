@@ -4,8 +4,33 @@
 
 /**
  * \ingroup main
- * \defgroup main_config config
+ * \defgroup main_config Config
  * \brief Configuration options
+ *
+ * The main controller firmware is configured statically (i.e. through
+ * compile-time defined options). Because the configuration is likely to
+ * contain Wi-Fi credentials, this file is not tracked under version control.
+ *
+ * Before compiling the main controller fimrware, a file (`config.h`) must be
+ * created by the user with the following format:
+ *
+ * ```c
+ * #pragma once
+ *
+ * // define non-default options here
+ *
+ * #include "config.def.h"
+ * ```
+ *
+ * \note `config.def.h` contains preprocessor logic that tries to ensure a
+ * correct configuration. The default configuration has the following settings:
+ * - Wi-Fi is disabled (prints a warning during compilation because it was not
+ *   explicitly disabled by the user)
+ * - The TCP server is disabled (due to Wi-Fi being disabled)
+ *
+ * \note The exact default values of each configuration option, and all
+ * available options are listed below.
+ *
  * \{
  */
 

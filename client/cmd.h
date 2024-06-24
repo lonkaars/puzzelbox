@@ -2,8 +2,13 @@
 
 /**
  * \ingroup pbc
- * \defgroup pbc_cmd cmd
+ * \defgroup pbc_cmd Commands
  * \brief Commands within \ref pbc
+ *
+ * \note A manpage is available containing end-user usage instructions inside
+ * the \ref client folder in the source code repository. This page contains the
+ * internal code documentation for the commands defined in \c pbc.
+ *
  * \{
  */
 

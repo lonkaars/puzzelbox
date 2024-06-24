@@ -5,7 +5,7 @@
 
 /**
  * \ingroup pbc
- * \defgroup pbc_i2c i2c
+ * \defgroup pbc_i2c I2C
  * \brief I2C abstraction functions
  * \{
  */

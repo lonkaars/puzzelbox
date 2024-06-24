@@ -4,8 +4,8 @@
 
 /**
  * \ingroup pbc
- * \defgroup pbc_parse parse
- * \brief Debug send command parser utilities
+ * \defgroup pbc_parse Parse
+ * \brief Debug \c send command parser utilities
  * \{
  */
 
