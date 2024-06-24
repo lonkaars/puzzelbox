@@ -1,8 +1,9 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_NeoTrellis.h>
-#include "lib/pbdrv/pb-types.h"
-#include "lib/pbdrv/pb-mod.h"
+#include "pb-types.h"
+#include "pb-mod.h"
+#include "pb.h"
 
 #define MATRIX_SIZE 8
 #define LED_COLOR_ON 0x0000FF // Color of the LEDs in ON state
@@ -11,14 +12,13 @@
 #define LED_COLOR_ORANGE 0xFFA500 // Orange color for IDLE state
 
 Adafruit_NeoTrellis t_array[MATRIX_SIZE / 4][MATRIX_SIZE / 4] = {
-	{Adafruit_NeoTrellis(0x2E), Adafruit_NeoTrellis(0x2F)},
-	{Adafruit_NeoTrellis(0x30), Adafruit_NeoTrellis(0x32)}
+	{ Adafruit_NeoTrellis(PB_ADDR_ADA_NEO_1), Adafruit_NeoTrellis(PB_ADDR_ADA_NEO_2) },
+	{ Adafruit_NeoTrellis(PB_ADDR_ADA_NEO_3), Adafruit_NeoTrellis(PB_ADDR_ADA_NEO_4) },
 };
 
 Adafruit_MultiTrellis trellis((Adafruit_NeoTrellis *)t_array, MATRIX_SIZE / 4, MATRIX_SIZE / 4);
 
 bool neoMatrix[MATRIX_SIZE][MATRIX_SIZE]; // To track state of each pixel
-
 
 unsigned long previousMillis = 0;
 const long interval = 500; // Interval at which to blink (milliseconds)
