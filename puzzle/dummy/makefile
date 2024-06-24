@@ -4,5 +4,5 @@ include ../../lazy.mk
 
 export SERIAL_PORT ?= /dev/ttyACM0
 flash: upload;
-upload-main: $(TARGET)
+upload: $(TARGET)
 
