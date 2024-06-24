@@ -12,6 +12,9 @@
 #include "pb-buf.h"
 #include "pb-send.h"
 
+// stolen from lib/pico-sdk/src/rp2_common/hardware_i2c/i2c.c
+#define i2c_reserved_addr(addr) (((addr) & 0x78) == 0 || ((addr) & 0x78) == 0x78)
+
 i2c_addr_t modules[CFG_PB_MOD_MAX];
 size_t modules_size = 0;
 
@@ -21,6 +24,9 @@ static void bus_scan() {
 	// check for all 7-bit addresses
 	uint16_t addr_max = 1 << 7;
 	for (uint16_t addr = 0x00; addr < addr_max; addr++) {
+		if (i2c_reserved_addr(addr)) continue;
+		if (addr == PB_MOD_ADDR) continue;
+
 		pb_i2c_send(addr, (uint8_t *) buf.data, buf.size);
 	}
 
