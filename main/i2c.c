@@ -12,7 +12,7 @@
 #include "pb-buf.h"
 #include "pb-send.h"
 
-static pb_global_state_t _global_state = PB_GS_IDLE; 
+static pb_global_state_t _global_state = PB_GS_IDLE;
 pb_puzzle_module_t modules[CFG_PB_MOD_MAX];
 // stolen from lib/pico-sdk/src/rp2_common/hardware_i2c/i2c.c
 #define i2c_reserved_addr(addr) (((addr) & 0x78) == 0 || ((addr) & 0x78) == 0x78)
@@ -33,17 +33,7 @@ static void bus_scan() {
 	pb_buf_free(&buf);
 }
 
-static void state_exchange() {
-	
-
-	for (size_t i = 0; i < modules_size; i++) {
-		pb_buf_t buf = pb_send_state_req();
-		
-		pb_buf_free(&buf);
-	}
-}
-
-void update_state() {
+static void update_state() {
 	// TODO: Add calculation(?) to get global state
 	// all states idle == idle -> set first address as playingz
 	// all states solved == solved
@@ -56,10 +46,10 @@ void update_state() {
 	for (size_t i = 0; i < modules_size; i++) {
 		module_state = modules[i].state;
 		if (module_state != PB_GS_SOLVED)
-			solved == false;	
-		
+			solved = false;
+
 		if (module_state == PB_GS_PLAYING)
-			playing == true;
+			playing = true;
 	}
 
 	// set state if no further processing is needed
@@ -74,7 +64,7 @@ void update_state() {
 	// IF no module playing, get/set next module THAT IS NOT SOLVED to playing
 	// and set mc state to playing
 	// pb_i2c_send(addr, buff.msg, buff.size)
-	
+
 	for (size_t i = 0; i < modules_size; i++) {
 		module_state = modules[i].state;
 		if (module_state == PB_GS_IDLE) {
@@ -84,6 +74,14 @@ void update_state() {
 			return;
 		}
 	}
+}
+
+static void state_exchange() {
+	update_state();
+	pb_buf_t buf = pb_send_state_req();
+	for (size_t i = 0; i < modules_size; i++)
+		pb_i2c_send(modules[i].sender, (uint8_t *) buf.data, buf.size);
+	pb_buf_free(&buf);
 }
 
 void bus_task() {
@@ -120,7 +118,7 @@ void pb_route_cmd_magic_res(pb_msg_t * msg) {
 void pb_route_cmd_state_res(pb_msg_t * msg) {
 	pb_cmd_state_t * cmd = msg->cmd;
 	i2c_addr_t sender = msg->sender;
-	
+
 	// update sender state
 	for( size_t i = 0; i < modules_size; i++ ) {
 		if (modules[i].sender == sender) {
