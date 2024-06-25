@@ -130,3 +130,25 @@ void pb_hook_mod_state_write(pb_global_state_t state) {
 	_global_state = state;
 }
 
+void pb_route_cmd_prop_req(pb_msg_t * msg) {
+	// send modules using buf
+	pb_cmd_prop_t cmd = msg->cmd;
+
+	pb_buf_t buf;
+
+	if(cmd == "PROPID_AJHDKADLHL") {
+		pb_send_reply(msg,buf);
+	}
+
+	pb_buf_free(buf);
+}
+
+void pb_route_cmd_prop_set(pb_msg_t * msg) {
+	// scan bus again.
+	pb_cmd_prop_t cmd = msg->cmd;
+
+	if(cmd == "") {
+
+	}
+}
+
