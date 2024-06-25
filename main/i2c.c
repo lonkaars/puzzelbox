@@ -12,8 +12,13 @@
 #include "pb-buf.h"
 #include "pb-send.h"
 
+typedef struct {
+	i2c_addr_t sender; //!< I2C address of sender
+	pb_global_state_t state; //!< global state
+} puzzle_module_t;
+
 static pb_global_state_t _global_state = PB_GS_IDLE;
-pb_puzzle_module_t modules[CFG_PB_MOD_MAX];
+puzzle_module_t modules[CFG_PB_MOD_MAX];
 // stolen from lib/pico-sdk/src/rp2_common/hardware_i2c/i2c.c
 #define i2c_reserved_addr(addr) (((addr) & 0x78) == 0 || ((addr) & 0x78) == 0x78)
 size_t modules_size = 0;
@@ -100,8 +105,10 @@ void bus_task() {
  */
 void pb_route_cmd_magic_res(pb_msg_t * msg) {
 	if (modules_size == CFG_PB_MOD_MAX) return;
-	pb_puzzle_module_t tmp_module = {msg->sender, PB_GS_NOINIT};
-	modules[modules_size++] = tmp_module;
+	modules[modules_size++] = (puzzle_module_t) {
+		.sender = msg->sender,
+		.state = PB_GS_NOINIT,
+	};
 	printf("i2c: registered puzzle module w/ address 0x%02x\n", msg->sender);
 }
 
