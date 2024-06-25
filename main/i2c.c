@@ -149,9 +149,9 @@ void pb_route_cmd_prop_set(pb_msg_t * msg) {
 	pb_cmd_prop_t * cmd = msg->cmd;
 	if(cmd->propid != PB_MOD_MAIN_PROP_MODS) return;
 
-	bus_scan();
-
-	puzzle_module_t modules[CFG_PB_MOD_MAX] = {};
 	size_t modules_size = 0;
+	puzzle_module_t modules[CFG_PB_MOD_MAX] = {};
+
+	bus_scan();
 }
 
