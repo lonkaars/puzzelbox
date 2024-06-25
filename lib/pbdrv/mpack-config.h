@@ -13,7 +13,7 @@
 #define MPACK_MEMCMP pb_memcmp
 
 // more reasonable buffer size (all messages are small)
-#define MPACK_BUFFER_SIZE 256
+#define MPACK_BUFFER_SIZE 64
 #define MPACK_STACK_SIZE MPACK_BUFFER_SIZE
 #define MPACK_PAGE_SIZE MPACK_BUFFER_SIZE
 
