@@ -37,6 +37,8 @@
 #define PB_ADDR_MOD_VAULT 0x24
 //! Automation puzzle module I2C address
 #define BUSADDR_MOD_AUTOMATION 0x25
+//! Smoketest puzzle module I2C address
+#define PB_ADDR_MOD_SMOKETEST 0x26
 //! Dummy puzzle module I2C address
 #define PB_ADDR_MOD_DUMMY 0x69
 
