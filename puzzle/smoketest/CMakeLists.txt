@@ -10,8 +10,8 @@ add_compile_definitions(DEBUG)
 
 # arduino
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/lib/Arduino-CMake-Toolchain/Arduino-toolchain.cmake)
-set(ARDUINO_BOARD "Arduino Mega or Mega 2560 [avr.mega]")
-#set(ARDUINO_BOARD "Arduino Uno [avr.uno]")
+# set(ARDUINO_BOARD "Arduino Mega or Mega 2560 [avr.mega]")
+set(ARDUINO_BOARD "Arduino Uno [avr.uno]")
 
 # freertos
 add_library(freertos_config INTERFACE)
@@ -19,7 +19,7 @@ target_include_directories(freertos_config SYSTEM INTERFACE .)
 set(FREERTOS_PORT GCC_ATMEGA)
 set(FREERTOS_HEAP 4)
 
-project(pb_mod_vault C CXX)
+project(pb_mod_smoketest C CXX)
 
 add_subdirectory(lib/pbdrv)
 add_subdirectory(lib/FreeRTOS-Kernel)
@@ -35,7 +35,6 @@ target_link_libraries(main PUBLIC
 target_link_arduino_libraries(main PUBLIC
 	core
 	Wire
-	TM1637
 	)
 
 target_enable_arduino_upload(main)
