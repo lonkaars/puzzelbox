@@ -7,6 +7,7 @@
 #include <hardware/i2c.h>
 
 #include "i2c.h"
+#include "lib/pbdrv/mod/main/mod.h"
 #include "pb-mod.h"
 #include "config.h"
 #include "pb-buf.h"
@@ -18,10 +19,10 @@ typedef struct {
 } puzzle_module_t;
 
 static pb_global_state_t _global_state = PB_GS_IDLE;
-puzzle_module_t modules[CFG_PB_MOD_MAX];
+puzzle_module_t modules[CFG_PB_MOD_MAX] = {};
+size_t modules_size = 0;
 // stolen from lib/pico-sdk/src/rp2_common/hardware_i2c/i2c.c
 #define i2c_reserved_addr(addr) (((addr) & 0x78) == 0 || ((addr) & 0x78) == 0x78)
-size_t modules_size = 0;
 
 static void bus_scan() {
 	pb_buf_t buf = pb_send_magic_req();
@@ -132,23 +133,25 @@ void pb_hook_mod_state_write(pb_global_state_t state) {
 
 void pb_route_cmd_prop_req(pb_msg_t * msg) {
 	// send modules using buf
-	pb_cmd_prop_t cmd = msg->cmd;
+	// pb_cmd_prop_t cmd = msg->cmd;
 
-	pb_buf_t buf;
+	// pb_buf_t buf;
 
-	if(cmd == "PROPID_AJHDKADLHL") {
-		pb_send_reply(msg,buf);
-	}
+	// if(cmd == "PROPID_AJHDKADLHL") {
+	// 	pb_send_reply(msg,buf);
+	// }
 
-	pb_buf_free(buf);
+	// pb_buf_free(buf);
 }
 
 void pb_route_cmd_prop_set(pb_msg_t * msg) {
-	// scan bus again.
-	pb_cmd_prop_t cmd = msg->cmd;
+	// if incorrect property id -> stop
+	pb_cmd_prop_t * cmd = msg->cmd;
+	if(cmd->propid != PB_MOD_MAIN_PROP_MODS) return;
 
-	if(cmd == "") {
+	bus_scan();
 
-	}
+	puzzle_module_t modules[CFG_PB_MOD_MAX] = {};
+	size_t modules_size = 0;
 }
 
