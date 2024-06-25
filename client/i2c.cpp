@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "i2ctcpv1.h"
+#include "rl.h"
 #include "sock.h"
 #include "xxd.h"
 
@@ -37,8 +38,10 @@ static void i2c_handle_cmd_read(uint16_t, const char *, size_t);
 
 void i2c_recv(const char * data, size_t data_size) {
 	if (i2c_dump_recv) {
+		_rl_printf_start();
 		printf("[%s] data(0x%02lx):\n", __FUNCTION__, data_size);
 		xxd(data, data_size);
+		_rl_printf_stop();
 	}
 }
 

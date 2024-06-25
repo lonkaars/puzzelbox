@@ -10,24 +10,22 @@
 #include "cmd.h"
 #include "parse.h"
 
-void rl_printf(const char *fmt, ...) {
+static char* saved_line;
+static int saved_point, saved_end;
+
+void _rl_printf_start() {
 	// save line
-	char* saved_line = rl_copy_text(0, rl_end);
-	int saved_point = rl_point;
-	int saved_end = rl_end;
+	saved_line = rl_copy_text(0, rl_end);
+	saved_point = rl_point;
+	saved_end = rl_end;
 
 	// clear line
 	rl_save_prompt();
 	rl_replace_line("", 0);
 	rl_redisplay();
+}
 
-	// printf
-	va_list args;
-	va_start(args, fmt);
-	vprintf(fmt, args);
-	va_end(args);
-
-	// restore line
+void _rl_printf_stop() {
 	rl_restore_prompt();
 	rl_replace_line(saved_line, 0);
 	rl_point = saved_point;
@@ -35,6 +33,17 @@ void rl_printf(const char *fmt, ...) {
 	rl_redisplay();
 
 	free(saved_line);
+}
+
+void rl_printf(const char *fmt, ...) {
+	_rl_printf_start();
+
+	va_list args;
+	va_start(args, fmt);
+	vprintf(fmt, args);
+	va_end(args);
+
+	_rl_printf_stop();
 }
 
 static void cli_cmd(char* cmd) {

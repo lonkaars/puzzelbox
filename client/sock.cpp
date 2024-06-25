@@ -79,8 +79,6 @@ void PBSocket::sock_task() {
 		char buf[80];
 		ssize_t bytes = read(_fd, buf, sizeof(buf));
 
-		rl_printf("%.*s", bytes, buf);
-		continue;
 		if (bytes == -1) {
 			rl_printf("error: %s (%d)\n", strerror(errno), errno);
 			break;

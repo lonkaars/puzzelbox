@@ -27,6 +27,11 @@ int cli_main();
  * completes.
  */
 void rl_printf(const char * fmt, ...);
+//! Store line for printing without disrupting readline prompt
+void _rl_printf_start();
+//! Restore line stored by \c _rl_printf_start()
+void _rl_printf_stop();
+
 /**
  * \brief Get the index of the word currently under the cursor
  *
