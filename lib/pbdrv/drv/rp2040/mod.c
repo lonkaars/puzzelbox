@@ -43,6 +43,8 @@ void pb_setup() {
 }
 
 __weak void pb_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
+	pb_hook_i2c_send(addr, buf, sz);
+
 	// false to write stop condition to i2c bus
 	i2c_write_timeout_us(PB_I2C_M, addr, buf, sz, false, PB_TIMEOUT_US);
 }
