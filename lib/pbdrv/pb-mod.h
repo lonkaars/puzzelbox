@@ -62,10 +62,8 @@ void pb_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz);
 
 /// \}
 
-/// \ingroup pb_hook
-/// \{
-
 /**
+ * \ingroup pb_hook
  * \defgroup pb_hook_mod_state State
  * \brief Provide your own global state variable
  *
@@ -96,6 +94,7 @@ void pb_hook_mod_state_write(pb_global_state_t state);
 /// \}
 
 /**
+ * \ingroup pb_hook
  * \defgroup pb_hook_i2c I2C
  * \brief Intercept incoming/outgoing I2C messages
  *
@@ -104,8 +103,6 @@ void pb_hook_mod_state_write(pb_global_state_t state);
 
 void pb_hook_i2c_recv(const uint8_t * buf, size_t sz);
 void pb_hook_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz);
-
-/// \}
 
 /// \}
 
