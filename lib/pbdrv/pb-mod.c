@@ -18,9 +18,8 @@ __weak void pb_hook_mod_state_write(pb_global_state_t state) {
 	_global_state = state;
 }
 
-__weak void pb_hook_i2c_recv(const uint8_t * data, size_t sz) { }
 __weak void pb_i2c_recv(const uint8_t * data, size_t sz) {
-	pb_hook_i2c_recv(data, sz);
+	if (pb_hook_i2c_recv(data, sz)) return;
 
 	pb_buf_t buf = {
 		.data = (char *) data,
@@ -35,5 +34,11 @@ __weak void pb_i2c_recv(const uint8_t * data, size_t sz) {
 	pb_msg_free(msg);
 }
 
-__weak void pb_hook_i2c_send(i2c_addr_t i2c_addr, const uint8_t * data, size_t sz) { }
+__weak bool pb_hook_i2c_recv(const uint8_t * data, size_t sz) {
+	return false;
+}
+
+__weak bool pb_hook_i2c_send(i2c_addr_t i2c_addr, const uint8_t * data, size_t sz) {
+	return false;
+}
 

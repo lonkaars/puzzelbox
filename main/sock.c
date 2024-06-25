@@ -14,7 +14,7 @@
 struct netconn* current_connection = NULL;
 i2ctcp_msg_t recv_msg;
 
-void pb_hook_i2c_send(i2c_addr_t addr, const uint8_t * data, size_t data_size) {
+static void sock_dump_msg(i2c_addr_t addr, const uint8_t * data, size_t data_size) {
 	if (current_connection == NULL) return;
 
 	i2ctcp_msg_t send_msg = {
@@ -35,7 +35,17 @@ void pb_hook_i2c_send(i2c_addr_t addr, const uint8_t * data, size_t data_size) {
 	free(buf);
 }
 
-static void i2c_recv_fwd(i2c_addr_t addr, const uint8_t * data, size_t data_size) {
+bool pb_hook_i2c_send(i2c_addr_t addr, const uint8_t * data, size_t data_size) {
+	sock_dump_msg(addr, data, data_size);
+	return addr == PB_MOD_ADDR; // stop processing message if it is sent to myself
+}
+
+bool pb_hook_i2c_recv(const uint8_t * data, size_t data_size) {
+	sock_dump_msg(0x00, data, data_size);
+	return false;
+}
+
+static void sock_fwd_msg(i2c_addr_t addr, const uint8_t * data, size_t data_size) {
 	if (addr == PB_MOD_ADDR) {
 		// addressed to me = act as recieved
 		pb_i2c_recv(data, data_size);
@@ -57,7 +67,7 @@ void recv_handler(struct netconn* conn, struct netbuf* buf) {
 		if (i2ctcp_read(&recv_msg, data, len) != 0) continue;
 
 		// forward received message to puzzle bus
-		i2c_recv_fwd(recv_msg.addr, (uint8_t *) recv_msg.data, recv_msg.length);
+		sock_fwd_msg(recv_msg.addr, (uint8_t *) recv_msg.data, recv_msg.length);
 		free(recv_msg.data);
 	} while (netbuf_next(buf) >= 0);
 

@@ -48,6 +48,8 @@ static void pb_setup() {
  * RP2040.
  */
 __weak void pb_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
+	if (pb_hook_i2c_send(addr, buf, sz)) return;
+
 	vTaskDelay(10 / portTICK_PERIOD_MS); // prevent bus collisions
 	Wire.beginTransmission((int) addr);
 	Wire.write(buf, sz);

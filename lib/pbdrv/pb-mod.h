@@ -101,8 +101,8 @@ void pb_hook_mod_state_write(pb_global_state_t state);
  * \{
  */
 
-void pb_hook_i2c_recv(const uint8_t * buf, size_t sz);
-void pb_hook_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz);
+bool pb_hook_i2c_recv(const uint8_t * buf, size_t sz);
+bool pb_hook_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz);
 
 /// \}
 

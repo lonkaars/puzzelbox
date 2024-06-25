@@ -1,10 +1,8 @@
-#include "pb.h"
-
-#include "pb.h"
-#include "pb-types.h"
-#include "pb-mod.h"
-#include "pb-send.h"
-#include "pb-buf.h"
+#include "../../pb.h"
+#include "../../pb-types.h"
+#include "../../pb-mod.h"
+#include "../../pb-send.h"
+#include "../../pb-buf.h"
 
 #include <hardware/i2c.h>
 #include <hardware/gpio.h>
@@ -43,7 +41,7 @@ void pb_setup() {
 }
 
 __weak void pb_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
-	pb_hook_i2c_send(addr, buf, sz);
+	if (pb_hook_i2c_send(addr, buf, sz)) return;
 
 	// false to write stop condition to i2c bus
 	i2c_write_timeout_us(PB_I2C_M, addr, buf, sz, false, PB_TIMEOUT_US);
