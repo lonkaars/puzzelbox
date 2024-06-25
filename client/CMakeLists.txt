@@ -23,12 +23,13 @@ add_executable(pbc
 	parse.cpp
 	xxd.c
 	i2c.cpp
+	mod.c
 	)
 
 target_link_libraries(pbc
 	i2ctcp
 	mpack
 	readline # this is such a common library that I did not bother adding it as a submodule
-	pbdrv
+	pbdrv-mod
 	)
 

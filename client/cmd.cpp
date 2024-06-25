@@ -4,12 +4,12 @@
 #include <string.h>
 
 #include "cmd.h"
-// #include "pb/types.h"
+#include "pb-types.h"
+#include "pb-buf.h"
+#include "pb-send.h"
 #include "rl.h"
 #include "i2c.h"
 #include "parse.h"
-
-// #include "pb/bus.h"
 
 char* consume_token(char* input, const char* ifs) {
 	strtok(input, ifs);
@@ -43,7 +43,17 @@ void cmd_help(char*) {
 }
 
 void cmd_send(char * addr_str) {
+	if (addr_str == NULL) {
+		printf("error: no address\n");
+		return;
+	}
+
 	char* data_str = consume_token(addr_str, IFS);
+
+	if (data_str == NULL) {
+		printf("error: no data\n");
+		return;
+	}
 
 	char* end;
 	uint16_t addr = strtol(addr_str, &end, 0);
@@ -67,13 +77,25 @@ void cmd_send(char * addr_str) {
 	free(data);
 }
 
-void cmd_reset(char*) {
+static void cmd_set_state(char * line, pb_global_state_t state) {
+	if (line == NULL) {
+		printf("error: no address\n");
+		return;
+	}
+	
+	i2c_addr_t addr = strtol(line, NULL, 0);
+
+	pb_buf_t buf = pb_send_state_set(state);
+	i2c_send(addr, buf.data, buf.size);
+	pb_buf_free(&buf);
 }
 
-void cmd_skip(char*) {
+void cmd_reset(char * line) {
+	cmd_set_state(line, PB_GS_IDLE);
 }
 
-void cmd_ls(char*) {
+void cmd_skip(char * line) {
+	cmd_set_state(line, PB_GS_SOLVED);
 }
 
 extern bool i2c_dump_send;

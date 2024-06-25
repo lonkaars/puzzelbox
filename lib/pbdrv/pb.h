@@ -15,6 +15,9 @@
 //! I2C bus timeout delay in microseconds
 #define PB_TIMEOUT_US (1e3 * PB_TIMEOUT_MS)
 
+//! Null address (used by client)
+#define PB_ADDR_NULL 0x00
+
 //! Adafruit NeoTrellis module 1 I2C address
 #define PB_ADDR_ADA_NEO_1 0x2E
 //! Adafruit NeoTrellis module 2 I2C address

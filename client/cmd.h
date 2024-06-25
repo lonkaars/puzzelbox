@@ -49,7 +49,6 @@ cmd_handle_t cmd_exit;
 cmd_handle_t cmd_test;
 cmd_handle_t cmd_help;
 cmd_handle_t cmd_reset;
-cmd_handle_t cmd_ls;
 cmd_handle_t cmd_send;
 cmd_handle_t cmd_skip;
 cmd_handle_t cmd_dump;
@@ -70,17 +69,12 @@ static const cmd_t cmds[] = {
 	{
 		.handle = cmd_reset,
 		.name = "reset",
-		.info = "set game state to 'idle' for one or more puzzle modules",
+		.info = "set a puzzle module's game state to 'idle'",
 	},
 	{
 		.handle = cmd_skip,
 		.name = "skip",
-		.info = "set game state to 'solved' for one or more puzzle modules",
-	},
-	{
-		.handle = cmd_ls,
-		.name = "ls",
-		.info = "list connected puzzle modules and their state",
+		.info = "set a puzzle module's game state to 'solved'",
 	},
 #ifdef DEBUG
 	{
