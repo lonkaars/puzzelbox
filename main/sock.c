@@ -14,7 +14,7 @@
 struct netconn* current_connection = NULL;
 i2ctcp_msg_t recv_msg;
 
-void i2c_send(uint16_t addr, const char * data, size_t data_size) {
+void pb_hook_i2c_send(i2c_addr_t addr, const uint8_t * data, size_t data_size) {
 	if (current_connection == NULL) return;
 
 	i2ctcp_msg_t send_msg = {
@@ -35,7 +35,7 @@ void i2c_send(uint16_t addr, const char * data, size_t data_size) {
 	free(buf);
 }
 
-static void i2c_recv_fwd(uint16_t addr, const uint8_t * data, size_t data_size) {
+static void i2c_recv_fwd(i2c_addr_t addr, const uint8_t * data, size_t data_size) {
 	if (addr == PB_MOD_ADDR) {
 		// addressed to me = act as recieved
 		pb_i2c_recv(data, data_size);
