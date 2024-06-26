@@ -75,16 +75,16 @@ void pb_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz);
  */
 
 /**
- * \brief global state read hook
- * \return current value of global state enum
+ * \brief Global state read hook
+ * \return Current value of global state enum
  *
  * The default implementation of this function uses an internal global state
  * variable in \ref pbdrv.
  */
 pb_global_state_t pb_hook_mod_state_read();
 /**
- * \brief global state write hook
- * \param state new value of global state enum
+ * \brief Global state write hook
+ * \param state New value of global state enum
  *
  * The default implementation of this function uses an internal global state
  * variable in \ref pbdrv.
@@ -101,7 +101,23 @@ void pb_hook_mod_state_write(pb_global_state_t state);
  * \{
  */
 
+/**
+ * \brief \c pb_i2c_recv() hook
+ *
+ * The default implementation of this function immediately returns \c false.
+ *
+ * \return \c false if execution should continue to the default handler, or \c
+ * true if it should stop (i.e. the message was handled).
+ */
 bool pb_hook_i2c_recv(const uint8_t * buf, size_t sz);
+/**
+ * \brief \c pb_i2c_send() hook
+ *
+ * The default implementation of this function immediately returns \c false.
+ *
+ * \return \c false if execution should continue to the default handler, or \c
+ * true if it should stop (i.e. the message was handled).
+ */
 bool pb_hook_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz);
 
 /// \}

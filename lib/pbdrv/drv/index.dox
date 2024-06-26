@@ -8,12 +8,17 @@ Like \ref pb_ext "extensions", drivers provide platform-specific
 implementations for various functions used in \ref pbdrv-mod.
 
 If there is no existing driver for your target, you may implement the following
-in order to use \ref pbdrv-mod:
+in order to use \ref "pbdrv-mod":
 
 - The \c pb_i2c_recv() function must be **called** for every received I2C
 	message
 - The \c pb_i2c_send() function must be **implemented** using the
 	platform/device-specific I2C write function
+	\note The \c pb_i2c_send() function should immediately call \c
+	pb_hook_i2c_send() before doing any further processing:
+	```c
+	if (pb_hook_i2c_send(i2c_addr, buf, sz)) return;
+	```
 
 */
 

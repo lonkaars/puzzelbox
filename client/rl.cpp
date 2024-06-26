@@ -128,18 +128,17 @@ int rl_word(const char * line, int cursor) {
 	return word;
 }
 
-/// \internal
 typedef struct {
 	const char * word;
 	const char ** options;
-} __rl_complete_list_data_t;
+} _rl_complete_list_data_t;
 char** rl_complete_list(const char * word, const char ** options) {
-	__rl_complete_list_data_t data = {
+	_rl_complete_list_data_t data = {
 		.word = word,
 		.options = options,
 	};
 	return rl_completion_matches((char *) &data, [](const char * text, int state) -> char * {
-		__rl_complete_list_data_t data = *(__rl_complete_list_data_t *) text;
+		_rl_complete_list_data_t data = *(_rl_complete_list_data_t *) text;
 		static size_t i = 0;
 		if (state == 0) i = 0;
 

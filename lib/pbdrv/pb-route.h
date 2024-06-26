@@ -140,10 +140,10 @@ void pb_route_cmd_magic_res(pb_msg_t * msg);
 /**
  * \brief \c pb_route_msg() hook
  *
- * The default implementation of this function immediately returns false.
+ * The default implementation of this function immediately returns \c false.
  *
- * \return \c true if execution should continue to the default handler, or \c
- * false if it should stop (i.e. the message was handled).
+ * \return \c false if execution should continue to the default handler, or \c
+ * true if it should stop (i.e. the message was handled).
  */
 bool pb_hook_route_msg(pb_msg_t * msg);
 

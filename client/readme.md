@@ -18,31 +18,12 @@ arbitrary data over the puzzle bus.
 - Request puzzle box state
 - Debug: send arbitrary messages
 
-## Building
+## Usage
 
-PBC is a standard CMake project.
-
-## Using
-
-See ./pbc.1 for usage.
-
-## Send data
-
-```
-     ADDRESS  DATA
-     v~~~     v~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-send 0x39     68:65:6c:6c:6f  44      0x20    'world'    33
-              ^~~~~~~~~~~~~~  ^~      ^~~~    ^~~~~~~    ^~
-              HEXSTR          NUMBER  NUMBER  STRING     NUMBER
-              (binary)        (dec)   (hex)   (literal)  (dec)
-```
-
-The data is concatenated, and may contain mixed types of literals
-
+See \ref pbc_cmd_usage "command usage" for individual command usage.
 
 ## WIP TODO
 
 - add enum to string functions in CLIENT ONLY
 - bug: tab completion for `dump` seems to print garbage sometimes
-- bug: the send command with an address but no data causes a segmentation fault
 

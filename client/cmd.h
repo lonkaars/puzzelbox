@@ -5,10 +5,6 @@
  * \defgroup pbc_cmd Commands
  * \brief Commands within \ref pbc
  *
- * \note A manpage is available containing end-user usage instructions inside
- * the \ref client folder in the source code repository. This page contains the
- * internal code documentation for the commands defined in \c pbc.
- *
  * \{
  */
 
@@ -45,13 +41,149 @@ typedef struct {
 	cmd_complete_t * complete; //!< Completion function (optional = NULL)
 } cmd_t;
 
+/**
+ * \anchor pbc_cmd_usage
+ * \name Command usage
+ * \{
+ */
+
+/**
+ * \brief \c exit command
+ *
+ * ```
+ * (pbc) exit
+ * ```
+ *
+ * Disconnect from the puzzle box and exit \c pbc. This command takes no
+ * arguments.
+ */
 cmd_handle_t cmd_exit;
+/**
+ * \brief \c test command
+ *
+ * ```
+ * (pbc) test
+ * ```
+ * 
+ * Send a test command containing the ASCII string "Hello world!" to I2C
+ * address 0x39. This command takes no arguments.
+ */
 cmd_handle_t cmd_test;
+/**
+ * \brief \c help command
+ *
+ * ```
+ * (pbc) help
+ * ```
+ *
+ * Print a list of available commands with descriptions. This command takes no
+ * arguments.
+ */
 cmd_handle_t cmd_help;
+/**
+ * \brief \c reset command
+ *
+ * ```
+ * (pbc) reset <mod>
+ * ```
+ * 
+ * Set a specific puzzle module's global state to *idle*. *mod* is the I2C
+ * address of the puzzle module to reset. This parameter may be specified in
+ * hexadecimal using a *0x* prefix or decimal.
+ *
+ */
 cmd_handle_t cmd_reset;
+/**
+ * \brief \c send command
+ *
+ * ```
+ * (pbc) send <addr> <data>
+ * ```
+ *
+ * Send arbitrary data specified by *data* to the I2C address specified by
+ * *addr*. *data* may consist of multiple arguments separated by \ref IFS, in
+ * which case the arguments are concatenated.
+ *
+ * The main controller will initiate an I2C write command if the address
+ * specified in *addr* does not match that of the main controller. If the
+ * addresses do match, the main controller interprets the message as if it were
+ * being addressed by another I2C controller.
+ *
+ * \par Example
+ * ```
+ *            ADDRESS  DATA
+ *            v~~~     v~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * (pbc) send 0x39     68:65:6c:6c:6f  44      0x20    'world'    33
+ *                     ^~~~~~~~~~~~~~  ^~      ^~~~    ^~~~~~~    ^~
+ *                     HEXSTR          NUMBER  NUMBER  STRING     NUMBER
+ *                     (binary)        (dec)   (hex)   (literal)  (dec)
+ * ```
+ *
+ * \par Datatypes
+ * \parblock
+ * - **NUMBER**
+ *
+ *   Numbers can be specified as decimal or hexadecimal using a "0x" prefix.
+ *   All numbers are unsigned. Decimal literals are always cast to 8-bit
+ *   integers, while hexadecimal literals are cast to the smallest type that
+ *   will fit the specified number. Numbers are always sent as little endian.
+ *   
+ *   Examples: `0` `123` `255` `0x10` `0x1245` `0xdeadBEEF`
+ *
+ * - **HEXSTR**
+ *
+ *   Hexadecimal string literals are specified by hexadecimal bytes separated
+ *   by colons. Each byte must be exactly 2 hexadecimal characters long and
+ *   followed by a colon (except for the last byte). The minimum length of a
+ *   hexstr is 2 bytes, as it must include at least a single colon.
+ *   
+ *   Examples: `de:ad:be:ef` `00:00`
+ *
+ * - **STRING**
+ *
+ *   A string literal starts and ends with a single quote. All characters within
+ *   this literal are sent as-is, and no escaping is possible.
+ *   
+ *   Examples: <code>'Hello world!'</code> <code>'string'</code> <code>'  hello
+ *   '</code>
+ *   
+ *   When double quotes are used instead of single quotes, the following escape
+ *   sequences are recognised and replaced with special characters:
+ *   |input|replacement|meaning|
+ *   |-|-|-|
+ *   |`\0`|0x00|null|
+ *   |`\t`|0x09|tab|
+ *   |`\n`|0x0a|newline|
+ *   |`\r`|0x0d|carriage return|
+ *   |`\\`|0x5c|backslash|
+ *   |`\"`|0x22|double quote|
+ *   |<code>\'</code>|0x27|single quote|
+ *
+ *   Examples: `"Hello world!\\0"` `"foo\\nbar"`
+ * \endparblock
+ */
 cmd_handle_t cmd_send;
+/**
+ * \brief \c skip command
+ *
+ * ```
+ * (pbc) skip <mod>
+ * ```
+ * 
+ * Set a specific puzzle module's global state to *solved*. *mod* is the I2C
+ * address of the puzzle module to skip. This parameter may be specified in
+ * hexadecimal using a *0x* prefix or decimal.
+ *
+ */
 cmd_handle_t cmd_skip;
+/**
+ * \brief \c dump command
+ */
 cmd_handle_t cmd_dump;
+
+/// \}
+
+//! \c dump completion function
 cmd_complete_t cmd_dump_complete;
 
 //! Commands

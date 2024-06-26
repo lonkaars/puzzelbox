@@ -71,10 +71,10 @@
 
 #ifdef CFG_NET_DISABLE
 #undef CFG_NET_COUNTRY
+//! Radio communications country
 #define CFG_NET_COUNTRY CYW43_COUNTRY_WORLDWIDE
 #endif
 #ifndef CFG_NET_COUNTRY
-//! Radio communications country
 #define CFG_NET_COUNTRY CYW43_COUNTRY_NETHERLANDS
 #endif
 /// \}

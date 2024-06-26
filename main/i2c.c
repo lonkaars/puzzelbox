@@ -12,6 +12,7 @@
 #include "pb-buf.h"
 #include "pb-send.h"
 
+//! Puzzle module handle
 typedef struct {
 	i2c_addr_t sender; //!< I2C address of sender
 	pb_global_state_t state; //!< global state

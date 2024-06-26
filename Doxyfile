@@ -4,10 +4,15 @@ PROJECT_NAME = "puzzlebox"
 OUTPUT_DIRECTORY = doxygen
 LAYOUT_FILE = docs/doxygen-layout.xml
 
+# read these files first (fixes broken links)
 INPUT += readme.md
+INPUT += lib/pbdrv/pb-mod.h
+INPUT += client/cmd.h
+
+# find remaining files
+INPUT += lib/pbdrv
 INPUT += lib/mpack
 INPUT += lib/i2ctcp
-INPUT += lib/pbdrv
 INPUT += client
 INPUT += main
 INPUT += puzzle
@@ -15,6 +20,7 @@ INPUT += puzzle
 EXCLUDE = lib/mpack/src
 EXCLUDE_PATTERNS = **/build
 EXCLUDE_SYMLINKS = YES
+EXCLUDE_SYMBOLS = _*
 
 FILE_PATTERNS = *.c *.cpp *.h *.hpp *.md *.dox
 RECURSIVE = YES
@@ -24,10 +30,12 @@ GENERATE_LATEX = NO
 ALIASES += I2C="I&sup2;C"
 INPUT_FILTER = "sed -e 's/\<I2C\>\|\<I<sup>2<\/sup>C\>/\\I2C/g'"
 
-USE_MDFILE_AS_MAINPAGE = readme.md
+USE_MDFILE_AS_MAINPAGE = ./readme.md
 HTML_INDEX_NUM_ENTRIES = 1 # collapse trees by default
 REPEAT_BRIEF = NO
 
 INTERNAL_DOCS = YES
 EXTRACT_STATIC = YES
+
+QUIET = YES
 

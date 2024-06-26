@@ -18,6 +18,7 @@
 class PBSocket {
 public:
 	PBSocket();
+	//! Constructor that immediately calls \c set_server()
 	PBSocket(const char * addr, uint16_t port);
 	virtual ~PBSocket();
 

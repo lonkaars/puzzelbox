@@ -47,11 +47,11 @@ static void pb_setup() {
  * with 2 Uno's, but ran into issues while integrating the Arduino's with the
  * RP2040.
  */
-__weak void pb_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
-	if (pb_hook_i2c_send(addr, buf, sz)) return;
+__weak void pb_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz) {
+	if (pb_hook_i2c_send(i2c_addr, buf, sz)) return;
 
 	vTaskDelay(10 / portTICK_PERIOD_MS); // prevent bus collisions
-	Wire.beginTransmission((int) addr);
+	Wire.beginTransmission((int) i2c_addr);
 	Wire.write(buf, sz);
 	Wire.endTransmission(true);
 	Wire.setWireTimeout(PB_TIMEOUT_US, true);

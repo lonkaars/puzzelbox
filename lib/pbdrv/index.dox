@@ -68,6 +68,11 @@ extend or conditionally replace the default handlers), without needing to
 completely overwrite the built-in handlers or understand the internals of \ref
 pbdrv-mod.
 
+The boolean value returned by some hooks (e.g. those under \ref pb_hook_route
+or \ref pb_hook_i2c) represents if the default handler should run after the
+hook returns. This allow you to conditionally 'catch' calls to their respective
+base functions by returning \c true.
+
 \}
 
 */
