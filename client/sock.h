@@ -52,7 +52,7 @@ private:
 	void sock_close();
 
 	//! Pointer to thread running \c sock_task()
-	std::thread* _thread = nullptr;
+	std::thread * _thread = nullptr;
 
 	/**
 	 * \brief IP address of server to connect to
@@ -69,7 +69,6 @@ private:
 };
 
 //! Singleton \c PBSocket instance
-extern PBSocket* sock;
+extern PBSocket * sock;
 
 /// \}
-

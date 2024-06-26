@@ -1,6 +1,6 @@
 #include <FreeRTOS.h>
-#include <task.h>
 #include <pico/cyw43_arch.h>
+#include <task.h>
 
 #include "blink.h"
 #include "config.h"
@@ -13,4 +13,3 @@ void blink_task() {
 		vTaskDelay(1000 / portTICK_PERIOD_MS);
 	}
 }
-

@@ -30,11 +30,11 @@ extern "C" {
  *
  * \return Amount of bytes read
  */
-size_t mpack_read_remaining_bytes(mpack_reader_t * reader, char * p, size_t count);
+size_t mpack_read_remaining_bytes(mpack_reader_t * reader, char * p,
+								  size_t count);
 
 /// \}
 
 #ifdef __cplusplus
 }
 #endif
-

@@ -1,16 +1,16 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
 #include <stdarg.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-#include <readline/readline.h>
 #include <readline/history.h>
+#include <readline/readline.h>
 
-#include "rl.h"
 #include "cmd.h"
 #include "parse.h"
+#include "rl.h"
 
-static char* saved_line;
+static char * saved_line;
 static int saved_point, saved_end;
 
 void _rl_printf_start() {
@@ -35,7 +35,7 @@ void _rl_printf_stop() {
 	free(saved_line);
 }
 
-void rl_printf(const char *fmt, ...) {
+void rl_printf(const char * fmt, ...) {
 	_rl_printf_start();
 
 	va_list args;
@@ -46,13 +46,12 @@ void rl_printf(const char *fmt, ...) {
 	_rl_printf_stop();
 }
 
-static void cli_cmd(char* cmd) {
+static void cli_cmd(char * cmd) {
 	cmd += strspn(cmd, IFS); // skip leading whitespace
-	char* line = consume_token(cmd, IFS);
+	char * line = consume_token(cmd, IFS);
 
 	for (size_t i = 0; i < cmds_length; i++) {
-		if (strncmp(cmds[i].name, cmd, strlen(cmd)) != 0)
-			continue;
+		if (strncmp(cmds[i].name, cmd, strlen(cmd)) != 0) continue;
 
 		cmds[i].handle(line);
 		return;
@@ -61,7 +60,7 @@ static void cli_cmd(char* cmd) {
 	printf("unknown command!\n");
 }
 
-static char* rl_completion_entries(const char *text, int state) {
+static char * rl_completion_entries(const char * text, int state) {
 	static size_t i = 0;
 	if (state == 0) i = 0;
 
@@ -76,7 +75,7 @@ static char* rl_completion_entries(const char *text, int state) {
 	return NULL;
 }
 
-static char** rl_attempted_completion(const char * text, int start, int end) {
+static char ** rl_attempted_completion(const char * text, int start, int end) {
 	// do not suggest filenames
 	rl_attempted_completion_over = 1;
 
@@ -90,7 +89,8 @@ static char** rl_attempted_completion(const char * text, int start, int end) {
 	for (size_t i = 0; i < cmds_length; i++) {
 		cmd_t cmd = cmds[i];
 		if (cmd.complete == NULL) continue;
-		if (strncmp(cmd.name, rl_line_buffer + cmd_start, cmd_len) != 0) continue;
+		if (strncmp(cmd.name, rl_line_buffer + cmd_start, cmd_len) != 0)
+			continue;
 		return cmd.complete(text, start, end);
 	}
 
@@ -99,7 +99,7 @@ static char** rl_attempted_completion(const char * text, int start, int end) {
 }
 
 int cli_main() {
-	char* input = NULL;
+	char * input = NULL;
 	rl_attempted_completion_function = rl_attempted_completion;
 
 	while (1) {
@@ -111,7 +111,7 @@ int cli_main() {
 		add_history(input);
 
 		cli_cmd(input);
-	}	
+	}
 
 	return EXIT_SUCCESS;
 }
@@ -132,22 +132,22 @@ typedef struct {
 	const char * word;
 	const char ** options;
 } _rl_complete_list_data_t;
-char** rl_complete_list(const char * word, const char ** options) {
+char ** rl_complete_list(const char * word, const char ** options) {
 	_rl_complete_list_data_t data = {
 		.word = word,
 		.options = options,
 	};
-	return rl_completion_matches((char *) &data, [](const char * text, int state) -> char * {
-		_rl_complete_list_data_t data = *(_rl_complete_list_data_t *) text;
-		static size_t i = 0;
-		if (state == 0) i = 0;
+	return rl_completion_matches(
+		(char *) &data, [](const char * text, int state) -> char * {
+			_rl_complete_list_data_t data = *(_rl_complete_list_data_t *) text;
+			static size_t i = 0;
+			if (state == 0) i = 0;
 
-		while (data.options[i] != NULL) {
-			const char * option = data.options[i++];
-			if (strncmp(data.word, option, strlen(data.word)) == 0)
-				return strdup(option);
-		}
-		return NULL;
-	});
+			while (data.options[i] != NULL) {
+				const char * option = data.options[i++];
+				if (strncmp(data.word, option, strlen(data.word)) == 0)
+					return strdup(option);
+			}
+			return NULL;
+		});
 }
-

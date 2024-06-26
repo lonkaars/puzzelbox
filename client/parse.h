@@ -17,9 +17,9 @@
 //! Decimal digit character set
 #define SET_DEC "0123456789"
 //! Hexadecimal digit character set
-#define SET_HEX SET_DEC"abcdefABCDEF"
+#define SET_HEX SET_DEC "abcdefABCDEF"
 //! (Hexadecimal) byte string character set
-#define SET_HEX_STR SET_HEX":"
+#define SET_HEX_STR SET_HEX ":"
 
 /**
  * \brief modify \p token to point to the first token when broken up on \p ifs
@@ -34,7 +34,7 @@
  *
  * \return the remaining data after \p token and the first \p ifs
  */
-char* consume_token(char * token, const char * ifs);
+char * consume_token(char * token, const char * ifs);
 
 /**
  * \brief convert string with literals into raw data
@@ -53,4 +53,3 @@ char* consume_token(char * token, const char * ifs);
 int strtodata(const char * str, char ** data, size_t * size);
 
 /// \}
-

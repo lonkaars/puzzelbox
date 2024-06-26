@@ -2,12 +2,12 @@
 
 #include <mpack.h>
 
+#include "pb-mem.h"
 #include "pb-msg.h"
 #include "pb-serial.h"
-#include "pb-mem.h"
 
 pb_buf_t pb_msg_write(const pb_msg_t * msg) {
-	pb_buf_t buf = { 0 };
+	pb_buf_t buf = {0};
 	if (msg == NULL) return buf;
 
 	buf.data = pb_malloc(MPACK_BUFFER_SIZE);
@@ -43,4 +43,3 @@ void pb_msg_free(pb_msg_t * msg) {
 	// free message container that was created in \p pb_msg_read
 	pb_free(msg);
 }
-

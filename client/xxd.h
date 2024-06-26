@@ -23,4 +23,3 @@ void xxd(const char * data, size_t size);
 #ifdef __cplusplus
 }
 #endif
-

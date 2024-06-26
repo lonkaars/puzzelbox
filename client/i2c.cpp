@@ -6,11 +6,11 @@
 #include "sock.h"
 #include "xxd.h"
 
-#include "pb.h"
 #include "pb-buf.h"
+#include "pb-mod.h"
 #include "pb-msg.h"
 #include "pb-types.h"
-#include "pb-mod.h"
+#include "pb.h"
 
 #ifdef DEBUG
 bool i2c_dump_send = true;
@@ -27,7 +27,7 @@ void i2c_send(uint16_t addr, const char * data, size_t data_size) {
 		.length = data_size,
 	};
 
-	char* packed;
+	char * packed;
 	size_t size;
 	if (!i2ctcp_write(&msg, &packed, &size)) return;
 
@@ -66,9 +66,9 @@ void i2c_dump(const i2ctcp_msg_t * msg) {
 	_rl_printf_start();
 
 	const char * direction = send ? "send" : "recv";
-	printf("[I2C %s] 0x%02x -> 0x%02x data(0x%02lx):\n", direction, sender, receiver, msg->length);
+	printf("[I2C %s] 0x%02x -> 0x%02x data(0x%02lx):\n", direction, sender,
+		   receiver, msg->length);
 	xxd(msg->data, msg->length);
 
 	_rl_printf_stop();
 }
-

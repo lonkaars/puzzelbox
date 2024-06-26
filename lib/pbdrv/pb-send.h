@@ -1,7 +1,7 @@
 #pragma once
 
-#include "pb-types.h"
 #include "pb-buf.h"
+#include "pb-types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -130,4 +130,3 @@ pb_buf_t pb_send_magic_res();
 #ifdef __cplusplus
 }
 #endif
-

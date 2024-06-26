@@ -55,4 +55,3 @@ int rl_word(const char * line, int cursor);
 char ** rl_complete_list(const char * word, const char * options[]);
 
 /// \}
-

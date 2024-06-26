@@ -1,8 +1,8 @@
 #pragma once
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,9 +37,10 @@ extern "C" {
 //! I2C over TCP message (v1)
 typedef struct {
 	uint16_t addr; //!< I2C address
-	char * data;   //!< message content
+	char * data; //!< message content
 	size_t length; //!< message size
-	size_t _rdata; //!< \private remaining bytes to read until message is complete
+	size_t
+		_rdata; //!< \private remaining bytes to read until message is complete
 } i2ctcp_msg_t;
 
 /**
@@ -96,4 +97,3 @@ bool i2ctcp_write(const i2ctcp_msg_t * target, char ** buf, size_t * buf_sz);
 #ifdef __cplusplus
 }
 #endif
-

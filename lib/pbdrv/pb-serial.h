@@ -83,4 +83,3 @@ pb_ser_free_t pb_ser_free_cmd_magic;
 #ifdef __cplusplus
 }
 #endif
-

@@ -1,7 +1,7 @@
+#include <netinet/in.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
-#include <netinet/in.h>
 
 #include "parse.h"
 
@@ -25,15 +25,14 @@ static int parse_string(const char * str, char * data, size_t * offset) {
 	for (i = 1; i < len && str[i] != '\0'; i++, *offset += 1) {
 		char c = str[i];
 
-		if (c == closing)
-			return i + 1; // +1 for closing quote
+		if (c == closing) return i + 1; // +1 for closing quote
 
 		if (escape && c == '\\') {
 			char x = str[i + 1];
-			if      (x == '0')  c = '\0';
-			else if (x == 't')  c = '\t';
-			else if (x == 'n')  c = '\n';
-			else if (x == 'r')  c = '\r';
+			if (x == '0') c = '\0';
+			else if (x == 't') c = '\t';
+			else if (x == 'n') c = '\n';
+			else if (x == 'r') c = '\r';
 			else if (x == '\\') c = '\\';
 			else if (x == '\"') c = '\"';
 			else if (x == '\'') c = '\'';
@@ -41,8 +40,7 @@ static int parse_string(const char * str, char * data, size_t * offset) {
 			i++;
 		}
 
-		if (data != NULL)
-			data[*offset] = c;
+		if (data != NULL) data[*offset] = c;
 	}
 
 	return -i;
@@ -53,7 +51,7 @@ static int parse_hexstr(const char * str, char * data, size_t * offset) {
 	int i = 0;
 
 	// check if token contains at least one colon
-	const char* colon = strchr(str, ':');
+	const char * colon = strchr(str, ':');
 	if (colon == NULL) return -i;
 	if (colon >= str + len) return -i;
 
@@ -63,11 +61,9 @@ static int parse_hexstr(const char * str, char * data, size_t * offset) {
 
 	size_t c = 0;
 	while (c < len) { // count bytes in bytestring
-		if (strspn(str + c, SET_HEX) != 2)
-			return -i -c;
+		if (strspn(str + c, SET_HEX) != 2) return -i - c;
 
-		if (data != NULL)
-			data[*offset] = strtol(str + c, NULL, 16) & 0xff;
+		if (data != NULL) data[*offset] = strtol(str + c, NULL, 16) & 0xff;
 
 		c += 2;
 		*offset += 1;
@@ -92,16 +88,16 @@ static int parse_number(const char * str, char * data, size_t * offset) {
 	if (len > 2 && strncmp(str, "0x", 2) == 0) { // hexadecimal prefix
 		base = 16;
 		i += 2;
-	}/* else if (len > 1 && strncmp(str, "0", 1) == 0) { // octal prefix
+	} /* else if (len > 1 && strncmp(str, "0", 1) == 0) { // octal prefix
 		base = 8;
 		i += 1;
 	}*/
 
-	const char* set;
+	const char * set;
 	// if (base == 8) set = SET_OCT;
 	if (base == 10) set = SET_DEC;
 	if (base == 16) set = SET_HEX;
-	
+
 	size_t len_ok = strspn(str + i, set) + i;
 	if (len != len_ok) return -len_ok;
 
@@ -109,9 +105,9 @@ static int parse_number(const char * str, char * data, size_t * offset) {
 	if (base == 16) {
 		size_t prefixless = len - i;
 		switch (prefixless) {
-			case 2:  //  8-bit (2 hex characters)
-			case 4:  // 16-bit
-			case 8:  // 32-bit
+			case 2: //  8-bit (2 hex characters)
+			case 4: // 16-bit
+			case 8: // 32-bit
 			case 16: // 64-bit
 				break;
 			default:
@@ -133,12 +129,12 @@ static int parse_number(const char * str, char * data, size_t * offset) {
 			case 2:
 				number = htons(number);
 				// TODO: check if the endianness is OK, or reverse these *offset indices*
-				data[*offset + 1] = (number)       & 0xff;
+				data[*offset + 1] = (number) & 0xff;
 				data[*offset + 0] = (number >>= 8) & 0xff;
 				break;
 			case 4:
 				number = htonl(number);
-				data[*offset + 3] = (number)       & 0xff;
+				data[*offset + 3] = (number) & 0xff;
 				data[*offset + 2] = (number >>= 8) & 0xff;
 				data[*offset + 1] = (number >>= 8) & 0xff;
 				data[*offset + 0] = (number >>= 8) & 0xff;
@@ -150,7 +146,7 @@ static int parse_number(const char * str, char * data, size_t * offset) {
 	return len;
 }
 
-static int _strtodata_main(const char * str, char* data, size_t * offset) {
+static int _strtodata_main(const char * str, char * data, size_t * offset) {
 	size_t len = strlen(str);
 
 	int i, run;
@@ -177,8 +173,7 @@ int strtodata(const char * str, char ** data, size_t * size) {
 	if (ret <= 0) return ret; // on error
 
 	// 2nd pass: convert string literals into binary data
-	*data = (char*) malloc(*size);
+	*data = (char *) malloc(*size);
 	size_t written = 0;
 	return _strtodata_main(str, *data, &written);
 }
-

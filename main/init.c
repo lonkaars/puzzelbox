@@ -1,17 +1,15 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-#include <pico/stdio.h>
 #include <pico/cyw43_arch.h>
+#include <pico/stdio.h>
 
 #include "config.h"
 #include "init.h"
-#include "tasks.h"
 #include "pb-mod.h"
+#include "tasks.h"
 
-static void init_stdio() {
-	stdio_init_all();
-}
+static void init_stdio() { stdio_init_all(); }
 
 static void init_cyw34() {
 	if (cyw43_arch_init_with_country(CFG_NET_COUNTRY))
@@ -22,7 +20,8 @@ static void init_wifi() {
 	// enable 'station' mode (connect to an access point instead of acting like one)
 	cyw43_arch_enable_sta_mode();
 
-	if (cyw43_arch_wifi_connect_timeout_ms(CFG_NET_SSID, CFG_NET_PASS, CFG_NET_AUTH, CFG_NET_CONN_TIMEOUT))
+	if (cyw43_arch_wifi_connect_timeout_ms(CFG_NET_SSID, CFG_NET_PASS,
+										   CFG_NET_AUTH, CFG_NET_CONN_TIMEOUT))
 		panic("cyw43_arch_wifi_connect failed\n");
 
 	// TODO: announce hostname(?)
@@ -59,6 +58,6 @@ void init() {
 	init_stdio();
 
 	// defer other initialization until the task scheduler is running (important)
-	xTaskCreate((TaskFunction_t) async_init, "init", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL);
+	xTaskCreate((TaskFunction_t) async_init, "init", configMINIMAL_STACK_SIZE,
+				NULL, tskIDLE_PRIORITY + 4, NULL);
 }
-

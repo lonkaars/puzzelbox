@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <ctype.h>
+#include <stdio.h>
 
 #include "xxd.h"
 
@@ -33,12 +33,9 @@ void xxd(const char * data, size_t size) {
 				continue;
 			}
 
-			if (isprint(data[i]))
-				printf("%c", data[i]);
-			else
-				printf(".");
+			if (isprint(data[i])) printf("%c", data[i]);
+			else printf(".");
 		}
 		printf("|\n");
 	}
 }
-

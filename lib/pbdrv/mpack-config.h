@@ -20,4 +20,3 @@
 // disable unused features (causes errors?)
 #define MPACK_NODE 0
 #define MPACK_BUILDER 0
-

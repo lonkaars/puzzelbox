@@ -13,38 +13,38 @@
 /// class.</typeparam>
 template <class TState> class FSM {
 public:
-  template <class... TPState> FSM(TPState &...args) {
-    int i = 0;
+	template <class... TPState> FSM(TPState &... args) {
+		int i = 0;
 
-    ((void)_states.emplace(i++, args), ...);
-  }
+		((void) _states.emplace(i++, args), ...);
+	}
 
-  /// <summary>
-  /// Implement with FSM::act()
-  /// </summary>
-  void act();
+	/// <summary>
+	/// Implement with FSM::act()
+	/// </summary>
+	void act();
 
-  /// <summary>
-  /// Used to check current state.
-  /// </summary>
-  /// <returns>Current state.</returns>
-  std::shared_ptr<TState> &get_state() { return _currentState; }
+	/// <summary>
+	/// Used to check current state.
+	/// </summary>
+	/// <returns>Current state.</returns>
+	std::shared_ptr<TState> & get_state() { return _currentState; }
 
-  /// <summary>
-  /// Used to get all states.
-  /// </summary>
-  /// <returns>Current states.</returns>
-  std::map<int, std::shared_ptr<TState>> get_states();
+	/// <summary>
+	/// Used to get all states.
+	/// </summary>
+	/// <returns>Current states.</returns>
+	std::map<int, std::shared_ptr<TState>> get_states();
 
-  /// <summary>
-  /// Sets current state, calls appropiate functions.
-  /// </summary>
-  /// <param name="">State to transition into.</param>
-  void set_state(std::shared_ptr<TState>);
+	/// <summary>
+	/// Sets current state, calls appropiate functions.
+	/// </summary>
+	/// <param name="">State to transition into.</param>
+	void set_state(std::shared_ptr<TState>);
 
 private:
-  std::map<int, std::shared_ptr<TState>> _states;
-  std::shared_ptr<TState> _currentState;
+	std::map<int, std::shared_ptr<TState>> _states;
+	std::shared_ptr<TState> _currentState;
 };
 
 #endif // _FSM_H_

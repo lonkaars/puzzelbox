@@ -14,4 +14,3 @@
 void serve_task();
 
 /// \}
-

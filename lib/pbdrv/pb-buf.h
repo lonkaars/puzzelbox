@@ -33,4 +33,3 @@ void pb_buf_free(pb_buf_t * buf);
 #ifdef __cplusplus
 }
 #endif
-

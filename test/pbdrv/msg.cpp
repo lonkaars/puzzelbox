@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
+#include "pb-mod.h"
 #include "pb-msg.h"
 #include "pb-send.h"
-#include "pb-mod.h"
 
 TEST(pb_msg_rw, cmd_req_read) {
 	pb_cmd_prop_t cmd = {
@@ -53,4 +53,3 @@ TEST(pb_msg_rw, cmd_req_magic) {
 
 	pb_msg_free(msg_read);
 }
-

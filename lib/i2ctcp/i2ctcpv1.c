@@ -1,6 +1,6 @@
 #include <mpack.h>
 #ifndef MIN
-#define MIN(a,b) (((a) < (b)) ? (a) : (b))
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
 #include "i2ctcpv1.h"
@@ -26,9 +26,7 @@ int i2ctcp_read(i2ctcp_msg_t * target, const char * buf, size_t buf_sz) {
 	return target->_rdata;
 }
 
-void i2ctcp_read_reset(i2ctcp_msg_t * target) {
-	target->_rdata = 0;
-}
+void i2ctcp_read_reset(i2ctcp_msg_t * target) { target->_rdata = 0; }
 
 bool i2ctcp_write(const i2ctcp_msg_t * target, char ** buf, size_t * buf_sz) {
 	mpack_writer_t writer;
@@ -40,4 +38,3 @@ bool i2ctcp_write(const i2ctcp_msg_t * target, char ** buf, size_t * buf_sz) {
 	// finish writing
 	return mpack_writer_destroy(&writer) == mpack_ok;
 }
-

@@ -1,23 +1,23 @@
 #include <arpa/inet.h>
-#include <cstring>
-#include <stdexcept>
-#include <unistd.h>
 #include <cstdio>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+#include <cstring>
 #include <errno.h>
+#include <netinet/in.h>
+#include <stdexcept>
+#include <sys/socket.h>
+#include <sys/types.h>
 #include <thread>
+#include <unistd.h>
 
-#include "i2ctcpv1.h"
-#include "sock.h"
-#include "rl.h"
 #include "i2c.h"
+#include "i2ctcpv1.h"
+#include "rl.h"
+#include "sock.h"
 
 using std::logic_error;
 using std::thread;
 
-PBSocket::PBSocket() { }
+PBSocket::PBSocket() {}
 PBSocket::PBSocket(const char * addr, uint16_t port) : PBSocket() {
 	set_server(addr, port);
 }
@@ -47,7 +47,7 @@ void PBSocket::sock_connect() {
 
 	_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_fd < 0) throw logic_error("socket create failed");
-	
+
 	struct sockaddr_in server = {
 		.sin_family = AF_INET,
 		.sin_port = htons(_port),
@@ -55,7 +55,7 @@ void PBSocket::sock_connect() {
 			.s_addr = inet_addr(_addr),
 		},
 	};
-	int ret = connect(_fd, (struct sockaddr*) &server, sizeof(server));
+	int ret = connect(_fd, (struct sockaddr *) &server, sizeof(server));
 	if (ret != 0) throw logic_error(strerror(errno));
 
 	this->_thread = new thread(&PBSocket::sock_task, this);
@@ -75,7 +75,7 @@ void PBSocket::sock_task() {
 	i2ctcp_msg_t input;
 	i2ctcp_read_reset(&input);
 
-	while(1) {
+	while (1) {
 		char buf[80];
 		ssize_t bytes = read(_fd, buf, sizeof(buf));
 
@@ -105,4 +105,3 @@ void PBSocket::sock_task() {
 
 	sock_close();
 }
-

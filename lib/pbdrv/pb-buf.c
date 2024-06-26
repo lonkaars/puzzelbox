@@ -6,4 +6,3 @@ void pb_buf_free(pb_buf_t * buf) {
 	pb_free(buf->data);
 	buf->data = NULL;
 }
-

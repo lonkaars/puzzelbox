@@ -117,4 +117,3 @@ pb_buf_t pb_send_magic_res() {
 	};
 	return pb_msg_write(&msg);
 }
-

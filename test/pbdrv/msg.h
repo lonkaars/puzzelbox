@@ -26,7 +26,6 @@ static const pb_cmd_res_state_t expected_res_state = {
 	.state = PB_GS_IDLE,
 };
 
-static const pb_cmd_req_set_state_t expected_req_set_state ={
+static const pb_cmd_req_set_state_t expected_req_set_state = {
 	.state = PB_GS_PLAYING,
 };
-

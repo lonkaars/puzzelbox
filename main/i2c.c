@@ -1,15 +1,15 @@
 #include <FreeRTOS.h>
-#include <task.h>
-#include <stdio.h>
+#include <hardware/i2c.h>
+#include <pico/stdlib.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <pico/stdlib.h>
-#include <hardware/i2c.h>
+#include <stdio.h>
+#include <task.h>
 
-#include "i2c.h"
-#include "pb-mod.h"
 #include "config.h"
+#include "i2c.h"
 #include "pb-buf.h"
+#include "pb-mod.h"
 #include "pb-send.h"
 
 //! Puzzle module handle
@@ -21,7 +21,8 @@ typedef struct {
 static pb_global_state_t _global_state = PB_GS_IDLE;
 puzzle_module_t modules[CFG_PB_MOD_MAX];
 // stolen from lib/pico-sdk/src/rp2_common/hardware_i2c/i2c.c
-#define i2c_reserved_addr(addr) (((addr) & 0x78) == 0 || ((addr) & 0x78) == 0x78)
+#define i2c_reserved_addr(addr) \
+	(((addr) & 0x78) == 0 || ((addr) & 0x78) == 0x78)
 size_t modules_size = 0;
 
 static void bus_scan() {
@@ -63,11 +64,11 @@ static void update_state() {
 
 	for (size_t i = 0; i < modules_size; i++) {
 		// find first module that is idle
-		pb_global_state_t	module_state = modules[i].state;
+		pb_global_state_t module_state = modules[i].state;
 		if (module_state != PB_GS_IDLE) continue;
 
 		pb_buf_t buff = pb_send_state_set(PB_GS_PLAYING);
-		pb_i2c_send(modules[i].sender, (uint8_t*)buff.data, buff.size);
+		pb_i2c_send(modules[i].sender, (uint8_t *) buff.data, buff.size);
 		pb_buf_free(&buff);
 	}
 }
@@ -84,7 +85,7 @@ void bus_task() {
 	// do a scan of the bus
 	bus_scan();
 
-	while(1) {
+	while (1) {
 		// send my state to all puzzle modules
 		state_exchange();
 
@@ -106,7 +107,7 @@ void bus_task() {
  */
 void pb_route_cmd_magic_res(pb_msg_t * msg) {
 	if (modules_size == CFG_PB_MOD_MAX) return;
-	modules[modules_size++] = (puzzle_module_t) {
+	modules[modules_size++] = (puzzle_module_t){
 		.sender = msg->sender,
 		.state = PB_GS_NOINIT,
 	};
@@ -123,11 +124,6 @@ void pb_route_cmd_state_res(pb_msg_t * msg) {
 	}
 }
 
-pb_global_state_t pb_hook_mod_state_read() {
-	return _global_state;
-}
+pb_global_state_t pb_hook_mod_state_read() { return _global_state; }
 
-void pb_hook_mod_state_write(pb_global_state_t state) {
-	_global_state = state;
-}
-
+void pb_hook_mod_state_write(pb_global_state_t state) { _global_state = state; }

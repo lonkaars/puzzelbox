@@ -1,9 +1,9 @@
+#include "pb-mod.h"
+#include "pb-types.h"
+#include "pb.h"
+#include <Adafruit_NeoTrellis.h>
 #include <Arduino.h>
 #include <Wire.h>
-#include <Adafruit_NeoTrellis.h>
-#include "pb-types.h"
-#include "pb-mod.h"
-#include "pb.h"
 
 #define MATRIX_SIZE 8
 #define LED_COLOR_ON 0x0000FF // Color of the LEDs in ON state
@@ -12,11 +12,14 @@
 #define LED_COLOR_ORANGE 0xFFA500 // Orange color for IDLE state
 
 Adafruit_NeoTrellis t_array[MATRIX_SIZE / 4][MATRIX_SIZE / 4] = {
-	{ Adafruit_NeoTrellis(PB_ADDR_ADA_NEO_1), Adafruit_NeoTrellis(PB_ADDR_ADA_NEO_2) },
-	{ Adafruit_NeoTrellis(PB_ADDR_ADA_NEO_3), Adafruit_NeoTrellis(PB_ADDR_ADA_NEO_4) },
+	{Adafruit_NeoTrellis(PB_ADDR_ADA_NEO_1),
+	 Adafruit_NeoTrellis(PB_ADDR_ADA_NEO_2)},
+	{Adafruit_NeoTrellis(PB_ADDR_ADA_NEO_3),
+	 Adafruit_NeoTrellis(PB_ADDR_ADA_NEO_4)},
 };
 
-Adafruit_MultiTrellis trellis((Adafruit_NeoTrellis *)t_array, MATRIX_SIZE / 4, MATRIX_SIZE / 4);
+Adafruit_MultiTrellis trellis((Adafruit_NeoTrellis *) t_array, MATRIX_SIZE / 4,
+							  MATRIX_SIZE / 4);
 
 bool neoMatrix[MATRIX_SIZE][MATRIX_SIZE]; // To track state of each pixel
 
@@ -36,17 +39,19 @@ void toggleAdjacentLEDs(int x, int y) {
 			int nx = x + dx, ny = y + dy;
 			if (nx >= 0 && nx < MATRIX_SIZE && ny >= 0 && ny < MATRIX_SIZE) {
 				neoMatrix[nx][ny] = !neoMatrix[nx][ny];
-				trellis.setPixelColor(nx * MATRIX_SIZE + ny, neoMatrix[nx][ny] ? LED_COLOR_ON : LED_COLOR_OFF);
+				trellis.setPixelColor(nx * MATRIX_SIZE + ny,
+									  neoMatrix[nx][ny] ? LED_COLOR_ON
+														: LED_COLOR_OFF);
 			}
 		}
 	}
 }
 
-
 bool isNeoPuzzleSolved() {
 	for (int i = 0; i < MATRIX_SIZE; i++) {
 		for (int j = 0; j < MATRIX_SIZE; j++) {
-			if (neoMatrix[i][j]) return false; // If any LED is on, puzzle is not solved
+			if (neoMatrix[i][j])
+				return false; // If any LED is on, puzzle is not solved
 		}
 	}
 	return true;
@@ -69,7 +74,8 @@ TrellisCallback buttonCallback(keyEvent evt) {
 
 void setup() {
 	Serial.begin(115200);
-	while (!Serial); // Wait for Serial to be read
+	while (!Serial)
+		; // Wait for Serial to be read
 	if (!trellis.begin()) {
 		Serial.println("Failed to initialize NeoTrellis");
 		pb_hook_mod_state_write(PB_GS_NOINIT);
@@ -77,14 +83,16 @@ void setup() {
 }
 
 void set_game_field() {
-	if (gamefield == false){
+	if (gamefield == false) {
 		// Initialize the matrix with a checkerboard pattern
 		bool toggle = false;
 		for (int i = 0; i < MATRIX_SIZE; i++) {
 			for (int j = 0; j < MATRIX_SIZE; j++) {
 				neoMatrix[i][j] = toggle;
 				toggle = !toggle;
-				trellis.setPixelColor(i * MATRIX_SIZE + j, neoMatrix[i][j] ? LED_COLOR_ON : LED_COLOR_OFF);
+				trellis.setPixelColor(i * MATRIX_SIZE + j, neoMatrix[i][j]
+															   ? LED_COLOR_ON
+															   : LED_COLOR_OFF);
 			}
 			toggle = !toggle;
 		}
@@ -100,13 +108,9 @@ void set_game_field() {
 	}
 }
 
-pb_global_state_t pb_hook_mod_state_read() {
-	return puzzleState;
-}
+pb_global_state_t pb_hook_mod_state_read() { return puzzleState; }
 
-void pb_hook_mod_state_write(pb_global_state_t state) {
-	puzzleState = state;
-}
+void pb_hook_mod_state_write(pb_global_state_t state) { puzzleState = state; }
 
 void flashCorners(uint32_t color) {
 	unsigned long currentMillis = millis();
@@ -120,14 +124,19 @@ void flashCorners(uint32_t color) {
 				int baseIndex = (i * 4 * MATRIX_SIZE) + (j * 4);
 				if (ledState) {
 					trellis.setPixelColor(baseIndex, color); // Top-left corner
-					trellis.setPixelColor(baseIndex + 3, color); // Top-right corner
-					trellis.setPixelColor(baseIndex + 3 * MATRIX_SIZE, color); // Bottom-left corner
-					trellis.setPixelColor(baseIndex + 3 * MATRIX_SIZE + 3, color); // Bottom-right corner
+					trellis.setPixelColor(baseIndex + 3,
+										  color); // Top-right corner
+					trellis.setPixelColor(baseIndex + 3 * MATRIX_SIZE,
+										  color); // Bottom-left corner
+					trellis.setPixelColor(baseIndex + 3 * MATRIX_SIZE + 3,
+										  color); // Bottom-right corner
 				} else {
 					trellis.setPixelColor(baseIndex, LED_COLOR_OFF);
 					trellis.setPixelColor(baseIndex + 3, LED_COLOR_OFF);
-					trellis.setPixelColor(baseIndex + 3 * MATRIX_SIZE, LED_COLOR_OFF);
-					trellis.setPixelColor(baseIndex + 3 * MATRIX_SIZE + 3, LED_COLOR_OFF);
+					trellis.setPixelColor(baseIndex + 3 * MATRIX_SIZE,
+										  LED_COLOR_OFF);
+					trellis.setPixelColor(baseIndex + 3 * MATRIX_SIZE + 3,
+										  LED_COLOR_OFF);
 				}
 			}
 		}
@@ -136,7 +145,7 @@ void flashCorners(uint32_t color) {
 }
 
 void loop() {
-	switch(puzzleState) {
+	switch (puzzleState) {
 		case PB_GS_PLAYING:
 			set_game_field();
 			trellis.read(); // Process button events
@@ -155,4 +164,3 @@ void loop() {
 			break;
 	}
 }
-

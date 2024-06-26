@@ -1,8 +1,8 @@
 #pragma once
 
 #include <stdbool.h>
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -82,13 +82,13 @@ typedef enum {
  *
  * The size of this array can be obtained by \c sizeof(pb_cmd_magic_req).
  */
-static const char pb_cmd_magic_req[] = { 0x70, 0x75, 0x7a, 0x62, 0x75, 0x73 };
+static const char pb_cmd_magic_req[] = {0x70, 0x75, 0x7a, 0x62, 0x75, 0x73};
 /**
  * \brief Magic reply from puzzle module back to main controller (="gaming")
  *
  * The size of this array can be obtained by \c sizeof(pb_cmd_magic_res).
  */
-static const char pb_cmd_magic_res[] = { 0x67, 0x61, 0x6d, 0x69, 0x6e, 0x67 };
+static const char pb_cmd_magic_res[] = {0x67, 0x61, 0x6d, 0x69, 0x6e, 0x67};
 
 //! puzzle bus message header / container (shared by all commands)
 typedef struct {
@@ -142,4 +142,3 @@ typedef struct {
 #ifdef __cplusplus
 }
 #endif
-

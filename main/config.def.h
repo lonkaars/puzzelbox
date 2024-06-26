@@ -1,6 +1,6 @@
 #pragma once
-#include <pico/cyw43_arch.h>
 #include <cyw43_country.h>
+#include <pico/cyw43_arch.h>
 
 /**
  * \ingroup main
@@ -130,4 +130,3 @@
 /// \}
 
 /// \}
-

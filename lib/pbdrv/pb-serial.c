@@ -13,10 +13,14 @@ void pb_ser_w(mpack_writer_t * writer, const pb_msg_t * cmd) {
 	if (cmd->cmd == NULL) return;
 
 	switch (cmd->type) {
-		case PB_CMD_PROP: return pb_ser_w_cmd_prop(writer, cmd);
-		case PB_CMD_STATE: return pb_ser_w_cmd_state(writer, cmd);
-		case PB_CMD_MAGIC: return pb_ser_w_cmd_magic(writer, cmd);
-		default: break;
+		case PB_CMD_PROP:
+			return pb_ser_w_cmd_prop(writer, cmd);
+		case PB_CMD_STATE:
+			return pb_ser_w_cmd_state(writer, cmd);
+		case PB_CMD_MAGIC:
+			return pb_ser_w_cmd_magic(writer, cmd);
+		default:
+			break;
 	}
 }
 void pb_ser_r(mpack_reader_t * reader, pb_msg_t * cmd) {
@@ -25,20 +29,28 @@ void pb_ser_r(mpack_reader_t * reader, pb_msg_t * cmd) {
 	cmd->sender = mpack_expect_u16(reader);
 
 	switch (cmd->type) {
-		case PB_CMD_PROP: return pb_ser_r_cmd_prop(reader, cmd);
-		case PB_CMD_STATE: return pb_ser_r_cmd_state(reader, cmd);
-		case PB_CMD_MAGIC: return pb_ser_r_cmd_magic(reader, cmd);
-		default: break;
+		case PB_CMD_PROP:
+			return pb_ser_r_cmd_prop(reader, cmd);
+		case PB_CMD_STATE:
+			return pb_ser_r_cmd_state(reader, cmd);
+		case PB_CMD_MAGIC:
+			return pb_ser_r_cmd_magic(reader, cmd);
+		default:
+			break;
 	}
 }
 void pb_ser_free(pb_msg_t * cmd) {
 	if (cmd == NULL) return;
 
 	switch (cmd->type) {
-		case PB_CMD_PROP: return pb_ser_free_cmd_prop(cmd);
-		case PB_CMD_STATE: return pb_ser_free_cmd_state(cmd);
-		case PB_CMD_MAGIC: return pb_ser_free_cmd_magic(cmd);
-		default: break;
+		case PB_CMD_PROP:
+			return pb_ser_free_cmd_prop(cmd);
+		case PB_CMD_STATE:
+			return pb_ser_free_cmd_state(cmd);
+		case PB_CMD_MAGIC:
+			return pb_ser_free_cmd_magic(cmd);
+		default:
+			break;
 	}
 }
 
@@ -108,4 +120,3 @@ void pb_ser_free_cmd_magic(pb_msg_t * _msg) {
 		_msg->cmd = NULL;
 	}
 }
-

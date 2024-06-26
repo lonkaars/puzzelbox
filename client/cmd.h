@@ -28,7 +28,7 @@ typedef void cmd_handle_t(char * line);
  * \return Array of \c char* with suggestions. The array is terminated by a
  * NULL pointer.
  */
-typedef char** cmd_complete_t(const char* text, int start, int end);
+typedef char ** cmd_complete_t(const char * text, int start, int end);
 
 /**
  * \internal
@@ -36,8 +36,9 @@ typedef char** cmd_complete_t(const char* text, int start, int end);
  */
 typedef struct {
 	cmd_handle_t * handle; //!< Handler function (required)
-	const char* name; //!< Command name (required)
-	const char* info; //!< Command info (shown in help command) (optional = NULL)
+	const char * name; //!< Command name (required)
+	const char *
+		info; //!< Command info (shown in help command) (optional = NULL)
 	cmd_complete_t * complete; //!< Completion function (optional = NULL)
 } cmd_t;
 
@@ -247,4 +248,3 @@ static const cmd_t cmds[] = {
 static const size_t cmds_length = sizeof(cmds) / sizeof(cmds[0]);
 
 /// \}
-

@@ -3,14 +3,14 @@
 #include <avr/delay.h>
 
 #include <FreeRTOS.h>
-#include <timers.h>
 #include <task.h>
+#include <timers.h>
 
-#include "../../pb.h"
-#include "../../pb-mod.h"
-#include "../../pb-types.h"
 #include "../../pb-buf.h"
 #include "../../pb-mem.h"
+#include "../../pb-mod.h"
+#include "../../pb-types.h"
+#include "../../pb.h"
 
 static void async_pb_i2c_recv(void * _msg, uint32_t _) {
 	pb_buf_t * msg = (pb_buf_t *) _msg;
@@ -23,8 +23,7 @@ static void recv_event(int bytes) {
 	pb_buf_t * msg = (pb_buf_t *) pb_malloc(sizeof(pb_buf_t));
 	msg->data = (char *) pb_malloc(bytes);
 	msg->size = 0;
-	while (Wire.available())
-		msg->data[msg->size++] = Wire.read();
+	while (Wire.available()) msg->data[msg->size++] = Wire.read();
 
 	// defer pb_i2c_recv call
 	xTimerPendFunctionCallFromISR(async_pb_i2c_recv, msg, 0, NULL);
@@ -66,7 +65,7 @@ void init(void);
 
 //! FreeRTOS loop task
 void loop_task() {
-	for(;;) {
+	for (;;) {
 		loop();
 		if (serialEventRun) serialEventRun();
 	}
@@ -90,8 +89,8 @@ int main(void) {
 	init(); // call arduino internal setup
 	setup(); // call regular arduino setup
 	pb_setup(); // call pbdrv-mod setup
-	xTaskCreate((TaskFunction_t) loop_task, "loop", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL);
+	xTaskCreate((TaskFunction_t) loop_task, "loop", configMINIMAL_STACK_SIZE,
+				NULL, tskIDLE_PRIORITY + 1, NULL);
 	vTaskStartScheduler(); // start freertos scheduler
 	return 0;
 }
-

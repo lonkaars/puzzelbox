@@ -1,7 +1,7 @@
 #pragma once
 
-#include "pb-types.h"
 #include "pb-buf.h"
+#include "pb-types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,4 +57,3 @@ void pb_msg_free(pb_msg_t * msg);
 #ifdef __cplusplus
 }
 #endif
-

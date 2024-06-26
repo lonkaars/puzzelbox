@@ -1,11 +1,11 @@
-#include "../../pb.h"
-#include "../../pb-types.h"
+#include "../../pb-buf.h"
 #include "../../pb-mod.h"
 #include "../../pb-send.h"
-#include "../../pb-buf.h"
+#include "../../pb-types.h"
+#include "../../pb.h"
 
-#include <hardware/i2c.h>
 #include <hardware/gpio.h>
+#include <hardware/i2c.h>
 #include <pico/i2c_slave.h>
 
 #define PB_I2C_S i2c0
@@ -17,7 +17,7 @@ uint8_t i2c_msg_buf[BUF_SIZE];
 size_t i2c_msg_buf_sz = 0;
 
 // This function is called from the I2C ISR
-static void recv_event(i2c_inst_t *i2c, i2c_slave_event_t event) {
+static void recv_event(i2c_inst_t * i2c, i2c_slave_event_t event) {
 	switch (event) {
 		case I2C_SLAVE_RECEIVE: {
 			if (i2c_msg_buf_sz == BUF_SIZE) return;
@@ -29,7 +29,8 @@ static void recv_event(i2c_inst_t *i2c, i2c_slave_event_t event) {
 			i2c_msg_buf_sz = 0;
 			break;
 		}
-		default: break;
+		default:
+			break;
 	}
 }
 
@@ -46,4 +47,3 @@ __weak void pb_i2c_send(i2c_addr_t addr, const uint8_t * buf, size_t sz) {
 	// false to write stop condition to i2c bus
 	i2c_write_timeout_us(PB_I2C_M, addr, buf, sz, false, PB_TIMEOUT_US);
 }
-
