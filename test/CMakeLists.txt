@@ -9,10 +9,10 @@ set(CMAKE_BUILD_TYPE Debug)
 project(pbtest C CXX ASM)
 
 add_executable(test
-	# i2ctcp/main.cpp
-	pbdrv/pb-route.c
-	pbdrv/msg.cpp
+	i2ctcp/main.cpp
 	pbdrv/mod.c
+	pbdrv/send.cpp
+	pbdrv/mem.cpp
 )
 
 add_subdirectory(lib/googletest)
