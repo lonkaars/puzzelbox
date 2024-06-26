@@ -1,8 +1,6 @@
 \defgroup pbc pbc
 \brief Puzzle box client
 
-# puzzle box client
-
 This folder contains the source code for the puzzle box client (pbc). This is a
 desktop application that communicates with the main controller over TCP to
 send/receive I<sup>2</sup>C messages. This application is not only used by a

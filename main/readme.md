@@ -1,8 +1,6 @@
 \defgroup main main
 \brief Main controller software
 
-# main controller firmware
-
 This directory contains the software for the main controller of the Puzzle Box.
 The main controller target is a Raspberry Pi Pico W.
 

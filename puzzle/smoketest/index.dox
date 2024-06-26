@@ -1,11 +1,16 @@
 // vim:ft=doxygen
 /**
 \ingroup puz
-\defgroup puz_vault Vault
-\brief Vault puzzle module
+\defgroup puz_smoketest Smoketest
+\brief Smoketest puzzle module
 
-\par Setup
-- Use the Arduino IDE library manager to install the "TM1637" library (by
-	Avishay Orpaz) and its dependencies
+This puzzle module was used as a substitute for the \ref puz_neo
+"NeoTrellis puzzle module" during the 23-24 assessment due to the I2C issues
+encountered with the Adafruit NeoTrellis modules.
+
+This puzzle module turns on an on-board LED when it is in the \ref
+PB_GS_PLAYING "playing" state, and sets itself to the \ref PB_GS_SOLVED
+"solved" state when an external button is pressed.
 
 */
+

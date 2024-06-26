@@ -4,6 +4,25 @@
 \defgroup puz_neo Neo
 \brief NeoTrellis puzzle module
 
+\warning **This puzzle module does not work.**
+
+\warning The NeoTrellis boards from Adafruit sometimes pull both the SDA and
+SCL lines low after being addressed. This seems to consistently happen during
+the first iteration of the main controller's state exchange loop after the
+handshake wave has completed successfully.
+
+\warning We have been unable to find the root cause of the issue, but suspect
+the Adafruit boards themselves, as the I2C lines remain low even when the main
+controller and Arduino are both disconnected. We did find that the \ref
+puz_dummy "dummy puzzle module" produced similar behavior (pulling the I2C low
+indefinitely) when attempting to write to the I2C bus from an I2C receive ISR
+directly. The Adafruit boards use a different microcontroller and run
+closed-source firmware, which made verifying whether this was the issue
+impossible.
+
+\warning We recommend future project groups design a custom button/LED matrix
+board instead of using the NeoTrellis boards.
+
 \par Setup
 - Use the Arduino IDE library manager to install the "Adafruit seesaw Library"
 	library and its dependencies

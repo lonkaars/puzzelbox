@@ -2,7 +2,9 @@
 #include "lib/pbdrv/pb-types.h"
 #include "lib/pbdrv/pb-mod.h"
 
+//! LED pin (on-board LED on Arduino Uno board) \ingroup puz_smoketest
 #define EXTERNAL_LED_PIN 13
+//! External button pin (button shorts this pin to ground) \ingroup puz_smoketest
 #define BUTTON_PIN 10
 
 pb_global_state_t state = PB_GS_NOINIT;
