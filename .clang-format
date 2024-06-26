@@ -18,8 +18,10 @@ SpaceAfterCStyleCast: true
 AlignConsecutiveAssignments:
   Enabled: false
 AlignTrailingComments:
-  Kind: Leave
+  Kind: Never
 ReflowComments: false
+AlignEscapedNewlines: DontAlign
+BreakBeforeBinaryOperators: All
 ...
 
 # vim: ft=yaml
