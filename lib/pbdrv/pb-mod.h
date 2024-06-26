@@ -44,9 +44,13 @@ extern const i2c_addr_t PB_MOD_ADDR;
  * \param buf pointer to message content
  * \param sz size of \p buf
  *
- * \note This function should not be directly called from an ISR. Please use
+ * \see pb_hook_i2c_recv()
+ *
+ * \warning Some platforms produce weird behavior when replying directly from
+ * the I2C ISR. Please verify if this function can be called directly on your
+ * target platform when writing a new driver. If it does not work as expected,
  * FreeRTOS's \c xTimerPendFunctionCallFromISR() or a similar scheduler-based
- * deferred function call mechanism instead.
+ * deferred function call mechanism may be used as a workaround.
  */
 void pb_i2c_recv(const uint8_t * buf, size_t sz);
 /**
@@ -57,6 +61,8 @@ void pb_i2c_recv(const uint8_t * buf, size_t sz);
  * \param i2c_addr address of slave controller
  * \param buf pointer to message content
  * \param sz size of \p buf
+ *
+ * \see pb_hook_i2c_send()
  */
 void pb_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz);
 
@@ -108,6 +114,8 @@ void pb_hook_mod_state_write(pb_global_state_t state);
  *
  * \return \c false if execution should continue to the default handler, or \c
  * true if it should stop (i.e. the message was handled).
+ *
+ * \see pb_i2c_recv()
  */
 bool pb_hook_i2c_recv(const uint8_t * buf, size_t sz);
 /**
@@ -117,6 +125,8 @@ bool pb_hook_i2c_recv(const uint8_t * buf, size_t sz);
  *
  * \return \c false if execution should continue to the default handler, or \c
  * true if it should stop (i.e. the message was handled).
+ *
+ * \see pb_i2c_send()
  */
 bool pb_hook_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz);
 

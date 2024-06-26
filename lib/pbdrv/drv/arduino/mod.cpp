@@ -40,12 +40,12 @@ static void pb_setup() {
 
 /**
  * \ingroup pb_drv_arduino
- * \warning This function includes a hard-coded 10ms delay before sending. This
- * is to work around a weird issue where the Arduino pulls both SDA and SCL low
- * while attempting to initiate an I2C transmission. We were able to verify
- * that the Arduino correctly handles bus arbitration under a test scenario
- * with 2 Uno's, but ran into issues while integrating the Arduino's with the
- * RP2040.
+ * \warning In the Arduino driver, this function includes a hard-coded 10ms
+ * delay before sending. This is to work around a weird issue where the Arduino
+ * pulls both SDA and SCL low while attempting to initiate an I2C transmission.
+ * We were able to verify that the Arduino correctly handles bus arbitration
+ * under a test scenario with 2 Uno's, but ran into issues while integrating
+ * the Arduino's with the RP2040.
  */
 __weak void pb_i2c_send(i2c_addr_t i2c_addr, const uint8_t * buf, size_t sz) {
 	if (pb_hook_i2c_send(i2c_addr, buf, sz)) return;

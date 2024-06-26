@@ -23,6 +23,8 @@ extern "C" {
  * PB_CMD_STATE "STATE", \ref PB_CMD_MAGIC "MAGIC"}
  *
  * Calls the next handler depending on \c msg->type.
+ *
+ * \see pb_hook_route_msg()
  */
 void pb_route_msg(pb_msg_t * msg);
 
@@ -32,6 +34,8 @@ void pb_route_msg(pb_msg_t * msg);
  * pb_route_cmd_prop_set "SET"}
  *
  * Calls the next handler depending on \c msg->action.
+ *
+ * \see pb_hook_route_cmd_prop()
  */
 void pb_route_cmd_prop(pb_msg_t * msg);
 /**
@@ -40,6 +44,8 @@ void pb_route_cmd_prop(pb_msg_t * msg);
  * pb_route_cmd_state_set "SET"}
  *
  * Calls the next handler depending on \c msg->action.
+ *
+ * \see pb_hook_route_cmd_state()
  */
 void pb_route_cmd_state(pb_msg_t * msg);
 /**
@@ -50,6 +56,8 @@ void pb_route_cmd_state(pb_msg_t * msg);
  *
  * \note Messages with type \c MAGIC and action \c SET will be silently
  * ignored, as there is no such command.
+ *
+ * \see pb_hook_route_cmd_magic()
  */
 void pb_route_cmd_magic(pb_msg_t * msg);
 
@@ -144,14 +152,28 @@ void pb_route_cmd_magic_res(pb_msg_t * msg);
  *
  * \return \c false if execution should continue to the default handler, or \c
  * true if it should stop (i.e. the message was handled).
+ *
+ * \see pb_route_msg()
  */
 bool pb_hook_route_msg(pb_msg_t * msg);
 
-//! \c pb_route_cmd_prop() hook \copydetails pb_hook_route_msg
+/**
+ * \brief \c pb_route_cmd_prop() hook
+ * \copydetails pb_hook_route_msg
+ * \see pb_route_cmd_prop()
+ */
 bool pb_hook_route_cmd_prop(pb_msg_t * msg);
-//! \c pb_route_cmd_state() hook \copydetails pb_hook_route_msg
+/**
+ * \brief \c pb_route_cmd_state() hook
+ * \copydetails pb_hook_route_msg
+ * \see pb_route_cmd_state()
+ */
 bool pb_hook_route_cmd_state(pb_msg_t * msg);
-//! \c pb_route_cmd_magic() hook \copydetails pb_hook_route_msg
+/**
+ * \brief \c pb_route_cmd_magic() hook
+ * \copydetails pb_hook_route_msg
+ * \see pb_route_cmd_magic()
+ */
 bool pb_hook_route_cmd_magic(pb_msg_t * msg);
 
 /// \}
