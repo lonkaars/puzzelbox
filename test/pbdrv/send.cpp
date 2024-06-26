@@ -73,4 +73,3 @@ TEST(pb_send_rw, cmd_magic_req) {
 
 	pb_msg_free(msg);
 }
-

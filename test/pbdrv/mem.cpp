@@ -8,4 +8,3 @@ TEST(pb_mem, all) {
 
 	pb_free(chunk);
 }
-
