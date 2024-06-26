@@ -30,10 +30,9 @@ target_link_libraries(main pbdrv)
 
 pbdrv-mod is a superset of \ref pbdrv, and includes functions specific to
 puzzle bus modules. \ref pbdrv-mod compiles to an object file instead of a
-static library because it may depend on functions that rely on external
-libraries. \ref pbdrv-mod is still considered standalone, but requires either
-using an existing \ref pb_drv "driver", or (partially) implementing the driver
-functions.
+static library because it may depend on functions from external libraries. \ref
+pbdrv-mod is still considered standalone, but requires either using an existing
+\ref pb_drv "driver", or (partially) implementing the driver functions.
 
 Like \ref pbdrv, \ref pbdrv-mod can be used by including this folder in your
 CMakeLists.txt file and linking the library with your executable. Please see

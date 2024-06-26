@@ -4,17 +4,18 @@
 # main controller firmware
 
 This directory contains the software for the main controller of the Puzzle Box.
+The main controller target is a Raspberry Pi Pico W.
 
-## building
+## Building
 
-1. make sure the submodules are initialized
-2. create a `config.h` file (see \ref main_config "config")
-3. use CMake to build
+1. Create a `config.h` file (see [config](#main_config))
+2. Use CMake to build
 
-## flashing
+## Flashing
 
-1. build
-2. hold the BOOTSEL button while resetting the pico (by power cycling or
+1. Hold the BOOTSEL button while resetting the Pico (by power cycling or
    pulling pin 30 (RUN) to GND)
-3. `picotool load build/main.uf2`
+2. ```
+   $ picotool load build/main.uf2
+   ```
 

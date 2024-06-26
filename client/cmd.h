@@ -61,6 +61,9 @@ cmd_handle_t cmd_exit;
 /**
  * \brief \c test command
  *
+ * \note This command is only available in builds of \c pbc compiled with the
+ * \c DEBUG flag
+ *
  * ```
  * (pbc) test
  * ```
@@ -95,6 +98,9 @@ cmd_handle_t cmd_help;
 cmd_handle_t cmd_reset;
 /**
  * \brief \c send command
+ *
+ * \note This command is only available in builds of \c pbc compiled with the
+ * \c DEBUG flag
  *
  * ```
  * (pbc) send <addr> <data>
@@ -178,6 +184,15 @@ cmd_handle_t cmd_send;
 cmd_handle_t cmd_skip;
 /**
  * \brief \c dump command
+ *
+ * \note This command is only available in builds of \c pbc compiled with the
+ * \c DEBUG flag
+ *
+ * ```
+ * (pbc) dump <none|send|recv|both>
+ * ```
+ * 
+ * Show raw I2C messages being sent to/from the main controller.
  */
 cmd_handle_t cmd_dump;
 

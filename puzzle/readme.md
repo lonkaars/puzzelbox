@@ -15,7 +15,15 @@ sure you have done the following:
 - Open "Tools" > "Board" > "Board manager"
 - Install the "Arduino AVR Boards" package (1.8.6 works at the time of writing)
 
-[arduino-cmake]: https://github.com/a9183756-gh/Arduino-CMake-Toolchain
+Some puzzle modules also require installing libraries through the Arduino
+library manager. Dependencies for specific puzzle modules are detailed on their
+Doxygen pages.
+
+### Flashing
+
+```
+$ ninja -C build upload
+```
 
 <!--
 
@@ -33,3 +41,4 @@ sure you have done the following:
 
 -->
 
+[arduino-cmake]: https://github.com/a9183756-gh/Arduino-CMake-Toolchain

@@ -10,20 +10,24 @@ game operator to control and monitor the state of a puzzle box, but is also a
 useful debugging tool when developing puzzle modules, as it allows you to send
 arbitrary data over the puzzle bus.
 
+> [!NOTE]
+> The client depends on the [GNU readline][readline] library, which is not
+> included as a submodule because it is installed on most Linux distributions
+> by default. Please ensure you have the readline development headers installed
+> for your distribution of choice.
+
 ## Features
 
-- List detected puzzle modules
-- Reset puzzle modules (individually or all to reset the box)
-- Skip puzzle modules (individually or all)
-- Request puzzle box state
+- Individually reset puzzle modules
+- Individually skip puzzle modules
 - Debug: send arbitrary messages
 
 ## Usage
 
-See \ref pbc_cmd_usage "command usage" for individual command usage.
+See [command usage](#pbc_cmd_usage)
 
-## WIP TODO
+## Bugs
 
-- add enum to string functions in CLIENT ONLY
-- bug: tab completion for `dump` seems to print garbage sometimes
+- tab completion for the `dump` command seems to print garbage (sometimes)
 
+[readline]: https://www.gnu.org/software/readline
