@@ -19,11 +19,11 @@ add_library(mpack STATIC
 	src/src/mpack/mpack-reader.c
 	src/src/mpack/mpack-writer.c
 	read-remaining.c
-	)
+)
 target_include_directories(mpack SYSTEM INTERFACE
 	.
 	src/src/mpack
-	)
+)
 
 # causes some wild crashes, please leave off
 target_compile_definitions(mpack PRIVATE MPACK_READ_TRACKING=0)

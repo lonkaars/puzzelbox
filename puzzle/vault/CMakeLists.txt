@@ -26,16 +26,16 @@ add_subdirectory(lib/FreeRTOS-Kernel)
 add_executable(main
 	main.cpp
 	mod.c
-	)
+)
 
 target_link_libraries(main PUBLIC
 	pbdrv-mod
-	)
+)
 target_link_arduino_libraries(main PUBLIC
 	core
 	Wire
 	TM1637
-	)
+)
 
 target_enable_arduino_upload(main)
 

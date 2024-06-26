@@ -21,7 +21,7 @@ add_library(pbdrv STATIC
 	pb-msg.c
 	pb-serial.c
 	pb-buf.c
-	)
+)
 target_include_directories(pbdrv SYSTEM INTERFACE .)
 target_link_libraries(pbdrv PRIVATE mpack)
 
@@ -30,7 +30,7 @@ add_library(pbdrv-mod OBJECT
 	pb-mod.c
 	pb-send.c
 	pb-route.c
-	)
+)
 target_include_directories(pbdrv-mod SYSTEM INTERFACE .)
 target_link_libraries(pbdrv-mod PUBLIC pbdrv)
 

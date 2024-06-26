@@ -13,7 +13,7 @@ add_executable(test
 	pbdrv/pb-route.c
 	pbdrv/msg.cpp
 	pbdrv/mod.c
-	)
+)
 
 add_subdirectory(lib/googletest)
 add_subdirectory(lib/pbdrv)
@@ -25,5 +25,5 @@ target_link_libraries(test
 	i2ctcp
 	mpack
 	pbdrv-mod
-	)
+)
 
