@@ -62,16 +62,22 @@ static void update_state() {
 	// if a module is still playing, don't promote a next one to playing module
 	if (playing > 0) return;
 
+	size_t next_idx;
+	uint8_t first_addr = (1 << 7);
 	for (size_t i = 0; i < modules_size; i++) {
 		// find first module that is idle
 		pb_global_state_t module_state = modules[i].state;
 		if (module_state != PB_GS_IDLE) continue;
+		
+		if (modules[i].sender > first_addr) continue;
 
-		pb_buf_t buff = pb_send_state_set(PB_GS_PLAYING);
-		pb_i2c_send(modules[i].sender, (uint8_t *) buff.data, buff.size);
-		pb_buf_free(&buff);
-		return;
+		first_addr = modules[i].sender;
+		next_idx = i;
 	}
+
+	pb_buf_t buff = pb_send_state_set(PB_GS_PLAYING);
+	pb_i2c_send(modules[next_idx].sender, (uint8_t *) buff.data, buff.size);
+	pb_buf_free(&buff);
 }
 
 static void state_exchange() {
