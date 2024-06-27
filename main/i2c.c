@@ -68,7 +68,7 @@ static void update_state() {
 		// find first module that is idle
 		pb_global_state_t module_state = modules[i].state;
 		if (module_state != PB_GS_IDLE) continue;
-		
+
 		if (modules[i].sender > first_addr) continue;
 
 		first_addr = modules[i].sender;
