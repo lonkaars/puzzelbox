@@ -70,6 +70,7 @@ static void update_state() {
 		pb_buf_t buff = pb_send_state_set(PB_GS_PLAYING);
 		pb_i2c_send(modules[i].sender, (uint8_t *) buff.data, buff.size);
 		pb_buf_free(&buff);
+		return;
 	}
 }
 
