@@ -36,12 +36,10 @@ pb_global_state_t puzzleState = PB_GS_NOINIT;
 /**
  * Scales the brightness of a color.
  *
- * @param color The color to be scaled.
- * @param scale The scale factor.
+ * \param color The color to be scaled.
+ * \param scale The scale factor.
  *
- * @return The scaled color.
- *
- * @throws None.
+ * \return The scaled color.
  */
 uint32_t scaleBrightness(uint32_t color, float scale) {
 	uint8_t r = (color >> 16) & 0xFF;
@@ -58,10 +56,8 @@ uint32_t scaleBrightness(uint32_t color, float scale) {
 /**
  * Toggles the state of adjacent LEDs based on the input coordinates.
  *
- * @param x The x-coordinate of the LED to toggle.
- * @param y The y-coordinate of the LED to toggle.
- *
- * @throws None
+ * \param x The x-coordinate of the LED to toggle.
+ * \param y The y-coordinate of the LED to toggle.
  */
 void toggleAdjacentLEDs(int x, int y) {
 	for (int dx = -1; dx <= 1; ++dx) {
@@ -82,9 +78,7 @@ void toggleAdjacentLEDs(int x, int y) {
 /**
  * Checks if the NeoPuzzle is solved.
  *
- * @return true if all LEDs in the NeoPuzzle are off, false otherwise.
- *
- * @throws None
+ * \return true if all LEDs in the NeoPuzzle are off, false otherwise.
  */
 bool isNeoPuzzleSolved() {
 	for (int i = 0; i < MATRIX_SIZE; i++) {
@@ -99,11 +93,9 @@ bool isNeoPuzzleSolved() {
 /**
  * Callback function triggered by a Trellis button press event.
  *
- * @param evt the key event containing information about the button press
+ * \param evt The key event containing information about the button press
  *
- * @return 0 indicating the success of the callback
- *
- * @throws None
+ * \return always 0
  */
 TrellisCallback buttonCallback(keyEvent evt) {
 	int x = evt.bit.NUM / MATRIX_SIZE;
@@ -121,11 +113,10 @@ TrellisCallback buttonCallback(keyEvent evt) {
 }
 
 /**
- * Initializes the serial communication and checks if the NeoTrellis board is initialized successfully.
- * If the initialization fails, it sets the module state to PB_GS_NOINIT and prints an error message.
- * Finally, it sets the module state to PB_GS_PLAYING.
- *
- * @throws None
+ * Initializes the serial communication and checks if the NeoTrellis board is
+ * initialized successfully. If the initialization fails, it sets the module
+ * state to PB_GS_NOINIT and prints an error message. Finally, it sets the
+ * module state to PB_GS_PLAYING.
  */
 void setup() {
 	Serial.begin(115200);
@@ -138,13 +129,7 @@ void setup() {
 	pb_hook_mod_state_write(PB_GS_PLAYING);
 }
 
-/**
- * Initializes the game field based on the current state of the NeoMatrix.
- *
- * @return None
- *
- * @throws None
- */
+//! Initialize the game field based on the current state of the NeoMatrix
 void set_game_field() {
 	if (!gamefield) {
 		bool toggle = false;
@@ -176,11 +161,7 @@ void pb_hook_mod_state_write(pb_global_state_t state) { puzzleState = state; }
 /**
  * Function to flash the corners of a matrix with a specified color.
  *
- * @param color The color value to be used for flashing.
- *
- * @return None
- *
- * @throws None
+ * \param color The color value to be used for flashing.
  */
 void flashCorners(uint32_t color) {
 	unsigned long currentMillis = millis();
@@ -213,12 +194,10 @@ void flashCorners(uint32_t color) {
 }
 
 /**
- * This function handles the different states of the puzzle game. 
+ * \brief Game loop
+ *
+ * This function handles the different states of the puzzle game.
  * It reads button events and updates the game field accordingly.
- *
- * @return void
- *
- * @throws None
  */
 void loop() {
 	switch (puzzleState) {
@@ -240,3 +219,4 @@ void loop() {
 			break;
 	}
 }
+
